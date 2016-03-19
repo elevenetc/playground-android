@@ -42,4 +42,6 @@ dependencies {
     apt project(':annotation-compiler')
     compile project(':annotations')
     compile 'javax.annotation:jsr250-api:1.0'
+
+    compile 'com.google.auto.value:auto-value:1.1'
 }
