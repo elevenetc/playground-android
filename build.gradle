@@ -21,3 +21,7 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+//ext{
+//    googlePlusApiKey = "AIzaSyBmd_ww1KP1_7hHkp7rHOnCH7-ZUqnudCI";
+//}

@@ -1,3 +1,5 @@
+apply from: '../params.gradle'
+
 buildscript {
     repositories {
         mavenCentral()
@@ -7,6 +9,7 @@ buildscript {
     }
 }
 
+apply from: '../params.gradle'
 apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
 
@@ -20,11 +23,18 @@ android {
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
+
+        buildConfigField "String", "GOOGLE_PLUS_API_KEY", rootProject.ext.googlePlusApiKey
+        buildConfigField "String", "GOOGLE_PLUS_USER_ID", rootProject.ext.testGooglePlusUserId
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        debug {
+
         }
     }
 
@@ -44,4 +54,7 @@ dependencies {
     compile 'javax.annotation:jsr250-api:1.0'
 
     compile 'com.google.auto.value:auto-value:1.1'
+
+    compile 'com.squareup.retrofit2:retrofit:2.0.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.0.0'
 }
