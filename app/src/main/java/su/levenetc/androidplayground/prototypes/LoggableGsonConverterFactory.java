@@ -21,7 +21,7 @@ import okhttp3.ResponseBody;
 import okio.Buffer;
 import retrofit2.Converter;
 import retrofit2.Retrofit;
-import su.levenetc.androidplayground.utils.Utils;
+import su.levenetc.androidplayground.utils.PlayUtils;
 
 /**
  * Copy of {@link retrofit2.converter.gson.GsonConverterFactory}
@@ -75,14 +75,14 @@ public class LoggableGsonConverterFactory extends Converter.Factory {
 		}
 
 		@Override public RequestBody convert(T value) throws IOException {
-			Utils.startTime("reqTime");
+			PlayUtils.startTime("reqTime");
 			Buffer buffer = new Buffer();
 			Writer writer = new OutputStreamWriter(buffer.outputStream(), UTF_8);
 			JsonWriter jsonWriter = gson.newJsonWriter(writer);
 			adapter.write(jsonWriter, value);
 			jsonWriter.close();
 			RequestBody result = RequestBody.create(MEDIA_TYPE, buffer.readByteString());
-			Log.i("reqTime", "request parse finish in:" + Utils.endTime("reqTime"));
+			Log.i("reqTime", "request parse finish in:" + PlayUtils.endTime("reqTime"));
 			return result;
 		}
 	}
@@ -97,7 +97,7 @@ public class LoggableGsonConverterFactory extends Converter.Factory {
 		}
 
 		@Override public T convert(ResponseBody value) throws IOException {
-			Utils.startTime("respTime");
+			PlayUtils.startTime("respTime");
 			JsonReader jsonReader = gson.newJsonReader(value.charStream());
 			T result;
 			try {
@@ -105,7 +105,7 @@ public class LoggableGsonConverterFactory extends Converter.Factory {
 			} finally {
 				value.close();
 			}
-			Log.i("respTime", "response parse finish in:" + Utils.endTime("respTime"));
+			Log.i("respTime", "response parse finish in:" + PlayUtils.endTime("respTime"));
 			return result;
 		}
 	}
