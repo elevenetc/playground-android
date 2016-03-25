@@ -2,18 +2,12 @@ package su.levenetc.androidplayground;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.TextView;
-
-import su.levenetc.androidplayground.models.UserModel;
-import su.levenetc.androidplayground.samples.Retrofit2Sample;
 
 public class MainActivity extends AppCompatActivity {
 
 	@Override protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		TextView textView = (TextView) findViewById(R.id.text);
-
-		Retrofit2Sample.run(this);
+//		Retrofit2Sample.run(this);
 	}
 }
