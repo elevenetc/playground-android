@@ -1,13 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="su.levenetc.androidplayground.MainActivity">
 
-    <su.levenetc.androidplayground.prototypes.timelineview.ScalableRecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
 
-</RelativeLayout>
+    <su.levenetc.androidplayground.views.SampleImagesRecycler
+        android:id="@+id/recycler_images"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.5"
+        android:background="#FF0000"/>
+
+
+    <su.levenetc.androidplayground.prototypes.timelineview.ScalableRecyclerView
+        android:id="@+id/list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.5"
+        android:background="#00FF00"/>
+
+</LinearLayout>

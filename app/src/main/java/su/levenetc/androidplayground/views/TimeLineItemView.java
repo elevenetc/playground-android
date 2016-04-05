@@ -6,7 +6,8 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import su.levenetc.androidplayground.models.TimeLine;
+import su.levenetc.androidplayground.models.TimeSession;
+import su.levenetc.androidplayground.models.Timeline;
 
 /**
  * Created by Eugene Levenetc on 24/03/2016.
@@ -14,10 +15,10 @@ import su.levenetc.androidplayground.models.TimeLine;
 public class TimeLineItemView extends FrameLayout {
 
 	private int id;
-	private int defaultHeight = 200;
+	private int defaultHeight = 100;
 	private float scaleValueY = 1f;
 	private TextView textView;
-	private LineView lineView;
+	private TimelineView timelineView;
 
 	public TimeLineItemView(Context context) {
 		super(context);
@@ -26,17 +27,17 @@ public class TimeLineItemView extends FrameLayout {
 
 	private void init() {
 		textView = new TextView(getContext());
-		lineView = new LineView(getContext());
+		timelineView = new TimelineView(getContext());
 		textView.setTextColor(Color.WHITE);
-		addView(lineView);
+		addView(timelineView);
 		addView(textView);
 
 		ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, defaultHeight);
 		setLayoutParams(lp);
 	}
 
-	public void setTimeLineItem(TimeLine item) {
-		lineView.setTimeItem(item);
+	public void setModels(TimeSession session, Timeline item) {
+		timelineView.setModels(session, item);
 	}
 
 	public void setItemId(int id) {

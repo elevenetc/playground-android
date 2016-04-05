@@ -5,98 +5,130 @@ import java.util.LinkedList;
 /**
  * Created by Eugene Levenetc on 28/03/2016.
  */
-public class TimeLine {
+public class Timeline {
 
-	private final LinkedList<TimeRange> timeRanges;
-	private TimeLineSession session;
-	private long timeInTimeline;
+	private final LinkedList<TimePeriod> periods;
+	private final LinkedList<TimelineEvent> events = new LinkedList<>();
+	private long startTime;
+	private long endTime = -1;
+	private String id;
+	private boolean hasError;
 
-	public TimeLine() {
-		timeRanges = new LinkedList<>();
+	public Timeline(String id, long startTime, LinkedList<TimePeriod> periods) {
+		this.startTime = startTime;
+		this.periods = periods;
+		this.id = id;
 	}
 
-	public TimeLine(LinkedList<TimeRange> timeRanges) {
-		this.timeRanges = timeRanges;
+	public void setId(String id) {
+		this.id = id;
 	}
 
-	public LinkedList<TimeRange> getTimeRanges() {
-		return timeRanges;
+	public LinkedList<TimePeriod> getPeriods() {
+		return periods;
 	}
 
-	public TimeRange getFirst() {
-		if (timeRanges.isEmpty()) return null;
-		else return timeRanges.getFirst();
+	public TimePeriod getFirst() {
+		if (periods.isEmpty()) return null;
+		else return periods.getFirst();
 	}
 
-	public TimeRange getLast() {
-		if (timeRanges.isEmpty()) return null;
-		else return timeRanges.getLast();
+	public TimePeriod getLast() {
+		if (periods.isEmpty()) return null;
+		else return periods.getLast();
 	}
 
 	public long getDuration() {
 		long duration = 0;
-		for (TimeRange timeRange : timeRanges)
-			duration += timeRange.getDuration();
+		for (TimePeriod timePeriod : periods) duration += timePeriod.getDuration();
 		return duration;
 	}
 
-	public void add(TimeRange timeRange) {
-		timeRanges.add(timeRange);
-	}
-
-	public void setSessionAndTime(TimeLineSession session, long timeInTimeline) {
-		this.session = session;
-		this.timeInTimeline = timeInTimeline;
+	public void add(TimePeriod timePeriod) {
+		periods.add(timePeriod);
 	}
 
 	public long getTimeInTimeline() {
-		return timeInTimeline;
+		return startTime;
 	}
 
-	public TimeLineSession getSession() {
-		return session;
+	public void setEndTime(long endTime) {
+		this.endTime = endTime;
+	}
+
+	public long getEndTime() {
+		return endTime;
+	}
+
+	public long getStartTime() {
+		return startTime;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public boolean isEnded() {
+		return endTime != -1;
+	}
+
+	public void addEvent(TimelineEvent event) {
+		hasError = event.isError();
+		events.add(event);
+	}
+
+	public LinkedList<TimelineEvent> getEvents() {
+		return events;
+	}
+
+	public boolean hasError() {
+		return hasError;
 	}
 
 	public static class Builder {
 
-		public static Builder create() {
-			return new Builder();
+		private long startTime;
+		private String id;
+
+		public static Builder create(String id, long startTime) {
+			Builder builder = new Builder();
+			builder.startTime = startTime;
+			builder.id = id;
+			return builder;
 		}
 
-		LinkedList<TimeRange> timeRanges = new LinkedList<>();
+		LinkedList<TimePeriod> timePeriods = new LinkedList<>();
 
-		Builder() {
+		private Builder() {
 
 		}
 
-		public Builder addRange(long duration, int color) {
-			timeRanges.add(new TimeRange(duration, color));
+		public Builder addPeriod(long startTime, long endTime) {
+			TimePeriod period = TimePeriod.create(0);
+			period.startAt(startTime);
+			period.endAt(endTime);
+			timePeriods.add(period);
 			return this;
 		}
 
-		public Builder addRange(long duration) {
-			timeRanges.add(new TimeRange(duration, 0));
-			return this;
-		}
-
-		public TimeLine build() {
-			return new TimeLine(timeRanges);
+		public Timeline build() {
+			return new Timeline(id, startTime, timePeriods);
 		}
 	}
 
 	@Override public String toString() {
 
-		if (timeRanges.isEmpty()) {
-			return "TimeLine{ empty }";
+		if (periods.isEmpty()) {
+			return "Timeline{ empty }";
 		}
 
 		String ranges = "";
 
-		for (TimeRange timeRange : timeRanges)
-			ranges += "[duration " + timeRange.getDuration() + "]";
+		for (TimePeriod timePeriod : periods)
+			ranges += "[duration " + timePeriod.getDuration() + "]";
 		ranges += "[total:" + getDuration() + "]";
 
-		return "TimeLine{\n" +
+		return "Timeline{\n" +
 				ranges +
 				"\n}";
 	}

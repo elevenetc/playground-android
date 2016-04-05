@@ -7,10 +7,8 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.RequestHandler;
+import com.squareup.picasso.InjectUtils;
 import com.squareup.picasso.Target;
-import com.squareup.picasso.UrlConnectionDownloader;
-import com.squareup.picasso.PicassoInjector;
 
 import java.io.IOException;
 
@@ -26,13 +24,14 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 import su.levenetc.androidplayground.BuildConfig;
 import su.levenetc.androidplayground.models.GPlusProfile;
+import su.levenetc.androidplayground.models.TimeSession;
 import su.levenetc.androidplayground.prototypes.LoggableGsonConverterFactory;
 import su.levenetc.androidplayground.utils.PlayUtils;
 
 /**
  * Created by Eugene Levenetc on 21/03/2016.
  */
-public class Retrofit2Sample {
+public class PicassoAndRetrofitInjectors {
 
 	private static GPlusService service;
 	private static Picasso picasso;
@@ -42,7 +41,7 @@ public class Retrofit2Sample {
 
 		initRetrofitClient();
 		initGPlusService();
-		initPicasso(context);
+		initPicasso(context, null);
 
 		new Thread(new Runnable() {
 			@Override public void run() {
@@ -72,34 +71,10 @@ public class Retrofit2Sample {
 		loadImage();
 	}
 
-	private static void initPicasso(Context context) {
-		if (picasso != null) return;
-
-		Picasso.Builder builder = new Picasso.Builder(context);
-		builder.loggingEnabled(true);
-		builder.downloader(new UrlConnectionDownloader(context));
-
-//		OkHttpDownloader downloader = new OkHttpDownloader(context);
-
-		builder.addRequestHandler(new RequestHandler() {
-			@Override public boolean canHandleRequest(com.squareup.picasso.Request data) {
-				return false;
-			}
-
-			@Override public Result load(com.squareup.picasso.Request request, int networkPolicy) throws IOException {
-				return null;
-			}
-		});
-		builder.requestTransformer(new Picasso.RequestTransformer() {
-			@Override public com.squareup.picasso.Request transformRequest(com.squareup.picasso.Request request) {
-				PlayUtils.startTime("imageLoading");
-				return request;
-			}
-		});
-
-//		builder.downloader(downloader);
-		picasso = builder.build();
-		PicassoInjector.dispatcher(picasso);
+	public static Picasso initPicasso(Context context, TimeSession session) {
+		if (picasso != null) return null;
+		InjectUtils.injectPicasso(Picasso.with(context), session);
+		return picasso;
 	}
 
 	private static void loadImage() {
