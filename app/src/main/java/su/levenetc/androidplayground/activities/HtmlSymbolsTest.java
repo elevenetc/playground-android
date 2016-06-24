@@ -26,16 +26,47 @@ public class HtmlSymbolsTest extends AppCompatActivity {
 
         textView = (TextView) findViewById(R.id.text_view);
 
+        final ReplaceMethod custom = new ReplaceMethod() {
+            @Override
+            public void test(String text, long[] times, int index) {
+                long time;
+                String result;
+                time = System.currentTimeMillis();
+                text = text.replace(EURO_SYMBOL, "€");
+                text = text.replace(E_SYMBOL, "ë");
+                result = text;
+                times[index] = System.currentTimeMillis() - time;
+            }
+        };
+
+        final ReplaceMethod builtin = new ReplaceMethod() {
+            @Override
+            public void test(String text, long[] times, int index) {
+                long time;
+                Spanned result;
+                time = System.currentTimeMillis();
+                result = Html.fromHtml(text);
+                times[index] = System.currentTimeMillis() - time;
+            }
+        };
+
         findViewById(R.id.btn_run).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 v.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        Log.i("test", "testBuiltIn");
-                        testBuiltIn(500, genText(500));
-                        testBuiltIn(1000, genText(1000));
-                        testBuiltIn(2000, genText(2000));
+                        Log.i("builtin", "builtin");
+                        test(20, genText(20), builtin);
+                        test(500, genText(500), builtin);
+                        test(1000, genText(1000), builtin);
+                        test(2000, genText(2000), builtin);
+
+                        Log.i("cusom", "custom");
+                        test(20, genText(20), custom);
+                        test(500, genText(500), custom);
+                        test(1000, genText(1000), custom);
+                        test(2000, genText(2000), custom);
                     }
                 }, 2000);
             }
@@ -57,23 +88,23 @@ public class HtmlSymbolsTest extends AppCompatActivity {
         return sb.toString();
     }
 
-    private void testBuiltIn(int size, String text) {
+    private void test(int size, String text, ReplaceMethod method) {
         long time;
         Spanned result;
         long[] times = new long[100];
         long max = 0;
         long average = 0;
         for (int i = 0; i < times.length; i++) {
-
-            time = System.currentTimeMillis();
-            result = Html.fromHtml(text);
-            times[i] = System.currentTimeMillis() - time;
-
+            method.test(text, times, i);
             if (times[i] > max) max = times[i];
         }
 
         for (int i = 0; i < times.length; i++) average += times[i];
 
         Log.i("result", "Size:" + size + " max:" + max + "ms " + "average:" + average / times.length + "ms");
+    }
+
+    private interface ReplaceMethod {
+        void test(String text, long[] times, int index);
     }
 }
