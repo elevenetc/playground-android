@@ -15,4 +15,14 @@ public class Utils {
 		}
 		return "";
 	}
+
+	public static String fixLength(String string, int max, char extraChar) {
+		if (string.length() < max) {
+			int diff = max - string.length();
+			string += getFilledString(diff, extraChar);
+		} else if (string.length() > max) {
+			string = string.substring(0, max);
+		}
+		return string;
+	}
 }
