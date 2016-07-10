@@ -10,11 +10,15 @@ import android.util.Log;
 /**
  * Created by Eugene Levenetc on 10/07/2016.
  */
-public class AlarmSensorsManager implements SensorEventListener {
+public class SManager implements SensorEventListener {
+
+	private static final String TAG = SManager.class.getClass().getSimpleName();
 
 	private Sensor accelerometer;
 	private SensorManager sysSensorManager;
 	private BManager bManager;
+	private static final float MAX_DEFLECTION = 0.3f;
+	private float[] prevValues = new float[3];
 
 	public void init(Context context) {
 		bManager = new BManager();
@@ -27,13 +31,35 @@ public class AlarmSensorsManager implements SensorEventListener {
 
 	@Override public void onSensorChanged(SensorEvent event) {
 		if (event.sensor.getType() != Sensor.TYPE_ACCELEROMETER) return;
-		float axisX = event.values[0];
-		float axisY = event.values[1];
-		float axisZ = event.values[2];
-		Log.i("alarm-sens", axisX + ":" + axisY + ":" + axisZ + ":battery:" + bManager.getBattery());
+
+		if (hasDeflection(event.values)) {
+			Log.i(TAG, "Deflection!");
+		}
 	}
 
 	@Override public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
+	}
+
+	private boolean hasDeflection(float[] fresh) {
+		if (prevValues == null) {
+			prevValues = fresh;
+			return false;
+		}
+
+		boolean result = false;
+
+		for (int i = 0; i < fresh.length; i++) {
+			float value = fresh[i];
+			float diff = value - prevValues[i];
+			if (Math.abs(diff) > MAX_DEFLECTION) {
+				result = true;
+				break;
+			}
+		}
+		prevValues[0] = fresh[0];
+		prevValues[1] = fresh[1];
+		prevValues[2] = fresh[2];
+		return result;
 	}
 }

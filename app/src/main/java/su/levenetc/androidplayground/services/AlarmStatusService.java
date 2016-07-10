@@ -6,14 +6,14 @@ import android.os.IBinder;
 import android.os.PowerManager;
 import android.support.annotation.Nullable;
 
-import su.levenetc.androidplayground.manager.AlarmSensorsManager;
+import su.levenetc.androidplayground.manager.SManager;
 
 /**
  * Created by Eugene Levenetc on 10/07/2016.
  */
 public class AlarmStatusService extends Service {
 
-	private AlarmSensorsManager sensorsManager = new AlarmSensorsManager();
+	private SManager sensorsManager = new SManager();
 
 	@Override public void onCreate() {
 		super.onCreate();
