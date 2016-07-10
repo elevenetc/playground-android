@@ -14,19 +14,23 @@ public class AlarmSensorsManager implements SensorEventListener {
 
 	private Sensor accelerometer;
 	private SensorManager sysSensorManager;
+	private BManager bManager;
 
 	public void init(Context context) {
+		bManager = new BManager();
 		sysSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
 		accelerometer = sysSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-		sysSensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL, 1000);
+
+		sysSensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL, 10 * 1000000);
+		bManager.init(context);
 	}
 
 	@Override public void onSensorChanged(SensorEvent event) {
 		if (event.sensor.getType() != Sensor.TYPE_ACCELEROMETER) return;
-		float sensorX = event.values[0];
-		float sensorY = event.values[1];
-		float sensorZ = event.values[2];
-		Log.i("alarm-sens", sensorX + ":" + sensorY);
+		float axisX = event.values[0];
+		float axisY = event.values[1];
+		float axisZ = event.values[2];
+		Log.i("alarm-sens", axisX + ":" + axisY + ":" + axisZ + ":battery:" + bManager.getBattery());
 	}
 
 	@Override public void onAccuracyChanged(Sensor sensor, int accuracy) {
