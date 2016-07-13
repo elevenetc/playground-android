@@ -1,11 +1,19 @@
 package su.levenetc.androidplayground.utils;
 
+import android.content.Context;
+import android.util.TypedValue;
+
 import java.util.Arrays;
 
 /**
  * Created by Eugene Levenetc on 10/07/2016.
  */
 public class Utils {
+
+	public static float getSp(float sp, Context context) {
+		return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, sp, context.getResources().getDisplayMetrics());
+	}
+
 	public static String getFilledString(int length, char c) {
 		if (length < 0) throw new IllegalArgumentException("length must be >= 0");
 		if (length > 0) {

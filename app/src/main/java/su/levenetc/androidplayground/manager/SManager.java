@@ -19,6 +19,7 @@ import su.levenetc.androidplayground.utils.ThreadUtils;
 public class SManager implements SensorEventListener {
 
 	private static final String TAG = SManager.class.getSimpleName();
+	private static final boolean CHECK_DEFLECTION = false;
 
 	private Sensor accelerometer;
 	private SensorManager sysSensorManager;
@@ -52,13 +53,13 @@ public class SManager implements SensorEventListener {
 
 	@Override public void onSensorChanged(SensorEvent event) {
 		if (event.sensor.getType() != Sensor.TYPE_ACCELEROMETER) return;
+		boolean update = CHECK_DEFLECTION ? hasDeflection(event.values) : true;
 
-		if (hasDeflection(event.values)) {
+		if (update) {
 			state.x = event.values[0];
 			state.y = event.values[1];
 			state.z = event.values[2];
 			statePublishSubject.onNext(state);
-			logWriter.log(TAG, "deflection");
 		}
 	}
 
