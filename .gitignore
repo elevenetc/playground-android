@@ -12,8 +12,8 @@ gen/
 /local.properties
 /.idea/workspace.xml
 .DS_Store
-/annotation-compiler
-/annotatios
+/annotations/build/libs/annotations.jar
+./annotation-compiler/build/libs/annotation-compiler.jar
 
 *.ipr
 *.iws
