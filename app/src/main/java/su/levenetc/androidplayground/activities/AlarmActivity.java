@@ -1,12 +1,10 @@
 package su.levenetc.androidplayground.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
 import su.levenetc.androidplayground.presenter.RotationViewPresenter;
-import su.levenetc.androidplayground.services.AlarmStatusService;
 import su.levenetc.androidplayground.views.RotationSensorView;
 
 /**
@@ -22,6 +20,5 @@ public class AlarmActivity extends AppCompatActivity {
 		presenter = new RotationViewPresenter();
 		presenter.setView(view);
 		setContentView(view);
-		startService(new Intent(this, AlarmStatusService.class));
 	}
 }

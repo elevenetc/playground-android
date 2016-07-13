@@ -6,6 +6,9 @@ import android.os.IBinder;
 import android.os.PowerManager;
 import android.support.annotation.Nullable;
 
+import javax.inject.Inject;
+
+import su.levenetc.androidplayground.di.DIHelper;
 import su.levenetc.androidplayground.manager.SManager;
 
 /**
@@ -13,12 +16,12 @@ import su.levenetc.androidplayground.manager.SManager;
  */
 public class AlarmStatusService extends Service {
 
-	private SManager sensorsManager = new SManager();
+	@Inject SManager sManager;
 
 	@Override public void onCreate() {
 		super.onCreate();
+		DIHelper.getAlarmAppComponent().inject(this);
 		acquireLock();
-		initSensorsManager();
 	}
 
 	@Nullable @Override public IBinder onBind(Intent intent) {
@@ -29,10 +32,6 @@ public class AlarmStatusService extends Service {
 		PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
 		PowerManager.WakeLock wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, getClass().getSimpleName() + "Lock");
 		wakeLock.acquire();
-	}
-
-	private void initSensorsManager() {
-		sensorsManager.init(this);
 	}
 
 }
