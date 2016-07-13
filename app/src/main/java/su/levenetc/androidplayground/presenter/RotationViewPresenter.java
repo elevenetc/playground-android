@@ -27,6 +27,7 @@ public class RotationViewPresenter {
 	public void onCreate(final RotationSensorView view) {
 		this.view = view;
 		subscribtion = sManager.getStateObservable()
+				.onBackpressureDrop()
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(new Action1<SManagerState>() {
 					@Override public void call(SManagerState sManagerState) {
