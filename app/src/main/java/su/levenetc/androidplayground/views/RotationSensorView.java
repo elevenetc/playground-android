@@ -32,11 +32,16 @@ public class RotationSensorView extends LinearLayout {
 		deflectionX = (DeflectionView) findViewById(R.id.deflection_x);
 		deflectionY = (DeflectionView) findViewById(R.id.deflection_y);
 		deflectionZ = (DeflectionView) findViewById(R.id.deflection_z);
+		setWillNotDraw(false);
 	}
 
 	public void setValues(float x, float y, float z) {
 		deflectionX.setValue(x);
 		deflectionY.setValue(y);
 		deflectionZ.setValue(z);
+
+		deflectionX.invalidate();
+		deflectionY.invalidate();
+		deflectionZ.invalidate();
 	}
 }

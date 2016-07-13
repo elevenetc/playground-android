@@ -7,6 +7,9 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.util.Log;
 
+import rx.Observable;
+import rx.subjects.PublishSubject;
+import su.levenetc.androidplayground.models.SManagerState;
 import su.levenetc.androidplayground.utils.LogWriter;
 import su.levenetc.androidplayground.utils.ThreadUtils;
 
@@ -24,6 +27,8 @@ public class SManager implements SensorEventListener {
 	private static final float MAX_DEFLECTION = 0.7f;
 	private float[] prevValues = new float[3];
 	private static final int BATTERY_LOG_TIME = 1000 * 60 * 5;
+	private PublishSubject<SManagerState> statePublishSubject = PublishSubject.create();
+	private SManagerState state = new SManagerState();
 
 	public void init(Context context) {
 		logWriter = new LogWriter(TAG, context);
@@ -41,10 +46,20 @@ public class SManager implements SensorEventListener {
 		initBatteryTimer();
 	}
 
+	public Observable<SManagerState> getStateObservable() {
+		return statePublishSubject;
+	}
+
 	@Override public void onSensorChanged(SensorEvent event) {
 		if (event.sensor.getType() != Sensor.TYPE_ACCELEROMETER) return;
 
-		if (hasDeflection(event.values)) logWriter.log(TAG, "deflection");
+		if (hasDeflection(event.values)) {
+			state.x = event.values[0];
+			state.y = event.values[1];
+			state.z = event.values[2];
+			statePublishSubject.onNext(state);
+			logWriter.log(TAG, "deflection");
+		}
 	}
 
 	@Override public void onAccuracyChanged(Sensor sensor, int accuracy) {

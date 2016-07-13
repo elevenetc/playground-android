@@ -18,7 +18,7 @@ public class AlarmActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		RotationSensorView view = new RotationSensorView(this);
 		presenter = new RotationViewPresenter();
-		presenter.setView(view);
+		presenter.onCreate(view);
 		setContentView(view);
 	}
 }
