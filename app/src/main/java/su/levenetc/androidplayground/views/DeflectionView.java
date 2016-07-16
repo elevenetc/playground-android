@@ -48,10 +48,12 @@ public class DeflectionView extends View {
 		final int width = canvas.getWidth();
 		final int height = canvas.getHeight();
 		final int max = width / 2;
-		final float w = max * value;
+		final float defSize = max * Math.abs(value);
 		final String stringValue = String.valueOf(value);
+		final float left = value >= 0 ? max : max - defSize;
+		final float right = value >= 0 ? max + defSize : max;
 
-		canvas.drawRect(width / 2, 0, max + w, height, redFill);
+		canvas.drawRect(left, 0, right, height, redFill);
 		canvas.drawRect(0, 0, width - 3, height - 3, blackStroke);
 		canvas.drawRect(max, 0, max + 3, height, blackStroke);
 
