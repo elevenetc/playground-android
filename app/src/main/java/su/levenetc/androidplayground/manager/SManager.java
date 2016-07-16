@@ -21,6 +21,7 @@ public class SManager implements SensorEventListener {
 	private static final String TAG = SManager.class.getSimpleName();
 	private static final boolean CHECK_DEFLECTION = false;
 
+	private static final int SENSOR_TYPE = Sensor.TYPE_ROTATION_VECTOR;
 	private Sensor accelerometer;
 	private SensorManager sysSensorManager;
 	private BManager bManager;
@@ -30,12 +31,15 @@ public class SManager implements SensorEventListener {
 	private static final int BATTERY_LOG_TIME = 1000 * 60 * 5;
 	private PublishSubject<SManagerState> statePublishSubject = PublishSubject.create();
 	private SManagerState state = new SManagerState();
+	private final float[] orientationValues = new float[3];
+	private final float[] rotationMatrix = new float[9];
+	private final float[] rotationVectorFromMatrix = new float[9];
 
 	public void init(Context context) {
 		logWriter = new LogWriter(TAG, context);
 		bManager = new BManager();
 		sysSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
-		accelerometer = sysSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+		accelerometer = sysSensorManager.getDefaultSensor(SENSOR_TYPE);
 		bManager.init(context);
 
 		Log.i(TAG, "Previous logs:");
@@ -52,13 +56,22 @@ public class SManager implements SensorEventListener {
 	}
 
 	@Override public void onSensorChanged(SensorEvent event) {
-		if (event.sensor.getType() != Sensor.TYPE_ACCELEROMETER) return;
+		if (event.sensor.getType() != SENSOR_TYPE) return;
 		boolean update = CHECK_DEFLECTION ? hasDeflection(event.values) : true;
 
 		if (update) {
-			state.x = event.values[0];
-			state.y = event.values[1];
-			state.z = event.values[2];
+
+			SensorManager.getRotationMatrixFromVector(rotationVectorFromMatrix, event.values);
+			SensorManager.remapCoordinateSystem(rotationVectorFromMatrix, SensorManager.AXIS_X, SensorManager.AXIS_Z, rotationMatrix);
+			SensorManager.getOrientation(rotationMatrix, orientationValues);
+			
+			orientationValues[0] = (float) Math.toDegrees(orientationValues[0]);
+			orientationValues[1] = (float) Math.toDegrees(orientationValues[1]);
+			orientationValues[2] = (float) Math.toDegrees(orientationValues[2]);
+
+			state.x = orientationValues[0];
+			state.y = orientationValues[1];
+			state.z = orientationValues[2];
 			statePublishSubject.onNext(state);
 		}
 	}
