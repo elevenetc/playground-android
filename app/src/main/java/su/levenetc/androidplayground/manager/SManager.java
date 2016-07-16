@@ -62,16 +62,20 @@ public class SManager implements SensorEventListener {
 		if (update) {
 
 			SensorManager.getRotationMatrixFromVector(rotationVectorFromMatrix, event.values);
-			SensorManager.remapCoordinateSystem(rotationVectorFromMatrix, SensorManager.AXIS_X, SensorManager.AXIS_Z, rotationMatrix);
-			SensorManager.getOrientation(rotationMatrix, orientationValues);
-			
-			orientationValues[0] = (float) Math.toDegrees(orientationValues[0]);
-			orientationValues[1] = (float) Math.toDegrees(orientationValues[1]);
-			orientationValues[2] = (float) Math.toDegrees(orientationValues[2]);
+			// get the azimuth value (orientation[0]) in degree
+			state.x = (int) (Math.toDegrees(SensorManager.getOrientation(rotationVectorFromMatrix, orientationValues)[0]) + 360) % 360;
 
-			state.x = orientationValues[0];
-			state.y = orientationValues[1];
-			state.z = orientationValues[2];
+//			SensorManager.getRotationMatrixFromVector(rotationVectorFromMatrix, event.values);
+//			SensorManager.getOrientation(rotationMatrix, orientationValues);
+//			SensorManager.remapCoordinateSystem(rotationVectorFromMatrix, SensorManager.AXIS_X, SensorManager.AXIS_Z, rotationMatrix);
+//
+//			orientationValues[0] = (float) Math.toDegrees(orientationValues[0]);
+//			orientationValues[1] = (float) Math.toDegrees(orientationValues[1]);
+//			orientationValues[2] = (float) Math.toDegrees(orientationValues[2]);
+//
+//			state.x = orientationValues[0];
+////			state.y = orientationValues[1];
+////			state.z = orientationValues[2];
 			statePublishSubject.onNext(state);
 		}
 	}
