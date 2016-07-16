@@ -18,6 +18,7 @@ public class DeflectionView extends View {
 	private float value;
 	private Paint redFill = new Paint();
 	private Paint blackStroke = new Paint();
+	private Paint blackText = new Paint();
 	private Rect valueTextBounds = new Rect();
 
 	public DeflectionView(Context context) {
@@ -36,7 +37,8 @@ public class DeflectionView extends View {
 		blackStroke.setStyle(Paint.Style.STROKE);
 		blackStroke.setColor(Color.BLACK);
 		blackStroke.setStrokeWidth(3);
-		blackStroke.setTextSize(Utils.getSp(12, getContext()));
+		blackText.setTextSize(Utils.getSp(12, getContext()));
+		blackText.setColor(Color.BLACK);
 	}
 
 	public void setValue(float value) {
@@ -53,12 +55,11 @@ public class DeflectionView extends View {
 		final float left = value >= 0 ? max : max - defSize;
 		final float right = value >= 0 ? max + defSize : max;
 
-		canvas.drawRect(left, 0, right, height, redFill);
-		canvas.drawRect(0, 0, width - 3, height - 3, blackStroke);
-		canvas.drawRect(max, 0, max + 3, height, blackStroke);
+		//canvas.drawRect(left, 0, right, height, redFill);
+		//canvas.drawRect(0, 0, width - 3, height - 3, blackStroke);
+		//canvas.drawRect(max, 0, max + 3, height, blackStroke);
 
-		blackStroke.getTextBounds(stringValue, 0, stringValue.length(), valueTextBounds);
-
-		canvas.drawText(stringValue, 3, valueTextBounds.top * -1 + 3, blackStroke);
+		blackText.getTextBounds(stringValue, 0, stringValue.length(), valueTextBounds);
+		canvas.drawText(stringValue, 3, valueTextBounds.top * -1 + 3, blackText);
 	}
 }

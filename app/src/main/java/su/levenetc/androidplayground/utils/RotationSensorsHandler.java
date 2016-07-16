@@ -15,30 +15,29 @@ import java.text.NumberFormat;
  */
 public class RotationSensorsHandler implements SensorEventListener {
 
-	SensorManager sensorManager;
-	float[] gData = new float[3];// Gravity or accelerometer
-	float[] mData = new float[3];// Magnetometer
-	float[] orientation = new float[3];
-	float[] rotationMatrix = new float[9];
-	float[] copyRotationMatrix = new float[9];
-	float[] Imat = new float[9];
-	boolean haveGrav;
-	boolean haveAccel;
-	boolean haveMag;
-	boolean haveRot;
-	private RotationDataHandler handler;
-	private NumberFormat nFormat = NumberFormat.getInstance();
+	private SensorManager sensorManager;
+	private float[] gData = new float[3];// Gravity or accelerometer
+	private float[] mData = new float[3];// Magnetometer
+	private float[] orientation = new float[3];
+	private float[] rotationMatrix = new float[9];
+	private float[] copyRotationMatrix = new float[9];
+	private float[] iMat = new float[9];
+	private boolean haveGravity;
+	private boolean haveAccelerometer;
+	private boolean haveMagnetometer;
+	private Handler handler;
+	private NumberFormat numberFormat = NumberFormat.getInstance();
 	private int displayRotation;
 	private boolean hasRotationVector;
 
-	void onCreate(Context context, int displayRotation) {
+	public void onCreate(Context context, int displayRotation) {
 		this.displayRotation = displayRotation;
 		sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
-		nFormat.setMaximumFractionDigits(2);
+		numberFormat.setMaximumFractionDigits(2);
 		hasRotationVector = SystemUtils.hasSensor(Sensor.TYPE_ROTATION_VECTOR, context);
 	}
 
-	void onResume() {
+	public void onResume() {
 		final int sensorDelay = SensorManager.SENSOR_DELAY_FASTEST;
 
 		if (hasRotationVector) {
@@ -53,37 +52,36 @@ public class RotationSensorsHandler implements SensorEventListener {
 		}
 	}
 
-	void onStop() {
+	public void onStop() {
 		sensorManager.unregisterListener(this);
 	}
 
 	public void onSensorChanged(SensorEvent event) {
-		float[] data;
+
 		switch (event.sensor.getType()) {
 			case Sensor.TYPE_ROTATION_VECTOR:
 				gData[0] = event.values[0];
 				gData[1] = event.values[1];
 				gData[2] = event.values[2];
-				haveRot = true;
 				break;
 			case Sensor.TYPE_GRAVITY:
 				gData[0] = event.values[0];
 				gData[1] = event.values[1];
 				gData[2] = event.values[2];
-				haveGrav = true;
+				haveGravity = true;
 				break;
 			case Sensor.TYPE_ACCELEROMETER:
-				if (haveGrav) break;
+				if (haveGravity) break;
 				gData[0] = event.values[0];
 				gData[1] = event.values[1];
 				gData[2] = event.values[2];
-				haveAccel = true;
+				haveAccelerometer = true;
 				break;
 			case Sensor.TYPE_MAGNETIC_FIELD:
 				mData[0] = event.values[0];
 				mData[1] = event.values[1];
 				mData[2] = event.values[2];
-				haveMag = true;
+				haveMagnetometer = true;
 				break;
 			default:
 				return;
@@ -108,8 +106,8 @@ public class RotationSensorsHandler implements SensorEventListener {
 			}
 
 		} else {
-			if ((haveGrav || haveAccel) && haveMag) {
-				SensorManager.getRotationMatrix(rotationMatrix, Imat, gData, mData);
+			if ((haveGravity || haveAccelerometer) && haveMagnetometer) {
+				SensorManager.getRotationMatrix(rotationMatrix, iMat, gData, mData);
 
 				if (displayRotation == Surface.ROTATION_270) {
 					SensorManager.remapCoordinateSystem(rotationMatrix, SensorManager.AXIS_MINUS_Y, SensorManager.AXIS_X, copyRotationMatrix);
@@ -142,7 +140,7 @@ public class RotationSensorsHandler implements SensorEventListener {
 
 	}
 
-	public void setDataHandler(RotationDataHandler handler) {
+	public void setDataHandler(Handler handler) {
 		this.handler = handler;
 	}
 
@@ -207,5 +205,13 @@ public class RotationSensorsHandler implements SensorEventListener {
 			R[12] = R[13] = R[14] = 0.0f;
 			R[15] = 1.0f;
 		}
+	}
+
+	public static interface Handler {
+		void handleYawn(float value);
+
+		void handlePitch(float value);
+
+		void handleRoll(float value);
 	}
 }
