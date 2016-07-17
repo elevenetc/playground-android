@@ -21,7 +21,7 @@ public class AlarmModule {
 
 	@Singleton @Provides public SManager provideSensorsManager() {
 		SManager sManager = new SManager();
-		sManager.init(context);
+		sManager.onCreate(context);
 		return sManager;
 	}
 }

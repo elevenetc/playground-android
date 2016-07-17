@@ -33,6 +33,10 @@ public class RotationSensorsHandler implements SensorEventListener {
 	private float minYaw;
 	private boolean hasRotationVector;
 
+	public void onCreate(Context context) {
+		onCreate(context, Surface.ROTATION_270);
+	}
+
 	public void onCreate(Context context, int displayRotation) {
 		this.displayRotation = displayRotation;
 		sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);

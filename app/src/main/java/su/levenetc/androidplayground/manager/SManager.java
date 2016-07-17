@@ -31,7 +31,7 @@ public class SManager {
 	private SManagerState state = new SManagerState();
 	private RotationSensorsHandler sensorsHandler = new RotationSensorsHandler();
 
-	public void init(Context context) {
+	public void onCreate(Context context) {
 		logWriter = new LogWriter(TAG, context);
 		bManager = new BManager();
 		sysSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
@@ -53,6 +53,10 @@ public class SManager {
 			@Override public void handleRoll(float value) {
 				state.z = value;
 				updateState();
+			}
+
+			@Override public void onError(Throwable t) {
+				t.printStackTrace();
 			}
 
 			private void updateState() {
