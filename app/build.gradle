@@ -52,23 +52,21 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.0.0'
 
+    //Annotation compiler
     apt project(':annotation-compiler')
     compile project(':annotations')
     compile 'javax.annotation:jsr250-api:1.0'
 
+    //Utils
     compile 'com.google.auto.value:auto-value:1.1'
 
-    compile 'com.squareup.retrofit2:retrofit:2.0.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.0.0'
+    //Picasso
     compile 'com.squareup.picasso:picasso:2.5.2'
+
+    //Google libs
+    compile 'com.android.support:appcompat-v7:23.0.0'
     compile 'com.android.support:recyclerview-v7:23.0.0'
-
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.mockito:mockito-core:1.10.19'
-
     compile 'com.google.android.gms:play-services-wallet:9.2.0'
 
     //Dagger2
@@ -83,4 +81,13 @@ dependencies {
     //Stetho
     compile 'com.facebook.stetho:stetho:1.3.1'
     compile 'com.facebook.stetho:stetho-okhttp3:1.3.1'
+
+    //Retrofit
+    compile 'com.squareup.retrofit2:retrofit:2.0.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.0.0'
+
+    //Testing
+    testCompile 'junit:junit:4.12'
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.mockito:mockito-core:1.10.19'
 }
