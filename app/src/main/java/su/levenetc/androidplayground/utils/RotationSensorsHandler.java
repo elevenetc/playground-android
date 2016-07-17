@@ -5,6 +5,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.support.annotation.Nullable;
 import android.view.Surface;
 
 import java.text.NumberFormat;
@@ -16,18 +17,20 @@ import java.text.NumberFormat;
 public class RotationSensorsHandler implements SensorEventListener {
 
 	private SensorManager sensorManager;
-	private float[] gData = new float[3];// Gravity or accelerometer
-	private float[] mData = new float[3];// Magnetometer
-	private float[] orientation = new float[3];
-	private float[] rotationMatrix = new float[9];
-	private float[] copyRotationMatrix = new float[9];
-	private float[] iMat = new float[9];
+	private final float[] gData = new float[3];// Gravity or accelerometer
+	private final float[] mData = new float[3];// Magnetometer
+	private final float[] orientation = new float[3];
+	private final float[] rotationMatrix = new float[9];
+	private final float[] copyRotationMatrix = new float[9];
+	private final float[] iMat = new float[9];
+	private final NumberFormat numberFormat = NumberFormat.getInstance();
 	private boolean haveGravity;
 	private boolean haveAccelerometer;
 	private boolean haveMagnetometer;
-	private Handler handler;
-	private NumberFormat numberFormat = NumberFormat.getInstance();
+	private @Nullable Handler handler;
 	private int displayRotation;
+	private float maxYaw;
+	private float minYaw;
 	private boolean hasRotationVector;
 
 	public void onCreate(Context context, int displayRotation) {
@@ -54,6 +57,10 @@ public class RotationSensorsHandler implements SensorEventListener {
 
 	public void onStop() {
 		sensorManager.unregisterListener(this);
+	}
+
+	public void onDestroy() {
+		sensorManager = null;
 	}
 
 	public void onSensorChanged(SensorEvent event) {
@@ -109,11 +116,10 @@ public class RotationSensorsHandler implements SensorEventListener {
 			if ((haveGravity || haveAccelerometer) && haveMagnetometer) {
 				SensorManager.getRotationMatrix(rotationMatrix, iMat, gData, mData);
 
-				if (displayRotation == Surface.ROTATION_270) {
+				if (displayRotation == Surface.ROTATION_270)
 					SensorManager.remapCoordinateSystem(rotationMatrix, SensorManager.AXIS_MINUS_Y, SensorManager.AXIS_X, copyRotationMatrix);
-				} else {
+				else
 					SensorManager.remapCoordinateSystem(rotationMatrix, SensorManager.AXIS_Y, SensorManager.AXIS_MINUS_X, copyRotationMatrix);
-				}
 
 				SensorManager.getOrientation(copyRotationMatrix, orientation);
 
@@ -129,12 +135,12 @@ public class RotationSensorsHandler implements SensorEventListener {
 					handler.handleRoll(roll);
 					handler.handlePitch(pitch);
 				}
+			} else {
+				if (handler != null)
+					handler.onError(new RuntimeException("Sensors are not available"));
 			}
 		}
 	}
-
-	private float maxYaw;
-	private float minYaw;
 
 	@Override public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
@@ -213,5 +219,7 @@ public class RotationSensorsHandler implements SensorEventListener {
 		void handlePitch(float value);
 
 		void handleRoll(float value);
+
+		void onError(Throwable t);
 	}
 }
