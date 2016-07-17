@@ -34,6 +34,7 @@
         <activity android:name=".activities.AlarmActivity"/>
 
         <service android:name=".services.AlarmStatusService"/>
+        <service android:name=".services.SensorsDataCollectorService"/>
     </application>
 
 </manifest>
