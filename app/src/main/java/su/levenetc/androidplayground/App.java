@@ -2,6 +2,8 @@ package su.levenetc.androidplayground;
 
 import android.app.Application;
 
+import com.facebook.stetho.Stetho;
+
 import su.levenetc.androidplayground.di.DIHelper;
 import su.levenetc.androidplayground.services.SensorsDataCollectorService;
 
@@ -14,6 +16,7 @@ public class App extends Application {
 		//startService(new Intent(this, AlarmStatusService.class));
 		DIHelper.init(this);
 
+		Stetho.initializeWithDefaults(this);
 		SensorsDataCollectorService.start(this);
 	}
 }
