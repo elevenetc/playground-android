@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest
-    package="su.levenetc.androidplayground"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="su.levenetc.androidplayground">
 
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <uses-feature
         android:name="android.hardware.nfc"
-        android:required="true"/>
+        android:required="true" />
 
     <application
         android:name=".App"
@@ -20,22 +19,23 @@
         android:theme="@style/AppTheme">
         <activity android:name=".activities.BootActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
         <meta-data
             android:name="com.google.android.gms.wallet.api.enabled"
-            android:value="true"/>
+            android:value="true" />
 
-        <activity android:name=".activities.HtmlSymbolsTest"/>
-        <activity android:name=".activities.AlarmActivity"/>
-        <activity android:name=".activities.StethoSampleActivity"/>
+        <activity android:name=".activities.HtmlSymbolsTest" />
+        <activity android:name=".activities.AlarmActivity" />
+        <activity android:name=".activities.StethoSampleActivity" />
+        <activity android:name=".activities.AllEventReceiverActivity" />
 
-        <service android:name=".services.AlarmStatusService"/>
-        <service android:name=".services.SensorsDataCollectorService"/>
+        <service android:name=".services.AlarmStatusService" />
+        <service android:name=".services.SensorsDataCollectorService" />
     </application>
 
 </manifest>
