@@ -55,4 +55,9 @@ public class VideoPagerAdapter extends PagerAdapter {
 	public TextureVideoView getItem(int position) {
 		return items[position];
 	}
+
+	public void resetTime() {
+		for (TextureVideoView item : items)
+			if (item != null) item.seekTo(0);
+	}
 }

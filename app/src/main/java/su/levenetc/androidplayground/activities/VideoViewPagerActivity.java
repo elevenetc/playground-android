@@ -42,7 +42,8 @@ public class VideoViewPagerActivity extends AppCompatActivity {
 
 			@Override public void onPageSelected(int position) {
 				TextureVideoView videoView = adapter.getItem(position);
-				videoView.seekTo(0);
+				adapter.resetTime();
+				//videoView.seekTo(0);
 				videoView.start();
 				animatedTextView.changeText(texts[position]);
 

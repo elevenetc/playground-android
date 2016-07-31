@@ -25,4 +25,6 @@ public class VideoViewPager extends ViewPager {
 
 		super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec((int) height, MeasureSpec.EXACTLY));
 	}
+
+
 }
