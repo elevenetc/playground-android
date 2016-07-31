@@ -1,6 +1,5 @@
 package su.levenetc.androidplayground.adapters;
 
-import android.graphics.Color;
 import android.net.Uri;
 import android.support.v4.view.PagerAdapter;
 import android.view.View;
@@ -23,9 +22,12 @@ public class VideoPagerAdapter extends PagerAdapter {
 	@Override public Object instantiateItem(ViewGroup container, int position) {
 		VideoView videoView = new VideoView(container.getContext());
 		Uri uri = Uri.parse("android.resource://su.levenetc.androidplayground/raw/" + rawFilesIds[position]);
-		videoView.setBackgroundColor(position % 2 == 0 ? Color.RED : Color.BLUE);
+		//videoView.setBackgroundColor(position % 2 == 0 ? Color.RED : Color.BLUE);
 		videoView.setVideoURI(uri);
 		videoView.setZOrderOnTop(true);
+		videoView.seekTo(0);
+		videoView.start();
+		videoView.stopPlayback();
 		//videoView.start();
 		container.addView(videoView);
 		items[position] = videoView;
