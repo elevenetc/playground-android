@@ -4,11 +4,11 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.VideoView;
 
 import su.levenetc.androidplayground.R;
 import su.levenetc.androidplayground.adapters.VideoPagerAdapter;
 import su.levenetc.androidplayground.views.AnimatedTextView;
+import su.levenetc.androidplayground.views.TextureVideoView;
 import su.levenetc.androidplayground.views.VideoViewPager;
 
 /**
@@ -41,16 +41,30 @@ public class VideoViewPagerActivity extends AppCompatActivity {
 			}
 
 			@Override public void onPageSelected(int position) {
-				VideoView videoView = adapter.getItem(position);
+				TextureVideoView videoView = adapter.getItem(position);
 				videoView.seekTo(0);
 				videoView.start();
 				animatedTextView.changeText(texts[position]);
+
 			}
 
 			@Override public void onPageScrollStateChanged(int state) {
 
 			}
 		});
+
+		ViewPager.PageTransformer pageTransformer = (page, position) -> {
+			if (position <= -1.0f || position >= 1.0f) {
+				page.setAlpha(0.0f);
+			} else if (position == 0.0f) {
+				page.setAlpha(1.0f);
+			} else {
+				// position is between -1.0F & 0.0F OR 0.0F & 1.0F
+				page.setAlpha(1.0f - Math.abs(position));
+			}
+		};
+
+		videoViewPager.setPageTransformer(false, pageTransformer);
 
 		animatedTextView.changeText(texts[0]);
 	}
