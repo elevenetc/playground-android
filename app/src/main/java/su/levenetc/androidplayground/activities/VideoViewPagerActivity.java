@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-
 import su.levenetc.androidplayground.R;
 import su.levenetc.androidplayground.adapters.VideoPagerAdapter;
 import su.levenetc.androidplayground.views.AnimatedTextView;
@@ -28,9 +27,9 @@ public class VideoViewPagerActivity extends AppCompatActivity {
 		final VideoViewPager videoViewPager = (VideoViewPager) findViewById(R.id.video_viewpager);
 		final AnimatedTextView animatedTextView = (AnimatedTextView) findViewById(R.id.text_animated);
 		final VideoPagerAdapter adapter = new VideoPagerAdapter(new int[]{
-				R.raw.video_01,
-				R.raw.video_02,
-				R.raw.video_03
+//				R.raw.video_01,
+//				R.raw.video_02,
+//				R.raw.video_03
 		});
 		videoViewPager.setAdapter(adapter);
 
