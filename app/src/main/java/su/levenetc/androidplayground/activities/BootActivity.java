@@ -9,7 +9,7 @@ public class BootActivity extends AppCompatActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		startActivity(VideoViewPagerActivity.class);
+		startActivity(AccountsActivity.class);
 	}
 
 	private void startActivity(Class c) {
