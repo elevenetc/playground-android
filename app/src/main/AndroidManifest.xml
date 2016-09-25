@@ -3,7 +3,9 @@
           xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+	<uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
 
     <uses-feature
@@ -34,6 +36,7 @@
         <activity android:name=".activities.StethoSampleActivity"/>
         <activity android:name=".activities.AllEventReceiverActivity"/>
         <activity android:name=".activities.VideoViewPagerActivity"/>
+        <activity android:name=".activities.AccountsActivity"/>
 
         <service android:name=".services.AlarmStatusService"/>
         <service android:name=".services.SensorsDataCollectorService"/>
