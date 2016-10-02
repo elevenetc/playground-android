@@ -9,7 +9,7 @@ public class BootActivity extends AppCompatActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		startActivity(AccountsActivity.class);
+		startActivity(SampleTestRecordActivityA.class);
 	}
 
 	private void startActivity(Class c) {
