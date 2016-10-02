@@ -28,6 +28,7 @@ android {
 
         buildConfigField "String", "GOOGLE_PLUS_API_KEY", rootProject.ext.googlePlusApiKey
         buildConfigField "String", "GOOGLE_PLUS_USER_ID", rootProject.ext.testGooglePlusUserId
+        testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
     }
     buildTypes {
         release {
@@ -36,7 +37,13 @@ android {
         }
 
         debug {
+            debuggable true
+            signingConfig signingConfigs.debug
+        }
 
+        custom {
+            debuggable true
+            signingConfig signingConfigs.debug
         }
     }
 
@@ -48,6 +55,26 @@ android {
     testOptions {
         unitTests.returnDefaultValues = true
     }
+
+    sourceSets {
+
+        release.java.srcDirs = [
+                "src/main/java",
+                "src/types/release/java"
+        ]
+
+        debug.java.srcDirs = [
+                "src/main/java",
+                "src/types/debug/java"
+        ]
+
+        custom.java.srcDirs = [
+                "src/main/java",
+                "src/types/custom/java"
+        ]
+    }
+
+    testBuildType "custom"
 }
 
 dependencies {
@@ -65,8 +92,8 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
 
     //Google libs
-    compile 'com.android.support:appcompat-v7:23.0.0'
-    compile 'com.android.support:recyclerview-v7:23.0.0'
+    compile 'com.android.support:appcompat-v7:23.1.1'
+    compile 'com.android.support:recyclerview-v7:23.1.1'
     compile 'com.google.android.gms:play-services-wallet:9.2.0'
 
     //Dagger2
@@ -86,8 +113,13 @@ dependencies {
     compile 'com.squareup.retrofit2:retrofit:2.0.0'
     compile 'com.squareup.retrofit2:converter-gson:2.0.0'
 
+    //ButterKnife
+    compile 'com.jakewharton:butterknife:8.4.0'
+    apt 'com.jakewharton:butterknife-compiler:8.4.0'
+
     //Testing
     testCompile 'junit:junit:4.12'
     testCompile 'junit:junit:4.12'
     testCompile 'org.mockito:mockito-core:1.10.19'
+    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'
 }
