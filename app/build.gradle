@@ -7,6 +7,7 @@ buildscript {
     dependencies {
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
         classpath 'me.tatarka:gradle-retrolambda:3.2.5'
+        classpath 'com.stanfy.spoon:spoon-gradle-plugin:1.2.2'
     }
 }
 
@@ -14,6 +15,7 @@ apply from: '../params.gradle'
 apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'spoon'
 
 android {
     compileSdkVersion 23
@@ -122,4 +124,6 @@ dependencies {
     testCompile 'junit:junit:4.12'
     testCompile 'org.mockito:mockito-core:1.10.19'
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'
+    androidTestCompile 'com.squareup.spoon:spoon-client:1.6.4'
+
 }
