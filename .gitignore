@@ -1,19 +1,13 @@
 .gradle
 .idea/
 /local.properties
-/.idea/workspace.xml
-/.idea/libraries
 .DS_Store
 /build
 /captures
 bin/
 gen/
-.gradle
-/local.properties
-/.idea/workspace.xml
-.DS_Store
 /annotations/build/libs/annotations.jar
-./annotation-compiler/build/libs/annotation-compiler.jar
+annotation-compiler/build/libs/annotation-compiler.jar
 
 *.ipr
 *.iws
