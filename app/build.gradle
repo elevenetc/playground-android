@@ -3,11 +3,15 @@ apply from: '../params.gradle'
 buildscript {
     repositories {
         mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
     }
     dependencies {
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
         classpath 'me.tatarka:gradle-retrolambda:3.2.5'
         classpath 'com.stanfy.spoon:spoon-gradle-plugin:1.2.2'
+        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.1"
     }
 }
 
@@ -16,6 +20,13 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'spoon'
+apply plugin: 'org.sonarqube'
+
+sonarqube {
+    properties {
+        property "sonar.sources", "./src/main/java"
+    }
+}
 
 android {
     compileSdkVersion 23
