@@ -8,6 +8,8 @@ class Config {
     static String appName = 'Sample'
 
     static String tempFileName = 'temp.txt'
+
+    static boolean debug = true
 }
 
 node {
@@ -18,11 +20,55 @@ node {
 
     checkout()
     compile()
-    loadApps()
-    createApp()
-//    createVersion()
-//    upload()
+    def app = loadOrCreateApp()
+    uploadVersionIfNeeded(app)
+}
 
+def loadVersions(app) {
+    def id = app.public_identifier
+    return request('-H "X-HockeyAppToken: ' + Config.hockeyToken + '" https://rink.hockeyapp.net/api/2/apps/' + id + '/app_versions').app_versions
+}
+
+def uploadVersionIfNeeded(app) {
+    logMethod('uploadVersionIfNeeded')
+    def versions = loadVersions(app)
+    String lastCommitMessage = getLastCommitMessage()
+    boolean needToUpload = true
+    for (int i = 0; i < versions.size(); i++) {
+        String notes = versions.get(i).notes
+        if (lastCommitMessage == notes) {
+            needToUpload = false
+            break
+        }
+    }
+    if (needToUpload) uploadVersion(app)
+}
+
+def loadOrCreateApp() {
+    List apps = loadApps()
+    def app = null
+    def title = getAppTitle()
+
+    for (int i = 0; i < apps.size(); i++) {
+        def a = apps.get(i);
+        if (a.title == title) {
+            app = a
+            log('App already created for ' + title)
+            break
+        }
+    }
+
+    if (app == null) {
+        app = createApp()
+        log('New app was created for ' + title)
+    }
+
+    return app
+}
+
+def getLastCommitMessage() {
+    sh 'git log -1 --pretty=%B > ' + Config.tempFileName
+    return readFile(Config.tempFileName).trim()
 }
 
 def checkout() {
@@ -35,8 +81,16 @@ def compile() {
     sh './gradlew assembleDebug'
 }
 
-def upload() {
-    println 'METHOD: upload'
+def uploadVersion(app) {
+    log 'METHOD: uploadVersion'
+    def id = app.public_identifier
+    compile()
+    sh 'mv app/build/outputs/apk/app-debug.apk app/build/outputs/apk/app-debug-x.apk'
+    request('-F "name=XXX" -F "status=2" -F "notify=1" -F "notes=' + getNotesForVersion() + '" -F "notes_type=0" -F "ipa=@app/build/outputs/apk/app-debug-x.apk" -H "X-HockeyAppToken: ' + Config.hockeyToken + '" https://rink.hockeyapp.net/api/2/apps/' + id + '/app_versions/upload')
+}
+
+def uploadApp() {
+    log 'METHOD: upload'
     //TODO: add commits to notes
     //TODO: inform testers
     //TODO: separate name
@@ -50,17 +104,37 @@ def upload() {
 }
 
 def createApp() {
-    println 'METHOD: createApp'
-    request('-F "title=' + Config.appName + '-$BRANCH_NAME" -F "bundle_identifier=' + Config.appName + '-$BRANCH_NAME" -F "platform=Android" -F "release_type=1" -H "X-HockeyAppToken: ' + Config.hockeyToken + '" https://rink.hockeyapp.net/api/2/apps/new')
+    log 'METHOD: createApp'
+    def app = request('-F "title=' + Config.appName + '-$BRANCH_NAME" -F "bundle_identifier=' + Config.appName + '-$BRANCH_NAME" -F "platform=Android" -F "release_type=1" -H "X-HockeyAppToken: ' + Config.hockeyToken + '" https://rink.hockeyapp.net/api/2/apps/new')
+    return app
+}
+
+def getAppTitle() {
+    return Config.appName + '-' + env.BRANCH_NAME
+}
+
+def getNotesForVersion() {
+    def commitMessage = getLastCommitMessage()
+    def hash = getGitHash()
+    return commitMessage + '-' + hash
+}
+
+def getBundleId() {
+    return Config.appName + '-' + env.BRANCH_NAME
+}
+
+def getGitHash() {
+    sh 'git log --pretty=format:"%h" -n 1 > ' + Config.tempFileName
+    return readFile(Config.tempFileName).trim()
 }
 
 def createVersion() {
-    println 'METHOD: createVersion'
+    log 'METHOD: createVersion'
     sh 'curl -F "bundle_version=$BRANCH_NAME" -H "X-HockeyAppToken: ' + Config.hockeyToken + '" https://rink.hockeyapp.net/api/2/apps/' + Config.hockeyAppId + '/app_versions/new > ' + Config.tempFileName
     checkError()
 }
 
-def loadApps() {
+def List loadApps() {
     println 'METHOD: loadApps'
 
     def response = request('-H "X-HockeyAppToken: ' + Config.hockeyToken + '" https://rink.hockeyapp.net/api/2/apps')
@@ -72,11 +146,7 @@ def loadApps() {
     def status = response.status
     def apps = response.apps
 
-    if (status == 'success') {
-
-    } else {
-
-    }
+    return apps
 
     //def zzz = 1
     //def object = JSON.parse(resp)
@@ -102,8 +172,8 @@ static def parseJson(String json) {
 }
 
 def checkError(response) {
-    if (response == null || response.status != 'success')
-        throw new Exception('Error: ' + response);
+    //if (response == null || response.status != 'success')
+    //    throw new Exception('Error: ' + response);
 }
 
 def request(curlParams) {
@@ -112,4 +182,13 @@ def request(curlParams) {
     checkError(response)
     println response
     return response
+}
+
+def log(String message) {
+    if (Config.debug)
+        println 'LOG: ' + message
+}
+
+def logMethod(String methodName) {
+    log('METHOD: ' + methodName)
 }
