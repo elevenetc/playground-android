@@ -18,10 +18,14 @@ node {
     Config.hockeyAppId = env.HOCKEY_APP_ID
     Config.apkFileName = env.APK_FILE_NAME
 
+    log 'Build number: ' + env.BUILD_NUMBER
+
     checkout()
     compile()
     def app = loadOrCreateApp()
     uploadVersionIfNeeded(app)
+
+
 }
 
 def loadVersions(app) {
@@ -49,6 +53,8 @@ def loadOrCreateApp() {
     def app = null
     def title = getAppTitle()
 
+    checkAndDeleteApps(apps)
+
     for (int i = 0; i < apps.size(); i++) {
         def a = apps.get(i);
         if (a.title == title) {
@@ -64,6 +70,26 @@ def loadOrCreateApp() {
     }
 
     return app
+}
+
+def checkAndDeleteApps(apps) {
+
+    String branches = execGit('branch -a')
+    boolean wasSomethingDeleted = false
+
+    for (int i = 0; i < apps.size(); i++) {
+        def app = apps.get(i)
+        String initBranch = app.title.replace(Config.appName + '-', '')
+
+        if (!branches.contains(initBranch)) {
+            log('DELETE APP:' + app.title)
+            wasSomethingDeleted = true
+        }
+    }
+
+    if (!wasSomethingDeleted) {
+        log('NOTHING WAS DELETED')
+    }
 }
 
 def getLastCommitMessage() {
@@ -83,10 +109,9 @@ def compile() {
 
 def uploadVersion(app) {
     log 'METHOD: uploadVersion'
-    def id = app.public_identifier
     compile()
     sh 'mv app/build/outputs/apk/app-debug.apk app/build/outputs/apk/app-debug-x.apk'
-    request('-F "name=XXX" -F "status=2" -F "notify=1" -F "notes=' + getNotesForVersion() + '" -F "notes_type=0" -F "ipa=@app/build/outputs/apk/app-debug-x.apk" -H "X-HockeyAppToken: ' + Config.hockeyToken + '" https://rink.hockeyapp.net/api/2/apps/' + id + '/app_versions/upload')
+    request('-F "status=2" -F "notify=1" -F "notes=' + getNotesForVersion() + '" -F "notes_type=0" -F "ipa=@app/build/outputs/apk/app-debug-x.apk" -H "X-HockeyAppToken: ' + Config.hockeyToken + '" https://rink.hockeyapp.net/api/2/apps/' + app.public_identifier + '/app_versions/upload')
 }
 
 def uploadApp() {
@@ -128,6 +153,15 @@ def getGitHash() {
     return readFile(Config.tempFileName).trim()
 }
 
+def getCurrentBranches() {
+    return execGit('branch -a')
+}
+
+def String execGit(String command) {
+    sh 'git ' + command + ' > ' + Config.tempFileName
+    return readFile(Config.tempFileName).trim()
+}
+
 def createVersion() {
     log 'METHOD: createVersion'
     sh 'curl -F "bundle_version=$BRANCH_NAME" -H "X-HockeyAppToken: ' + Config.hockeyToken + '" https://rink.hockeyapp.net/api/2/apps/' + Config.hockeyAppId + '/app_versions/new > ' + Config.tempFileName
@@ -136,30 +170,8 @@ def createVersion() {
 
 def List loadApps() {
     println 'METHOD: loadApps'
-
     def response = request('-H "X-HockeyAppToken: ' + Config.hockeyToken + '" https://rink.hockeyapp.net/api/2/apps')
-
-//    sh 'curl -H "X-HockeyAppToken: ' + Config.hockeyToken + '" https://rink.hockeyapp.net/api/2/apps > ' + Config.tempFileName
-//    def response = parseJson(readFile(Config.tempFileName))
-//    checkError(response)
-
-    def status = response.status
-    def apps = response.apps
-
-    return apps
-
-    //def zzz = 1
-    //def object = JSON.parse(resp)
-    //def status = response.status
-    //sh "echo 111"
-    //sh "echo ${status}"
-    //sh "echo 111"
-    //def result = new URL("https://rink.hockeyapp.net/api/2/apps").getText()
-    //sh 'echo ${result}'
-
-//def response = httpRequest "http://httpbin.org/response-headers?param1=${param1}"
-
-
+    return response.apps
 }
 
 //@NonCPS
