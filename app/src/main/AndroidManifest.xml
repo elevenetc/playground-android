@@ -40,6 +40,7 @@
         <activity android:name=".activities.AccountsActivity"/>
         <activity android:name=".activities.SampleTestRecordActivityA"/>
         <activity android:name=".activities.SampleTestRecordActivityB"/>
+        <activity android:name=".activities.BackStackTypePopActivity"/>
 
         <service android:name=".services.AlarmStatusService"/>
         <service android:name=".services.SensorsDataCollectorService"/>
