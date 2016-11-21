@@ -50,6 +50,12 @@ public class ViewUtils {
 	private static Point screenSize;
 	private static float defaultToolbarHeight;
 
+	public static TextView createTextView(Context context, String text){
+		TextView result = new TextView(context);
+		result.setText(text);
+		return result;
+	}
+
 	public static void setTextSize(Paint paint, float dpValue, Context context) {
 		paint.setTextSize(
 				TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,

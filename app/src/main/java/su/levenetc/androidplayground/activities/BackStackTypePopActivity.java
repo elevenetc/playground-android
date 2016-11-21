@@ -31,7 +31,7 @@ public class BackStackTypePopActivity extends AppCompatActivity {
                             fm.beginTransaction().replace(R.id.root_container, create("C", null, new Action0() {
                                 @Override
                                 public void call() {
-                                    backTo();
+                                    //backTo();
                                 }
                             }));
                         }
