@@ -16,3 +16,4 @@ annotation-compiler/build/libs/annotation-compiler.jar
 *.apk
 *.ap_
 *.dex
+/annotation-compiler/build/
