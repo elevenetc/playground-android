@@ -8,7 +8,6 @@ import android.nfc.tech.IsoDep;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-
 import su.levenetc.androidplayground.utils.ViewUtils;
 
 /**
@@ -19,6 +18,9 @@ public class NfcForegroundActivity extends AppCompatActivity {
 
     private static final IntentFilter[] INTENT_FILTER = new IntentFilter[]{
             new IntentFilter(NfcAdapter.ACTION_TECH_DISCOVERED)
+//            new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED)
+//            new IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED)
+//            new IntentFilter(NfcAdapter.ACTION_ADAPTER_STATE_CHANGED)
     };
 
     private static final String[][] TECH_LIST = new String[][]{

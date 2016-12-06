@@ -57,8 +57,11 @@ android {
         }
 
         custom {
-            debuggable true
-            signingConfig signingConfigs.debug
+            initWith debug
+        }
+
+        debugActivity {
+            initWith debug
         }
     }
 
@@ -73,20 +76,20 @@ android {
 
     sourceSets {
 
-        release.java.srcDirs = [
-                "src/main/java",
-                "src/types/release/java"
-        ]
-
-        debug.java.srcDirs = [
-                "src/main/java",
-                "src/types/debug/java"
-        ]
-
-        custom.java.srcDirs = [
-                "src/main/java",
-                "src/types/custom/java"
-        ]
+//        release.java.srcDirs = [
+//                "src/main/java",
+//                "src/types/release/java"
+//        ]
+//
+//        debug.java.srcDirs = [
+//                "src/main/java",
+//                "src/types/debug/java"
+//        ]
+//
+//        custom.java.srcDirs = [
+//                "src/main/java",
+//                "src/types/custom/java"
+//        ]
     }
 
     testBuildType "custom"
