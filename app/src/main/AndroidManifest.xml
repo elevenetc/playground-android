@@ -1,54 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="su.levenetc.androidplayground">
+          package="su.levenetc.androidplayground">
 
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.NFC" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+	<uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS"/>
+	<uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+	<uses-permission android:name="android.permission.INTERNET"/>
+	<uses-permission android:name="android.permission.NFC"/>
+	<uses-permission android:name="android.permission.WAKE_LOCK"/>
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
-    <uses-feature
-        android:name="android.hardware.nfc"
-        android:required="true" />
+	<uses-feature
+			android:name="android.hardware.nfc"
+			android:required="true"/>
 
-    <application
-        android:name=".App"
-        android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".activities.BootActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+	<application
+			android:name=".App"
+			android:allowBackup="true"
+			android:icon="@mipmap/ic_launcher"
+			android:label="@string/app_name"
+			android:supportsRtl="true"
+			android:theme="@style/AppTheme">
+		<activity android:name=".activities.BootActivity">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+				<category android:name="android.intent.category.LAUNCHER"/>
+			</intent-filter>
+		</activity>
 
-        <meta-data
-            android:name="com.google.android.gms.wallet.api.enabled"
-            android:value="true" />
+		<meta-data
+				android:name="com.google.android.gms.wallet.api.enabled"
+				android:value="true"/>
 
-        <activity android:name=".activities.HtmlSymbolsTest" />
-        <activity android:name=".activities.AlarmActivity" />
-        <activity android:name=".activities.StethoSampleActivity" />
-        <activity android:name=".activities.AllEventReceiverActivity" />
-        <activity android:name=".activities.VideoViewPagerActivity" />
-        <activity android:name=".activities.AccountsActivity" />
-        <activity android:name=".activities.SampleTestRecordActivityA" />
-        <activity android:name=".activities.SampleTestRecordActivityB" />
-        <activity android:name=".activities.BackStackTypePopActivity" />
-        <activity android:name=".activities.JustActivity" />
-        <activity android:name=".activities.NfcForegroundActivity" />
-        <activity android:name=".activities.NfcReaderActivity" />
-        <activity android:name=".activities.WorkRunnerActivity" />
+		<activity android:name=".activities.HtmlSymbolsTest"/>
+		<activity android:name=".activities.AlarmActivity"/>
+		<activity android:name=".activities.StethoSampleActivity"/>
+		<activity android:name=".activities.AllEventReceiverActivity"/>
+		<activity android:name=".activities.VideoViewPagerActivity"/>
+		<activity android:name=".activities.AccountsActivity"/>
+		<activity android:name=".activities.SampleTestRecordActivityA"/>
+		<activity android:name=".activities.SampleTestRecordActivityB"/>
+		<activity android:name=".activities.BackStackTypePopActivity"/>
+		<activity android:name=".activities.JustActivity"/>
+		<activity android:name=".activities.NfcForegroundActivity"/>
+		<activity android:name=".activities.NfcReaderActivity"/>
+		<activity android:name=".activities.WorkRunnerActivity"/>
+		<activity android:name=".activities.OpenGLSampleActivity"/>
 
-        <service android:name=".services.AlarmStatusService" />
-        <service android:name=".services.SensorsDataCollectorService" />
-    </application>
+		<service android:name=".services.AlarmStatusService"/>
+		<service android:name=".services.SensorsDataCollectorService"/>
+	</application>
 
 </manifest>
