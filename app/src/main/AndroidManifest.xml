@@ -15,6 +15,7 @@
 			android:required="true"/>
 
 	<application
+			android:hardwareAccelerated="true"
 			android:name=".App"
 			android:allowBackup="true"
 			android:icon="@mipmap/ic_launcher"
@@ -47,6 +48,7 @@
 		<activity android:name=".activities.NfcReaderActivity"/>
 		<activity android:name=".activities.WorkRunnerActivity"/>
 		<activity android:name=".activities.OpenGLSampleActivity"/>
+		<activity android:name=".activities.CanvasActivity"/>
 
 		<service android:name=".services.AlarmStatusService"/>
 		<service android:name=".services.SensorsDataCollectorService"/>
