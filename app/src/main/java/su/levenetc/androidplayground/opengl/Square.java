@@ -17,8 +17,9 @@ package su.levenetc.androidplayground.opengl;
 
 import android.content.Context;
 import android.opengl.GLES20;
+import android.opengl.Matrix;
 import su.levenetc.androidplayground.R;
-import su.levenetc.androidplayground.utils.GLUtils;
+import su.levenetc.androidplayground.utils.Utils;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -37,9 +38,8 @@ public class Square {
 
 	private static final int BYTES = 2;
 
-	// number of coordinates per vertex in this array
 	static final int COORDS_PER_VERTEX = 3;
-	static float squareCoords[] = {
+	static float squareCoordinates[] = {
 			-0.5f, 0.5f, 0.0f,   // top left
 			-0.5f, -0.5f, 0.0f,   // bottom left
 			0.5f, -0.5f, 0.0f,   // bottom right
@@ -49,16 +49,19 @@ public class Square {
 
 	private final int vertexStride = COORDS_PER_VERTEX * 4;
 
-	private final float color[] = {1.0f, 0.709803922f, 0.898039216f, 1.0f};
+	private final float color[];
+	private float xTranslation;
 
-	public Square(Context context) {
+	public Square(float xTranslation, int color, Context context) {
+		this.xTranslation = xTranslation;
+		this.color = Utils.intToFloatRgba(color, 1);
 		// initialize vertex byte buffer for shape coordinates
 		ByteBuffer bb = ByteBuffer.allocateDirect(
 				// (# of coordinate values * 4 bytes per float)
-				squareCoords.length * 4);
+				squareCoordinates.length * 4);
 		bb.order(ByteOrder.nativeOrder());
 		vertexBuffer = bb.asFloatBuffer();
-		vertexBuffer.put(squareCoords);
+		vertexBuffer.put(squareCoordinates);
 		vertexBuffer.position(0);
 
 		// initialize byte buffer for the draw list
@@ -83,13 +86,16 @@ public class Square {
 		setPosition(program);
 		setColor(program);
 
-		// get handle to shape's transformation matrix
-		int mMVPMatrixHandle = GLES20.glGetUniformLocation(program, "uMVPMatrix");
-		GLUtils.checkGlError("glGetUniformLocation");
+		Matrix.translateM(mvpMatrix, 0, xTranslation, 0, 0);
 
 		// Apply the projection and view transformation
-		GLES20.glUniformMatrix4fv(mMVPMatrixHandle, 1, false, mvpMatrix, 0);
-		GLUtils.checkGlError("glUniformMatrix4fv");
+		GLES20.glUniformMatrix4fv(
+				GLES20.glGetUniformLocation(program, "uMVPMatrix"),
+				1,
+				false,
+				mvpMatrix,
+				0
+		);
 
 		drawElements();
 

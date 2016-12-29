@@ -14,7 +14,7 @@ import java.io.InputStreamReader;
  * Created by eugene.levenetc on 25/12/2016.
  */
 public class GLUtils {
-	private static final String TAG = "MyGLRenderer";
+	private static final String TAG = "GLRenderer";
 
 	public static int loadShader(int type, String shaderCode) {
 

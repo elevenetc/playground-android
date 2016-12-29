@@ -9,18 +9,18 @@ import android.view.MotionEvent;
  * This view can also be used to capture touch events, such as a user
  * interacting with drawn objects.
  */
-public class MyGLSurfaceView extends GLSurfaceView {
+public class GLView extends GLSurfaceView {
 
-	private final MyGLRenderer renderer;
+	private final GLRenderer renderer;
 
-	public MyGLSurfaceView(Context context) {
+	public GLView(Context context) {
 		super(context);
 
 		// Create an OpenGL ES 2.0 context.
 		setEGLContextClientVersion(2);
 
 		// Set the Renderer for drawing on the GLSurfaceView
-		renderer = new MyGLRenderer(context);
+		renderer = new GLRenderer(context);
 		setRenderer(renderer);
 
 		// Render the view only when there is a change in the drawing data

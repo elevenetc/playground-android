@@ -3,7 +3,7 @@ package su.levenetc.androidplayground.activities;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import su.levenetc.androidplayground.opengl.MyGLSurfaceView;
+import su.levenetc.androidplayground.opengl.GLView;
 
 /**
  * Created by eugene.levenetc on 25/12/2016.
@@ -17,7 +17,7 @@ public class OpenGLSampleActivity extends AppCompatActivity {
 
 		// Create a GLSurfaceView instance and set it
 		// as the ContentView for this Activity
-		mGLView = new MyGLSurfaceView(this);
+		mGLView = new GLView(this);
 		setContentView(mGLView);
 	}
 

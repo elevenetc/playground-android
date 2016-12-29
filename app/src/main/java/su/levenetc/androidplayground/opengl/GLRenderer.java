@@ -1,6 +1,7 @@
 package su.levenetc.androidplayground.opengl;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
@@ -9,9 +10,9 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 
-public class MyGLRenderer implements GLSurfaceView.Renderer {
+public class GLRenderer implements GLSurfaceView.Renderer {
 
-	private Square square;
+	private Square[] squares;
 
 	// mvpMatrix is an abbreviation for "Model View Projection Matrix"
 	private final float[] mvpMatrix = new float[16];
@@ -22,14 +23,17 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 	private float angle;
 	private Context context;
 
-	public MyGLRenderer(Context context) {
+	public GLRenderer(Context context) {
 		this.context = context;
 	}
 
 	@Override
 	public void onSurfaceCreated(GL10 unused, EGLConfig config) {
 		GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-		square = new Square(context);
+		squares = new Square[]{
+				//new Square(0.1f, Color.RED, context),
+				new Square(0.2f, Color.BLUE, context)
+		};
 	}
 
 	@Override
@@ -44,11 +48,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 		// Calculate the projection and view transformation
 		Matrix.multiplyMM(mvpMatrix, 0, projectionMatrix, 0, viewMatrix, 0);
 
-		// Draw square
-		square.draw(mvpMatrix);
-
-		Matrix.translateM(mvpMatrix, 0, 100, 100, 100);
-		square.draw(mvpMatrix);
+		// Draw squares
+		for (Square square : squares) square.draw(mvpMatrix);
 	}
 
 	@Override
