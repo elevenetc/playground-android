@@ -31,8 +31,10 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 	public void onSurfaceCreated(GL10 unused, EGLConfig config) {
 		GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		squares = new Square[]{
-				//new Square(0.1f, Color.RED, context),
-				new Square(0.2f, Color.BLUE, context)
+				new Square(0.5f, 0.5f, 0.5f, 0, Color.RED, context),
+				new Square(0.5f, 0.5f, 0, 0, Color.BLUE, context)
+//				new Square(0.5f, 0.5f, 0.5f, 0.5f, Color.YELLOW, context),
+//				new Square(0.5f, 0.5f, 0.0f, 0.5f, Color.GREEN, context)
 		};
 	}
 
@@ -43,7 +45,7 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 		GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
 		// Set the camera position (View matrix)
-		Matrix.setLookAtM(viewMatrix, 0, 0, 0, -3, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
+		Matrix.setLookAtM(viewMatrix, 0, 0, 0, 3, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
 
 		// Calculate the projection and view transformation
 		Matrix.multiplyMM(mvpMatrix, 0, projectionMatrix, 0, viewMatrix, 0);

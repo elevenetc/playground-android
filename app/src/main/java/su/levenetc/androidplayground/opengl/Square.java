@@ -39,26 +39,30 @@ public class Square {
 	private static final int BYTES = 2;
 
 	static final int COORDS_PER_VERTEX = 3;
-	static float squareCoordinates[] = {
-			-0.5f, 0.5f, 0.0f,   // top left
-			-0.5f, -0.5f, 0.0f,   // bottom left
-			0.5f, -0.5f, 0.0f,   // bottom right
-			0.5f, 0.5f, 0.0f}; // top right
+	private final float squareCoordinates[];
 
 	private final short drawOrder[] = {0, 1, 2, 0, 2, 3};
 
 	private final int vertexStride = COORDS_PER_VERTEX * 4;
 
-	private final float color[];
+	private float yTranslation;
 	private float xTranslation;
+	private final float[] color;
 
-	public Square(float xTranslation, int color, Context context) {
+	public Square(
+			float width,
+			float height,
+			float xTranslation,
+			float yTranslation,
+			int color,
+			Context context) {
 		this.xTranslation = xTranslation;
+		this.yTranslation = yTranslation;
 		this.color = Utils.intToFloatRgba(color, 1);
-		// initialize vertex byte buffer for shape coordinates
-		ByteBuffer bb = ByteBuffer.allocateDirect(
-				// (# of coordinate values * 4 bytes per float)
-				squareCoordinates.length * 4);
+
+		squareCoordinates = initVertices(width, height);
+
+		ByteBuffer bb = ByteBuffer.allocateDirect(squareCoordinates.length * 4);
 		bb.order(ByteOrder.nativeOrder());
 		vertexBuffer = bb.asFloatBuffer();
 		vertexBuffer.put(squareCoordinates);
@@ -86,7 +90,7 @@ public class Square {
 		setPosition(program);
 		setColor(program);
 
-		Matrix.translateM(mvpMatrix, 0, xTranslation, 0, 0);
+		Matrix.translateM(mvpMatrix, 0, xTranslation, yTranslation, 0);
 
 		// Apply the projection and view transformation
 		GLES20.glUniformMatrix4fv(
@@ -131,5 +135,13 @@ public class Square {
 		);
 	}
 
+	private float[] initVertices(float width, float height) {
+
+		return new float[]{
+				-width / 2, height / 2, 0.0f,   // top left
+				-width / 2, -height / 2, 0.0f,   // bottom left
+				width / 2, -height / 2, 0.0f,   // bottom right
+				width / 2, height / 2, 0.0f}; //top right
+	}
 
 }
