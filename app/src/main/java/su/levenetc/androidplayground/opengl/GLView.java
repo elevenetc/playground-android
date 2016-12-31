@@ -11,58 +11,130 @@ import android.view.MotionEvent;
  */
 public class GLView extends GLSurfaceView {
 
-	private final GLRenderer renderer;
+    private final GLRenderer renderer;
+    private final RotationHandler rotationHandler;
+    private final DragHandler dragHandler;
+    private final TestHandler testHandler;
+    private float prevX;
+    private float prevY;
+    private float downX;
+    private float downY;
 
-	public GLView(Context context) {
-		super(context);
+    public GLView(Context context) {
+        super(context);
 
-		// Create an OpenGL ES 2.0 context.
-		setEGLContextClientVersion(2);
+        // Create an OpenGL ES 2.0 context.
+        setEGLContextClientVersion(2);
 
-		// Set the Renderer for drawing on the GLSurfaceView
-		renderer = new GLRenderer(context);
-		setRenderer(renderer);
+        // Set the Renderer for drawing on the GLSurfaceView
+        renderer = new GLRenderer(context);
 
-		// Render the view only when there is a change in the drawing data
-		setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
-	}
+        rotationHandler = new RotationHandler(renderer);
+        dragHandler = new DragHandler(renderer);
+        testHandler = new TestHandler(renderer);
 
-	private final float TOUCH_SCALE_FACTOR = 180.0f / 320;
-	private float mPreviousX;
-	private float mPreviousY;
+        setRenderer(renderer);
+        // Render the view only when there is a change in the drawing data
+        setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
+    }
 
-	@Override
-	public boolean onTouchEvent(MotionEvent e) {
-		// MotionEvent reports input details from the touch screen
-		// and other input controls. In this case, you are only
-		// interested in events where the touch position changed.
+    @Override
+    public boolean onTouchEvent(MotionEvent e) {
 
-		float x = e.getX();
-		float y = e.getY();
+        final float x = e.getX();
+        final float y = e.getY();
+        final int action = e.getAction();
 
-		switch (e.getAction()) {
-			case MotionEvent.ACTION_MOVE:
 
-				float dx = x - mPreviousX;
-				float dy = y - mPreviousY;
+        if (action == MotionEvent.ACTION_MOVE) {
+            final int width = getWidth();
+            final int height = getHeight();
+            rotationHandler.onMove(prevX, prevY, x, y, width, height);
+            dragHandler.onMove(prevX, prevY, x, y, width, height);
+            testHandler.onMove(downX, downY, prevX, prevY, x, y, width, height);
+            requestRender();
+        } else if (action == MotionEvent.ACTION_DOWN) {
+            downX = x;
+            downY = y;
+        }
 
-				// reverse direction of rotation above the mid-line
-				if (y > getHeight() / 2) {
-					dx = dx * -1;
-				}
+        prevX = x;
+        prevY = y;
 
-				// reverse direction of rotation to left of the mid-line
-				if (x < getWidth() / 2) {
-					dy = dy * -1;
-				}
+        return true;
+    }
 
-				renderer.setAngle(renderer.getAngle() + ((dx + dy) * TOUCH_SCALE_FACTOR));  // = 180.0f / 320
-				requestRender();
-		}
+    private static class TestHandler {
 
-		mPreviousX = x;
-		mPreviousY = y;
-		return true;
-	}
+        private final GLRenderer renderer;
+
+        public TestHandler(GLRenderer renderer) {
+            this.renderer = renderer;
+        }
+
+        void onMove(float downX, float downY,
+                    float prevX, float prevY,
+                    float x, float y,
+                    float width, float height) {
+            float hw = width / 2;
+            float hh = height / 2;
+            float xVal;
+            float yVal;
+            if (x > hw) {
+                xVal = (x - hw) / hw;
+            } else {
+                xVal = (1 - x / hw) * -1;
+            }
+
+            if (y > hh) {
+                yVal = (y - hh) / hh;
+            } else {
+                yVal = (1 - y / hh) * -1;
+            }
+            renderer.setTestValues(xVal, yVal);
+        }
+    }
+
+    private static class RotationHandler {
+
+        private static final float TOUCH_SCALE_FACTOR = 180.0f / 320;
+
+        private final GLRenderer renderer;
+
+        public RotationHandler(GLRenderer renderer) {
+            this.renderer = renderer;
+        }
+
+        void onMove(float prevX, float prevY, float x, float y, float width, float height) {
+            float dx = x - prevX;
+            float dy = y - prevY;
+
+            // reverse direction of rotation above the mid-line
+            if (y > height / 2) {
+                dx = dx * -1;
+            }
+
+            // reverse direction of rotation to left of the mid-line
+            if (x < width / 2) {
+                dy = dy * -1;
+            }
+
+            renderer.setAngle(renderer.getAngle() + ((dx + dy) * TOUCH_SCALE_FACTOR));  // = 180.0f / 320
+
+        }
+    }
+
+    private static class DragHandler {
+
+        private final GLRenderer renderer;
+
+        public DragHandler(GLRenderer renderer) {
+            this.renderer = renderer;
+        }
+
+        void onMove(float prevX, float prevY, float x, float y, float width, float height) {
+            renderer.updateCameraLocation(x - prevX, y - prevY);
+        }
+    }
 
 }
