@@ -1,42 +1,49 @@
 package su.levenetc.androidplayground.activities;
 
-import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+
+import su.levenetc.androidplayground.R;
 import su.levenetc.androidplayground.opengl.GLView;
+import su.levenetc.androidplayground.views.GLViewConfig;
 
 /**
  * Created by eugene.levenetc on 25/12/2016.
  */
 public class OpenGLSampleActivity extends AppCompatActivity {
-	private GLSurfaceView mGLView;
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+    private GLView glView;
 
-		// Create a GLSurfaceView instance and set it
-		// as the ContentView for this Activity
-		mGLView = new GLView(this);
-		setContentView(mGLView);
-	}
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_opengl_sample);
+        glView = (GLView) findViewById(R.id.view_gl);
+        GLViewConfig glViewConfig = (GLViewConfig) findViewById(R.id.view_gl_config);
 
-	@Override
-	protected void onPause() {
-		super.onPause();
-		// The following call pauses the rendering thread.
-		// If your OpenGL application is memory intensive,
-		// you should consider de-allocating objects that
-		// consume significant memory here.
-		mGLView.onPause();
-	}
+        glViewConfig.setUpXHandler(value -> {
+            glView.getRenderer().setUpX(value);
+            glView.requestRender();
+        });
+        glViewConfig.setUpYHandler(value -> {
+            glView.getRenderer().setUpY(value);
+            glView.requestRender();
+        });
+        glViewConfig.setUpZHandler(value -> {
+            glView.getRenderer().setUpZ(value);
+            glView.requestRender();
+        });
+    }
 
-	@Override
-	protected void onResume() {
-		super.onResume();
-		// The following call resumes a paused rendering thread.
-		// If you de-allocated graphic objects for onPause()
-		// this is a good place to re-allocate them.
-		mGLView.onResume();
-	}
+    @Override
+    protected void onPause() {
+        super.onPause();
+        glView.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        glView.onResume();
+    }
 }

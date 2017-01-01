@@ -21,7 +21,15 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 
     private float angle;
     private Context context;
-    private int camZ = 5;
+    private float camLocX = 0.0f;
+    private float camLocY = 0.0f;
+    private float camLocZ = 3.0f;
+    private float camTargetLocX = 0.0f;
+    private float camTargetLocY = 0.0f;
+    private float camTargetLocZ = 0.0f;
+    private float upX = 0.0f;
+    private float upY = 1.0f;
+    private float upZ = 0.0f;
 
     private SquareMatrix squareMatrix;
     private float camY;
@@ -36,7 +44,7 @@ public class GLRenderer implements GLSurfaceView.Renderer {
     @Override
     public void onSurfaceCreated(GL10 unused, EGLConfig config) {
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-        squareMatrix = new SquareMatrix(4, 4, context);
+        squareMatrix = new SquareMatrix(1, 1, context);
     }
 
     @Override
@@ -47,9 +55,9 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 
         // Set the camera position (View matrix)
         Matrix.setLookAtM(viewMatrix, 0,
-                0f, 0f, camZ,
-                xVal, yVal, 0f,
-                0f, 1.0f, 0.0f);
+                camLocX, camLocY, camLocZ,//camera location
+                camTargetLocX, camTargetLocY, camTargetLocZ,//target location
+                upX, upY, upZ);
 
         // Calculate the projection and view transformation
         Matrix.multiplyMM(mvpMatrix, 0, projectionMatrix, 0, viewMatrix, 0);
@@ -91,4 +99,39 @@ public class GLRenderer implements GLSurfaceView.Renderer {
         this.camY = camY;
     }
 
+    public void setCamTargetLocZ(float camTargetLocZ) {
+        this.camTargetLocZ = camTargetLocZ;
+    }
+
+    public void setCamLocX(float camLocX) {
+        this.camLocX = camLocX;
+    }
+
+    public void setCamLocY(float camLocY) {
+        this.camLocY = camLocY;
+    }
+
+    public void setCamLocZ(float camLocZ) {
+        this.camLocZ = camLocZ;
+    }
+
+    public void setCamTargetLocX(float camTargetLocX) {
+        this.camTargetLocX = camTargetLocX;
+    }
+
+    public void setCamTargetLocY(float camTargetLocY) {
+        this.camTargetLocY = camTargetLocY;
+    }
+
+    public void setUpZ(float upZ) {
+        this.upZ = upZ;
+    }
+
+    public void setUpY(float upY) {
+        this.upY = upY;
+    }
+
+    public void setUpX(float upX) {
+        this.upX = upX;
+    }
 }

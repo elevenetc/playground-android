@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#000000"
+    android:animateLayoutChanges="true"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/btn_visibility"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:text="Hide/Show config"
+        android:textColor="#FFFFFF" />
+
+    <LinearLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <su.levenetc.androidplayground.views.SeekBarExtended
+            android:id="@+id/seek_cam_loc_x"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:seek_bar_title="Cam-loc X" />
+
+        <su.levenetc.androidplayground.views.SeekBarExtended
+            android:id="@+id/seek_cam_loc_y"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:seek_bar_title="Cam-loc Y" />
+
+        <su.levenetc.androidplayground.views.SeekBarExtended
+            android:id="@+id/seek_cam_loc_z"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:seek_bar_title="Cam-loc Z" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#FFFFFF" />
+
+        <su.levenetc.androidplayground.views.SeekBarExtended
+            android:id="@+id/seek_cam_target_loc_x"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:seek_bar_title="Cam-target-loc X" />
+
+        <su.levenetc.androidplayground.views.SeekBarExtended
+            android:id="@+id/seek_cam_target_loc_y"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:seek_bar_title="Cam-target-loc Y" />
+
+        <su.levenetc.androidplayground.views.SeekBarExtended
+            android:id="@+id/seek_cam_target_loc_z"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:seek_bar_title="Cam-target-loc Z" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#FFFFFF" />
+
+        <su.levenetc.androidplayground.views.SeekBarExtended
+            android:id="@+id/seek_up_x"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:seek_bar_title="Up X" />
+
+        <su.levenetc.androidplayground.views.SeekBarExtended
+            android:id="@+id/seek_up_y"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:seek_bar_title="Up Y" />
+
+        <su.levenetc.androidplayground.views.SeekBarExtended
+            android:id="@+id/seek_up_z"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:seek_bar_title="Up Z" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

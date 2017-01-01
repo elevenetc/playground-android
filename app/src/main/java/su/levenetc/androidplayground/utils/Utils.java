@@ -11,7 +11,9 @@ import java.io.ObjectInput;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
+import java.text.DecimalFormat;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Random;
 
 import su.levenetc.androidplayground.exceptions.ObjectDeserializationException;
@@ -23,6 +25,19 @@ import su.levenetc.androidplayground.exceptions.ObjectSerialisationException;
 public class Utils {
 
     private static final Random RND = new Random();
+    private static HashMap<String, DecimalFormat> decFormats = new HashMap<>();
+
+    public static String formatFloat(float value, String format) {
+
+        DecimalFormat decimalFormat;
+        if (decFormats.containsKey(format)) {
+            decimalFormat = decFormats.get(format);
+        } else {
+            decimalFormat = new DecimalFormat(format);
+            decFormats.put(format, decimalFormat);
+        }
+        return decimalFormat.format(value);
+    }
 
     public static int randomColor() {
         int result = Color.argb(255, RND.nextInt(256), RND.nextInt(256), RND.nextInt(256));

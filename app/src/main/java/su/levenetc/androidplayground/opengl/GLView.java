@@ -2,6 +2,7 @@ package su.levenetc.androidplayground.opengl;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
+import android.util.AttributeSet;
 import android.view.MotionEvent;
 
 /**
@@ -11,18 +12,30 @@ import android.view.MotionEvent;
  */
 public class GLView extends GLSurfaceView {
 
-    private final GLRenderer renderer;
-    private final RotationHandler rotationHandler;
-    private final DragHandler dragHandler;
-    private final TestHandler testHandler;
+    private GLRenderer renderer;
+    private RotationHandler rotationHandler;
+    private DragHandler dragHandler;
+    private TestHandler testHandler;
     private float prevX;
     private float prevY;
     private float downX;
     private float downY;
 
+    public GLView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        init(context);
+    }
+
     public GLView(Context context) {
         super(context);
+        init(context);
+    }
 
+    public GLRenderer getRenderer() {
+        return renderer;
+    }
+
+    private void init(Context context) {
         // Create an OpenGL ES 2.0 context.
         setEGLContextClientVersion(2);
 

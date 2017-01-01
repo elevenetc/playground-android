@@ -15,9 +15,10 @@ public class SquareMatrix {
     public SquareMatrix(int width, int height, Context context) {
         squares = new Square[width * height];
         int i = 0;
+        float size = 1.0f;
         for (int w = 0; w < width; w++) {
             for (int h = 0; h < height; h++) {
-                squares[i] = new Square(0.5f, 0.5f, w * 0.5f, h * 0.5f, Utils.randomColor(), context);
+                squares[i] = new Square(size, size, w * 0.5f, h * 0.5f, Utils.randomColor(), context);
                 i++;
             }
         }
