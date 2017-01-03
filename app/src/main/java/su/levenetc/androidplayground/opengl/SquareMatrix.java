@@ -16,9 +16,11 @@ public class SquareMatrix {
 		int i = 0;
 		for (float w = 0; w < width; w++) {
 			for (float h = 0; h < height; h++) {
+				final float xTrans = w * size;
+				final float yTrans = h * size;
 				squares[i] = new Square(
 						size, size,
-						w * width, h * height,
+						xTrans, yTrans,
 						Utils.randomColor(),
 						context);
 				i++;

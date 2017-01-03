@@ -1,6 +1,7 @@
 package su.levenetc.androidplayground.opengl;
 
 import android.content.Context;
+import android.graphics.PointF;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
@@ -37,6 +38,9 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 	private float xVal;
 	private float yVal;
 	private float ratio;
+	private MODE mode = MODE.D2;
+	private PointF camPoint = new PointF(0, 0);
+	private float width;
 
 	public GLRenderer(Context context) {
 		this.context = context;
@@ -53,11 +57,21 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 		// Draw background color
 		GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
-		// Set the camera position (View matrix)
-		Matrix.setLookAtM(viewMatrix, 0,
-				camLocX, camLocY, camLocZ,//camera location
-				camTargetLocX, camTargetLocY, camTargetLocZ,//target location
-				upX, upY, upZ);
+		if (mode == MODE.D2) {
+
+			camPoint.x = width / 2f;
+
+			Matrix.setLookAtM(viewMatrix, 0,
+					camPoint.x, camPoint.y, camLocZ,//camera location
+					camPoint.x, camPoint.y, camTargetLocZ,//target location
+					upX, upY, upZ);
+		} else {
+			Matrix.setLookAtM(viewMatrix, 0,
+					camLocX, camLocY, camLocZ,//camera location
+					camTargetLocX, camTargetLocY, camTargetLocZ,//target location
+					upX, upY, upZ);
+		}
+
 
 		// Calculate the projection and view transformation
 		Matrix.multiplyMM(mvpMatrix, 0, projectionMatrix, 0, viewMatrix, 0);
@@ -84,9 +98,9 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 
 	private void initSquares() {
 		if (squareMatrix == null) {
-			final float width = 6f * ratio;
-			float w = 2;
-			float h = 2;
+			width = 6f * ratio;
+			float w = 9;
+			float h = 9;
 			float squareSize = width / w;
 			squareMatrix = new SquareMatrix((int) w, (int) h, squareSize, context);
 		}
@@ -144,5 +158,9 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 
 	public void setUpX(float upX) {
 		this.upX = upX;
+	}
+
+	public enum MODE {
+		D2, D3
 	}
 }
