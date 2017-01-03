@@ -17,7 +17,6 @@ package su.levenetc.androidplayground.opengl;
 
 import android.content.Context;
 import android.opengl.GLES20;
-import android.opengl.Matrix;
 import su.levenetc.androidplayground.R;
 import su.levenetc.androidplayground.utils.Utils;
 
@@ -138,10 +137,18 @@ public class Square {
 	private float[] initVertices(float width, float height) {
 
 		return new float[]{
-				xTranslation + -width / 2, yTranslation + height / 2, 0.0f,   // top left
-				xTranslation + -width / 2, yTranslation + -height / 2, 0.0f,   // bottom left
-				xTranslation + width / 2, yTranslation + -height / 2, 0.0f,   // bottom right
-				xTranslation + width / 2, yTranslation + height / 2, 0.0f}; //top right
+
+				xTranslation, yTranslation + height, 0.0f,   // top left
+				xTranslation, yTranslation, 0.0f,   // bottom left
+				xTranslation + width, yTranslation, 0.0f,   // bottom right
+				xTranslation + width, yTranslation + height, 0.0f //top right
+
+
+//				xTranslation + -width / 2, yTranslation + height / 2, 0.0f,   // top left
+//				xTranslation + -width / 2, yTranslation + -height / 2, 0.0f,   // bottom left
+//				xTranslation + width / 2, yTranslation + -height / 2, 0.0f,   // bottom right
+//				xTranslation + width / 2, yTranslation + height / 2, 0.0f //top right
+		};
 	}
 
 }

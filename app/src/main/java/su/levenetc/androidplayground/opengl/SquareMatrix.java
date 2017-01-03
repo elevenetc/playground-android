@@ -1,7 +1,6 @@
 package su.levenetc.androidplayground.opengl;
 
 import android.content.Context;
-
 import su.levenetc.androidplayground.utils.Utils;
 
 /**
@@ -10,23 +9,26 @@ import su.levenetc.androidplayground.utils.Utils;
 
 public class SquareMatrix {
 
-    private Square[] squares;
+	private Square[] squares;
 
-    public SquareMatrix(int width, int height, Context context) {
-        squares = new Square[width * height];
-        int i = 0;
-        float size = 1.0f;
-        for (int w = 0; w < width; w++) {
-            for (int h = 0; h < height; h++) {
-                squares[i] = new Square(size, size, w * 0.5f, h * 0.5f, Utils.randomColor(), context);
-                i++;
-            }
-        }
-    }
+	public SquareMatrix(float width, float height, float size, Context context) {
+		squares = new Square[(int) (width * height)];
+		int i = 0;
+		for (float w = 0; w < width; w++) {
+			for (float h = 0; h < height; h++) {
+				squares[i] = new Square(
+						size, size,
+						w * width, h * height,
+						Utils.randomColor(),
+						context);
+				i++;
+			}
+		}
+	}
 
-    public void draw(float[] mvpMatrix) {
-        for (int i = 0; i < squares.length; i++) {
-            squares[i].draw(mvpMatrix);
-        }
-    }
+	public void draw(float[] mvpMatrix) {
+		for (int i = 0; i < squares.length; i++) {
+			squares[i].draw(mvpMatrix);
+		}
+	}
 }
