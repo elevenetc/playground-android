@@ -85,6 +85,23 @@
             android:layout_height="wrap_content"
             app:seek_bar_title="Up Z" />
 
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#FFFFFF" />
+
+        <su.levenetc.androidplayground.views.SeekBarExtended
+                android:id="@+id/cam_x"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:seek_bar_title="Cam X" />
+
+        <su.levenetc.androidplayground.views.SeekBarExtended
+                android:id="@+id/cam_y"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:seek_bar_title="Cam Y" />
+
     </LinearLayout>
 
 

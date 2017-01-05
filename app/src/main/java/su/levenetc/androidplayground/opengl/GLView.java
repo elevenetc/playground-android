@@ -146,7 +146,8 @@ public class GLView extends GLSurfaceView {
         }
 
         void onMove(float prevX, float prevY, float x, float y, float width, float height) {
-            renderer.updateCameraLocation(x - prevX, y - prevY);
+            renderer.updateCameraLocation(x / 100f, y / 100f);
+//            renderer.updateCameraLocation((x - prevX) / 100f, (y - prevY) / 100f);
         }
     }
 

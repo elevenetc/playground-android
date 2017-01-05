@@ -71,4 +71,12 @@ public class GLViewConfig extends LinearLayout {
     public void setUpZHandler(ValueHandler valueHandler) {
         ((SeekBarExtended) findViewById(R.id.seek_up_z)).setValueHandler(valueHandler);
     }
+
+    public void setCamXHandler(ValueHandler valueHandler) {
+        ((SeekBarExtended) findViewById(R.id.cam_x)).setValueHandler(valueHandler);
+    }
+
+    public void setCamYHandler(ValueHandler valueHandler) {
+        ((SeekBarExtended) findViewById(R.id.cam_y)).setValueHandler(valueHandler);
+    }
 }

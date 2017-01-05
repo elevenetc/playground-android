@@ -21,7 +21,7 @@ public class SquareMatrix {
 				squares[i] = new Square(
 						size, size,
 						xTrans, yTrans,
-						Utils.randomColor(),
+						Utils.randomRed(),
 						context);
 				i++;
 			}

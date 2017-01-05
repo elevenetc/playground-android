@@ -33,6 +33,17 @@ public class OpenGLSampleActivity extends AppCompatActivity {
             glView.getRenderer().setUpZ(value);
             glView.requestRender();
         });
+
+        //
+
+        glViewConfig.setCamXHandler(value -> {
+            glView.getRenderer().setCamX(value);
+            glView.requestRender();
+        });
+        glViewConfig.setCamYHandler(value -> {
+            glView.getRenderer().setCamY(value);
+            glView.requestRender();
+        });
     }
 
     @Override

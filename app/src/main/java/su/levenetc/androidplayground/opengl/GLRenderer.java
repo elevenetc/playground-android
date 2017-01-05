@@ -38,7 +38,7 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 	private float xVal;
 	private float yVal;
 	private float ratio;
-	private MODE mode = MODE.D2;
+	private MODE mode = MODE.D2;//TODO check 2d Mode > change cemera location
 	private PointF camPoint = new PointF(0, 0);
 	private float width;
 
@@ -100,7 +100,7 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 		if (squareMatrix == null) {
 			width = 6f * ratio;
 			float w = 9;
-			float h = 9;
+			float h = 20;
 			float squareSize = width / w;
 			squareMatrix = new SquareMatrix((int) w, (int) h, squareSize, context);
 		}
@@ -120,8 +120,18 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 	}
 
 	public void updateCameraLocation(float camX, float camY) {
-		this.camX = camX;
-		this.camY = camY;
+//		this.camX = camX;
+//		this.camY = camY;
+		//setCamX(camX);
+		setCamY(camY);
+	}
+
+	public void setCamY(float camY) {
+		camPoint.y = camY;
+	}
+
+	public void setCamX(float camX) {
+		camPoint.x = camX;
 	}
 
 	public void setCamTargetLocZ(float camTargetLocZ) {

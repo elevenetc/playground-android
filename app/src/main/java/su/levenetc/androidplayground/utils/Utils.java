@@ -44,6 +44,11 @@ public class Utils {
         return result;
     }
 
+    public static int randomRed(){
+        int result = Color.argb(255, RND.nextInt(256), 0, 0);
+        return result;
+    }
+
     /**
      * @param color - Color.RED
      * @param alpha - 0 to 255
