@@ -5,6 +5,7 @@ import android.graphics.PointF;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
+import su.levenetc.androidplayground.utils.FpsCounter;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -41,9 +42,14 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 	private MODE mode = MODE.D2;//TODO check 2d Mode > change cemera location
 	private PointF camPoint = new PointF(0, 0);
 	private float width;
+	private FpsCounter fpsCounter = new FpsCounter();
 
 	public GLRenderer(Context context) {
 		this.context = context;
+	}
+
+	public FpsCounter getFpsCounter() {
+		return fpsCounter;
 	}
 
 	@Override
@@ -78,6 +84,7 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 
 		// Draw squares
 		squareMatrix.draw(mvpMatrix);
+		fpsCounter.onDrawFrame();
 //		for (Square square : squares) square.draw(mvpMatrix);
 	}
 
