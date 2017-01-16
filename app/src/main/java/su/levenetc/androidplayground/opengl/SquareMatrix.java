@@ -30,7 +30,8 @@ public class SquareMatrix {
 
 	public void draw(float[] mvpMatrix) {
 		for (int i = 0; i < squares.length; i++) {
-			squares[i].draw(mvpMatrix);
+			if (i % 2 == 0)
+				squares[i].draw(mvpMatrix);
 		}
 	}
 }

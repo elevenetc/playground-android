@@ -17,7 +17,7 @@ import java.util.Random;
  */
 public class Utils {
 
-	private static final Random RND = new Random();
+	public static final Random RND = new Random();
 	private static HashMap<String, DecimalFormat> decFormats = new HashMap<>();
 
 	public static String formatFloat(float value, String format) {

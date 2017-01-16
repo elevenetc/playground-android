@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="su.levenetc.androidplayground">
 
+	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
 	<uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS"/>
 	<uses-permission android:name="android.permission.GET_ACCOUNTS"/>
@@ -9,6 +10,8 @@
 	<uses-permission android:name="android.permission.NFC"/>
 	<uses-permission android:name="android.permission.WAKE_LOCK"/>
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
 	<uses-feature
 			android:name="android.hardware.nfc"
@@ -49,9 +52,12 @@
 		<activity android:name=".activities.WorkRunnerActivity"/>
 		<activity android:name=".activities.OpenGLSampleActivity"/>
 		<activity android:name=".activities.CanvasActivity"/>
+		<activity android:name=".activities.MapEditorActivity"/>
 
 		<service android:name=".services.AlarmStatusService"/>
 		<service android:name=".services.SensorsDataCollectorService"/>
+
+		<meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyAaPC86oWIiG1tcnKHvr8ioBpfmOcnWtxQ"/>
 	</application>
 
 </manifest>

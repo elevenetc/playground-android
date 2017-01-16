@@ -68,7 +68,7 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 			camPoint.x = width / 2f;
 
 			Matrix.setLookAtM(viewMatrix, 0,
-					camPoint.x, camPoint.y, camLocZ,//camera location
+					1, 1, camLocZ,//camera location
 					camPoint.x, camPoint.y, camTargetLocZ,//target location
 					upX, upY, upZ);
 		} else {

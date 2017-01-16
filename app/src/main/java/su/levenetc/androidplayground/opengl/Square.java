@@ -89,16 +89,8 @@ public class Square {
 		setPosition(program);
 		setColor(program);
 
-		//Matrix.translateM(mvpMatrix, 0, xTranslation, yTranslation, 0);
-
 		// Apply the projection and view transformation
-		GLES20.glUniformMatrix4fv(
-				GLES20.glGetUniformLocation(program, "uMVPMatrix"),
-				1,
-				false,
-				mvpMatrix,
-				0
-		);
+		GLES20.glUniformMatrix4fv(GLES20.glGetUniformLocation(program, "uMVPMatrix"), 1, false, mvpMatrix, 0);
 
 		drawElements();
 
@@ -136,11 +128,12 @@ public class Square {
 
 	private float[] initVertices(float width, float height) {
 
+		final float v = color[0] * 2;
 		return new float[]{
-				xTranslation, yTranslation + height, 0.0f,   // top left
-				xTranslation, yTranslation, 0.0f,   // bottom left
-				xTranslation + width, yTranslation, 0.0f,   // bottom right
-				xTranslation + width, yTranslation + height, 0.0f //top right
+				xTranslation, yTranslation + height, v,   // top left
+				xTranslation, yTranslation, v,   // bottom left
+				xTranslation + width, yTranslation, v,   // bottom right
+				xTranslation + width, yTranslation + height, v //top right
 		};
 	}
 
