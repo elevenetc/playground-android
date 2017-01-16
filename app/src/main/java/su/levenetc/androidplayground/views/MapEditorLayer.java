@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.model.LatLng;
@@ -21,6 +22,8 @@ public class MapEditorLayer extends View {
 	private Map<LatLng, Point> points = new HashMap<>();
 	private Paint paint = new Paint();
 
+	private OnDragListener dragListener;
+
 	public MapEditorLayer(Context context) {
 		super(context);
 		init();
@@ -31,9 +34,18 @@ public class MapEditorLayer extends View {
 		init();
 	}
 
+	@Override public boolean onTouchEvent(MotionEvent event) {
+		return false;
+	}
+
 	private void init() {
 		paint.setColor(Color.GREEN);
 		paint.setStyle(Paint.Style.FILL);
+	}
+
+	@Override public boolean dispatchTouchEvent(MotionEvent event) {
+		dragListener.onDrag(event);
+		return super.dispatchTouchEvent(event);
 	}
 
 	public void updateProjection(Projection projection) {
@@ -59,5 +71,13 @@ public class MapEditorLayer extends View {
 			final Point point = entry.getValue();
 			canvas.drawCircle(point.x, point.y, 100, paint);
 		}
+	}
+
+	public void setOnDragListener(OnDragListener dragListener) {
+		this.dragListener = dragListener;
+	}
+
+	public interface OnDragListener {
+		void onDrag(MotionEvent motionEvent);
 	}
 }

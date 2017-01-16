@@ -4,10 +4,20 @@
              android:layout_width="match_parent"
              android:layout_height="match_parent">
 
-	<com.google.android.gms.maps.MapView
-			android:id="@+id/map_view"
+	<su.levenetc.androidplayground.views.MapWrapperLayout
+			android:id="@+id/wrapper_layout"
 			android:layout_width="match_parent"
-			android:layout_height="match_parent"/>
+	                                                      android:layout_height="match_parent">
+		<com.google.android.gms.maps.MapView
+				android:id="@+id/map_view"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"/>
+	</su.levenetc.androidplayground.views.MapWrapperLayout>
+
+	<!--<com.google.android.gms.maps.MapView-->
+	<!--android:id="@+id/map_view"-->
+	<!--android:layout_width="match_parent"-->
+	<!--android:layout_height="match_parent"/>-->
 
 	<su.levenetc.androidplayground.views.MapEditorLayer
 			android:id="@+id/map_editor_layer"
