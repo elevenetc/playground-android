@@ -77,6 +77,10 @@ public class MapEditorLayer extends View {
 		this.dragListener = dragListener;
 	}
 
+	public void handleFling(float xVelocity, float yVelocity) {
+
+	}
+
 	public interface OnDragListener {
 		void onDrag(MotionEvent motionEvent);
 	}

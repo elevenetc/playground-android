@@ -3,6 +3,7 @@ package su.levenetc.androidplayground.views;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.widget.FrameLayout;
@@ -11,6 +12,8 @@ import android.widget.FrameLayout;
  * Created by eugene.levenetc on 16/01/2017.
  */
 public class MapWrapperLayout extends FrameLayout {
+
+	private GestureDetector gestureDetector;
 
 	public interface OnDragListener {
 		public void onDrag(MotionEvent motionEvent);
@@ -21,10 +24,16 @@ public class MapWrapperLayout extends FrameLayout {
 
 	public MapWrapperLayout(Context context) {
 		super(context);
+		init();
 	}
 
 	public MapWrapperLayout(Context context, AttributeSet attrs) {
 		super(context, attrs);
+		init();
+	}
+
+	private void init() {
+		gestureDetector = new GestureDetector(getContext(), new MyOnGestureListener());
 	}
 
 	@Override
@@ -43,10 +52,46 @@ public class MapWrapperLayout extends FrameLayout {
 			velocityTracker.recycle();
 		}
 
+		if(ev.getAction() == MotionEvent.ACTION_UP){
+			ev.setAction(MotionEvent.ACTION_CANCEL);
+		}
+
+		gestureDetector.onTouchEvent(ev);
+
+
+
 		return super.dispatchTouchEvent(ev);
 	}
 
 	public void setOnDragListener(OnDragListener mOnDragListener) {
 		this.dragListener = mOnDragListener;
+	}
+
+	class MyOnGestureListener implements GestureDetector.OnGestureListener {
+
+		@Override public boolean onDown(MotionEvent e) {
+			return false;
+		}
+
+		@Override public void onShowPress(MotionEvent e) {
+
+		}
+
+		@Override public boolean onSingleTapUp(MotionEvent e) {
+			return false;
+		}
+
+		@Override public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+			return false;
+		}
+
+		@Override public void onLongPress(MotionEvent e) {
+
+		}
+
+		@Override public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+			Log.d("onFling", "FLING!");
+			return false;
+		}
 	}
 }

@@ -7,8 +7,8 @@
 	<su.levenetc.androidplayground.views.MapWrapperLayout
 			android:id="@+id/wrapper_layout"
 			android:layout_width="match_parent"
-	                                                      android:layout_height="match_parent">
-		<com.google.android.gms.maps.MapView
+			android:layout_height="match_parent">
+		<su.levenetc.androidplayground.views.ExtendedMapView
 				android:id="@+id/map_view"
 				android:layout_width="match_parent"
 				android:layout_height="match_parent"/>
