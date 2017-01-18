@@ -4,84 +4,100 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.Point;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-import com.google.android.gms.maps.Projection;
-import com.google.android.gms.maps.model.LatLng;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.google.android.gms.maps.Projection;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import su.levenetc.androidplayground.models.MapLocation;
+import su.levenetc.androidplayground.models.MapPath;
 
 /**
  * Created by eugene.levenetc on 16/01/2017.
  */
 public class MapEditorLayer extends View {
 
-	private Map<LatLng, Point> points = new HashMap<>();
-	private Paint paint = new Paint();
+    private List<MapLocation> mapLocations = new ArrayList<>();
+    private Paint fillPaint = new Paint();
+    private Paint strokePaint = new Paint();
+    private Path path = new Path();
+    private float[] linePoints;
+    private MapPath mapPath;
 
-	private OnDragListener dragListener;
+    private OnDragListener dragListener;
 
-	public MapEditorLayer(Context context) {
-		super(context);
-		init();
-	}
+    public MapEditorLayer(Context context) {
+        super(context);
+        init();
+    }
 
-	public MapEditorLayer(Context context, AttributeSet attrs) {
-		super(context, attrs);
-		init();
-	}
+    public MapEditorLayer(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        init();
+    }
 
-	@Override public boolean onTouchEvent(MotionEvent event) {
-		return false;
-	}
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        return false;
+    }
 
-	private void init() {
-		paint.setColor(Color.GREEN);
-		paint.setStyle(Paint.Style.FILL);
-	}
+    private void init() {
+        fillPaint.setColor(Color.GREEN);
+        fillPaint.setStyle(Paint.Style.FILL);
 
-	@Override public boolean dispatchTouchEvent(MotionEvent event) {
-		dragListener.onDrag(event);
-		return super.dispatchTouchEvent(event);
-	}
+        strokePaint.setColor(Color.BLUE);
+        strokePaint.setStrokeWidth(50);
+        strokePaint.setStyle(Paint.Style.STROKE);
+    }
 
-	public void updateProjection(Projection projection) {
-		for (Map.Entry<LatLng, Point> entry : points.entrySet()) {
-			final LatLng latLng = entry.getKey();
-			final Point point = entry.getValue();
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        dragListener.onDrag(event);
+        return super.dispatchTouchEvent(event);
+    }
 
-			final Point result = projection.toScreenLocation(latLng);
-			point.set(result.x, result.y);
-		}
-		invalidate();
-	}
+    public void setMapPath(MapPath mapPath) {
+        this.mapPath = mapPath;
+    }
 
-	public void addPoint(LatLng latLng) {
-		points.put(latLng, new Point());
-	}
+    public void setMapLocations(List<MapLocation> mapLocations) {
+        this.mapLocations = mapLocations;
+    }
 
-	@Override protected void onDraw(Canvas canvas) {
-		super.onDraw(canvas);
+    public void updateProjection(Projection projection) {
 
+        for (MapLocation mapLocation : mapLocations) {
+            final Point result = projection.toScreenLocation(mapLocation.geo);
+            mapLocation.screen.set(result.x, result.y);
+        }
 
-		for (Map.Entry<LatLng, Point> entry : points.entrySet()) {
-			final Point point = entry.getValue();
-			canvas.drawCircle(point.x, point.y, 100, paint);
-		}
-	}
+        mapPath.updateScreenCoordinates(projection);
 
-	public void setOnDragListener(OnDragListener dragListener) {
-		this.dragListener = dragListener;
-	}
+        invalidate();
+    }
 
-	public void handleFling(float xVelocity, float yVelocity) {
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
 
-	}
+        for (MapLocation mapLocation : mapLocations) {
+            canvas.drawCircle(mapLocation.screen.x, mapLocation.screen.y, 100, fillPaint);
+        }
 
-	public interface OnDragListener {
-		void onDrag(MotionEvent motionEvent);
-	}
+        canvas.drawLines(mapPath.getPath(), strokePaint);
+    }
+
+    public void setOnDragListener(OnDragListener dragListener) {
+        this.dragListener = dragListener;
+    }
+
+    public interface OnDragListener {
+        void onDrag(MotionEvent motionEvent);
+    }
 }

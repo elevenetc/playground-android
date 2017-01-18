@@ -40,23 +40,23 @@ public class MapWrapperLayout extends FrameLayout {
 	public boolean dispatchTouchEvent(MotionEvent ev) {
 		dragListener.onDrag(ev);
 
-		if (ev.getAction() == MotionEvent.ACTION_DOWN) {
-			if (velocityTracker != null) velocityTracker.clear();
-			velocityTracker = VelocityTracker.obtain();
-		} else if (ev.getAction() == MotionEvent.ACTION_MOVE) {
-			velocityTracker.addMovement(ev);
-			velocityTracker.computeCurrentVelocity(1000);
-		} else if (ev.getAction() == MotionEvent.ACTION_UP || ev.getAction() == MotionEvent.ACTION_CANCEL) {
-			Log.d("XVelocity", velocityTracker.getXVelocity() + "");
-			Log.d("YVelocity", velocityTracker.getYVelocity() + "");
-			velocityTracker.recycle();
-		}
-
+//		if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+//			if (velocityTracker != null) velocityTracker.clear();
+//			velocityTracker = VelocityTracker.obtain();
+//		} else if (ev.getAction() == MotionEvent.ACTION_MOVE) {
+//			velocityTracker.addMovement(ev);
+//			velocityTracker.computeCurrentVelocity(1000);
+//		} else if (ev.getAction() == MotionEvent.ACTION_UP || ev.getAction() == MotionEvent.ACTION_CANCEL) {
+//			Log.d("XVelocity", velocityTracker.getXVelocity() + "");
+//			Log.d("YVelocity", velocityTracker.getYVelocity() + "");
+//			velocityTracker.recycle();
+//		}
+//
 		if(ev.getAction() == MotionEvent.ACTION_UP){
 			ev.setAction(MotionEvent.ACTION_CANCEL);
 		}
-
-		gestureDetector.onTouchEvent(ev);
+//
+//		gestureDetector.onTouchEvent(ev);
 
 
 
