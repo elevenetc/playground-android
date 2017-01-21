@@ -1,103 +1,110 @@
 package su.levenetc.androidplayground.views;
 
+import android.app.Activity;
 import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Path;
-import android.graphics.Point;
+import android.graphics.*;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-
 import com.google.android.gms.maps.Projection;
+import su.levenetc.androidplayground.models.MapLocation;
+import su.levenetc.androidplayground.models.MapLine;
+import su.levenetc.androidplayground.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import su.levenetc.androidplayground.models.MapLocation;
-import su.levenetc.androidplayground.models.MapPath;
 
 /**
  * Created by eugene.levenetc on 16/01/2017.
  */
 public class MapEditorLayer extends View {
 
-    private List<MapLocation> mapLocations = new ArrayList<>();
-    private Paint fillPaint = new Paint();
-    private Paint strokePaint = new Paint();
-    private Path path = new Path();
-    private float[] linePoints;
-    private MapPath mapPath;
+	private List<MapLocation> mapLocations = new ArrayList<>();
+	private Paint fillPaint = new Paint();
+	private Paint strokePaint = new Paint();
+	private Path path = new Path();
+	private float[] linePoints;
+	private MapLine mapLine;
 
-    private OnDragListener dragListener;
+	private OnDragListener dragListener;
+	private Point screenSize;
 
-    public MapEditorLayer(Context context) {
-        super(context);
-        init();
-    }
+	public MapEditorLayer(Context context) {
+		super(context);
+		init();
+	}
 
-    public MapEditorLayer(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        init();
-    }
+	public MapEditorLayer(Context context, AttributeSet attrs) {
+		super(context, attrs);
+		init();
+	}
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        return false;
-    }
+	@Override protected void onAttachedToWindow() {
+		super.onAttachedToWindow();
+		screenSize = Utils.getScreenSize((Activity) getContext());
+		if (mapLine != null) {
+			mapLine.setScreenSize(screenSize);
+		}
+	}
 
-    private void init() {
-        fillPaint.setColor(Color.GREEN);
-        fillPaint.setStyle(Paint.Style.FILL);
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		return false;
+	}
 
-        strokePaint.setColor(Color.BLUE);
-        strokePaint.setStrokeWidth(50);
-        strokePaint.setStyle(Paint.Style.STROKE);
-    }
+	private void init() {
+		fillPaint.setColor(Color.GREEN);
+		fillPaint.setStyle(Paint.Style.FILL);
 
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent event) {
-        dragListener.onDrag(event);
-        return super.dispatchTouchEvent(event);
-    }
+		strokePaint.setColor(Color.BLUE);
+		strokePaint.setStrokeWidth(50);
+		strokePaint.setStyle(Paint.Style.STROKE);
+	}
 
-    public void setMapPath(MapPath mapPath) {
-        this.mapPath = mapPath;
-    }
+	@Override
+	public boolean dispatchTouchEvent(MotionEvent event) {
+		dragListener.onDrag(event);
+		return super.dispatchTouchEvent(event);
+	}
 
-    public void setMapLocations(List<MapLocation> mapLocations) {
-        this.mapLocations = mapLocations;
-    }
+	public void setMapLine(MapLine mapLine) {
+		this.mapLine = mapLine;
+		if (screenSize != null)
+			mapLine.setScreenSize(screenSize);
+	}
 
-    public void updateProjection(Projection projection) {
+	public void setMapLocations(List<MapLocation> mapLocations) {
+		this.mapLocations = mapLocations;
+	}
 
-        for (MapLocation mapLocation : mapLocations) {
-            final Point result = projection.toScreenLocation(mapLocation.geo);
-            mapLocation.screen.set(result.x, result.y);
-        }
+	public void updateProjection(Projection projection) {
 
-        mapPath.updateScreenCoordinates(projection);
+		for (MapLocation mapLocation : mapLocations) {
+			final Point result = projection.toScreenLocation(mapLocation.geo);
+			mapLocation.screen.set(result.x, result.y);
+		}
 
-        invalidate();
-    }
+		mapLine.updateScreenCoordinates(projection);
 
-    @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
+		invalidate();
+	}
 
-        for (MapLocation mapLocation : mapLocations) {
-            canvas.drawCircle(mapLocation.screen.x, mapLocation.screen.y, 100, fillPaint);
-        }
+	@Override
+	protected void onDraw(Canvas canvas) {
+		super.onDraw(canvas);
 
-        canvas.drawLines(mapPath.getPath(), strokePaint);
-    }
+		for (MapLocation mapLocation : mapLocations) {
+			canvas.drawCircle(mapLocation.screen.x, mapLocation.screen.y, 100, fillPaint);
+		}
 
-    public void setOnDragListener(OnDragListener dragListener) {
-        this.dragListener = dragListener;
-    }
+		canvas.drawLines(mapLine.getPath(), strokePaint);
+	}
 
-    public interface OnDragListener {
-        void onDrag(MotionEvent motionEvent);
-    }
+	public void setOnDragListener(OnDragListener dragListener) {
+		this.dragListener = dragListener;
+	}
+
+	public interface OnDragListener {
+		void onDrag(MotionEvent motionEvent);
+	}
 }

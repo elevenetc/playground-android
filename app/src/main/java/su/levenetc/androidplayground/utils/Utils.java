@@ -1,8 +1,11 @@
 package su.levenetc.androidplayground.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.util.TypedValue;
+import android.view.Display;
 import su.levenetc.androidplayground.exceptions.ObjectDeserializationException;
 import su.levenetc.androidplayground.exceptions.ObjectSerialisationException;
 
@@ -127,5 +130,12 @@ public class Utils {
 			string = string.substring(0, max);
 		}
 		return string;
+	}
+
+	public static Point getScreenSize(Activity context) {
+		Display display = context.getWindowManager().getDefaultDisplay();
+		Point size = new Point();
+		display.getSize(size);
+		return size;
 	}
 }
