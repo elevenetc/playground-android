@@ -131,7 +131,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 		List<LatLng> points = new ArrayList<>();
 		List<MapLocation> mapLocations = new ArrayList<>();
 		List<MapLocation> pathLocations = new ArrayList<>();
-		points.add(new LatLng(52.384579, 4.894513));//ams
+		points.add(new LatLng(80.384579, 4.894513));//ams//52.384579
 //        points.add(new LatLng(52.384579, 24.894513));//pol
 //        points.add(new LatLng(56.502100, 39.389472));//mos
 //        points.add(new LatLng(52.424067, 59.851404));//kaz

@@ -12,6 +12,8 @@ import java.util.List;
 
 public class MapLine {
 
+	//TODO: simplify to line with only two points
+
 	private List<MapLocation> locations;
 	private float[] path;
 	private float[] emptyPath = new float[0];
