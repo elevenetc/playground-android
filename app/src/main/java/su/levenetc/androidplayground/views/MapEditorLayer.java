@@ -77,14 +77,14 @@ public class MapEditorLayer extends View {
 		this.mapLocations = mapLocations;
 	}
 
-	public void updateProjection(Projection projection) {
+	public void updateProjection(Projection projection, double eqLenght) {
 
 		for (MapLocation mapLocation : mapLocations) {
 			final Point result = projection.toScreenLocation(mapLocation.geo);
 			mapLocation.screen.set(result.x, result.y);
 		}
 
-		mapLine.updateScreenCoordinates(projection);
+		mapLine.updateScreenCoordinates(projection, eqLenght);
 
 		invalidate();
 	}

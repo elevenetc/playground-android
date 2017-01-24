@@ -23,6 +23,7 @@ public class Utils {
 	public static final Random RND = new Random();
 	private static HashMap<String, DecimalFormat> decFormats = new HashMap<>();
 
+
 	public static String formatFloat(float value, String format) {
 
 		DecimalFormat decimalFormat;
