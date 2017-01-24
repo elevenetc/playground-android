@@ -183,7 +183,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private void refreshProjection() {
 
-        double eqLenght = MapUtils.equatorLength(dp256, map.getCameraPosition().zoom);
+        //TODO: fix bearing
+        //No need to calculate points: calculate distance once between points and change screen location according zoom and one visible point
+        float zoom = map.getCameraPosition().zoom;
+        float bearing = map.getCameraPosition().bearing;
+        double eqLenght = MapUtils.equatorLength(dp256, zoom);
 
         mapEditorLayer.updateProjection(map.getProjection(), eqLenght);
     }
