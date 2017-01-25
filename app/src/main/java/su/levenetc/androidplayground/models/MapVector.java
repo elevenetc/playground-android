@@ -5,26 +5,37 @@ import android.util.Log;
 
 import com.google.android.gms.maps.Projection;
 
-import java.util.List;
-
 /**
  * Created by eugene.levenetc on 18/01/2017.
  */
 
-public class MapLine {
+public class MapVector {
 
     //TODO: simplify to line with only two points
 
-    private List<MapLocation> locations;
-    private float[] path;
-    private float[] emptyPath = new float[0];
+    private final float[] path = new float[4];
+    private final float[] emptyPath = new float[0];
     private Point screenSize;
     private MapLocation screenLocation;
     private double equatorLenght;
 
-    public MapLine(List<MapLocation> locations) {
-        this.locations = locations;
-        path = new float[locations.size() * 2];
+    private final MapLocation locA;
+    private final MapLocation locB;
+    private final MapLocation closerToEquator;
+    private final MapLocation farFromEquator;
+    private float angleWithEquator;
+
+    public MapVector(MapLocation locA, MapLocation locB) {
+        this.locA = locA;
+        this.locB = locB;
+
+        if (Math.abs(locA.geo.latitude) < Math.abs(locB.geo.latitude)) {
+            closerToEquator = locA;
+            farFromEquator = locB;
+        } else {
+            closerToEquator = locB;
+            farFromEquator = locA;
+        }
     }
 
     public void setScreenSize(Point screenSize) {
@@ -33,64 +44,56 @@ public class MapLine {
 
     public void updateScreenCoordinates(Projection projection, double eqLenght) {
         this.equatorLenght = eqLenght;
-        for (MapLocation mapLocation : locations) {
-            final Point result = projection.toScreenLocation(mapLocation.geo);
-            mapLocation.screen.set(result.x, result.y);
-        }
-        findScreenPoint();
+        updateLoc(projection, locA);
+        updateLoc(projection, locB);
+        checkPoints();
+    }
+
+    private void updateLoc(Projection projection, MapLocation mapLocation) {
+        final Point result = projection.toScreenLocation(mapLocation.geo);
+        mapLocation.screen.set(result.x, result.y);
     }
 
     public float[] getPath() {
-        int index = 0;
-        for (MapLocation location : locations) {
-            path[index] = location.screen.x;
-            path[index + 1] = location.screen.y;
-            index += 2;
-        }
+
+        path[0] = locA.screen.x;
+        path[1] = locA.screen.y;
+        path[2] = locB.screen.x;
+        path[3] = locB.screen.y;
+
         return path;
     }
 
-    private void findScreenPoint() {
+    private void checkPoints() {
         screenLocation = null;
-        boolean allInScreen = true;
-        boolean allOutOfScreen = true;
-        for (MapLocation location : locations) {
-            if (isInScreen(location)) {
-                allOutOfScreen = false;
-                screenLocation = location;
-                location.visible = true;
-            } else {
-                allInScreen = false;
-                location.visible = false;
-            }
+        boolean aInScreen = isInScreen(locA);
+        boolean bInScreen = isInScreen(locB);
+
+        if (aInScreen) {
+            screenLocation = locA;
+        } else if (bInScreen) {
+            screenLocation = locB;
         }
 
-        if (!allInScreen) {
-            //TODO: add case when all points are aligned correctly even when all out of screen
-            recalculateScreenLocations();
-        }
-
-        if (allOutOfScreen) {
-            checkAllOutOfScreen();
+        if (screenLocation == null) {
+            checkBothPoints();
+        } else if (!aInScreen) {
+            checkAPoint();
+        } else if (!bInScreen) {
+            checkBPoint();
         }
     }
 
-    private void checkAllOutOfScreen() {
-        MapLocation previous = null;
-        MapLocation current = locations.get(0);
+    private void checkBothPoints() {
 
+    }
 
-        while (current != null) {
+    private void checkAPoint() {
 
-            previous = current;
-            current = current.next;
+    }
 
-            if (current == null) continue;
+    private void checkBPoint() {
 
-            if (current.screen.x < previous.screen.x) {
-                moveFromLeftToRight(previous, current);
-            }
-        }
     }
 
     private boolean isInScreen(MapLocation location) {
@@ -102,10 +105,8 @@ public class MapLine {
 
     private void recalculateScreenLocations() {
 
-        MapLocation previous = null;
+        MapLocation previous;
         MapLocation current = screenLocation;
-
-        //TODO: add loops support
 
         //towards
         while (current != null) {

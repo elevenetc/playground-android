@@ -8,7 +8,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import com.google.android.gms.maps.Projection;
 import su.levenetc.androidplayground.models.MapLocation;
-import su.levenetc.androidplayground.models.MapLine;
+import su.levenetc.androidplayground.models.MapVector;
 import su.levenetc.androidplayground.utils.Utils;
 
 import java.util.ArrayList;
@@ -24,7 +24,7 @@ public class MapEditorLayer extends View {
 	private Paint strokePaint = new Paint();
 	private Path path = new Path();
 	private float[] linePoints;
-	private MapLine mapLine;
+	private MapVector mapVector;
 
 	private OnDragListener dragListener;
 	private Point screenSize;
@@ -42,8 +42,8 @@ public class MapEditorLayer extends View {
 	@Override protected void onAttachedToWindow() {
 		super.onAttachedToWindow();
 		screenSize = Utils.getScreenSize((Activity) getContext());
-		if (mapLine != null) {
-			mapLine.setScreenSize(screenSize);
+		if (mapVector != null) {
+			mapVector.setScreenSize(screenSize);
 		}
 	}
 
@@ -67,10 +67,10 @@ public class MapEditorLayer extends View {
 		return super.dispatchTouchEvent(event);
 	}
 
-	public void setMapLine(MapLine mapLine) {
-		this.mapLine = mapLine;
+	public void setMapVector(MapVector mapVector) {
+		this.mapVector = mapVector;
 		if (screenSize != null)
-			mapLine.setScreenSize(screenSize);
+			mapVector.setScreenSize(screenSize);
 	}
 
 	public void setMapLocations(List<MapLocation> mapLocations) {
@@ -84,7 +84,7 @@ public class MapEditorLayer extends View {
 			mapLocation.screen.set(result.x, result.y);
 		}
 
-		mapLine.updateScreenCoordinates(projection, eqLenght);
+		mapVector.updateScreenCoordinates(projection, eqLenght);
 
 		invalidate();
 	}
@@ -97,7 +97,7 @@ public class MapEditorLayer extends View {
 			canvas.drawCircle(mapLocation.screen.x, mapLocation.screen.y, 100, fillPaint);
 		}
 
-		canvas.drawLines(mapLine.getPath(), strokePaint);
+		canvas.drawLines(mapVector.getPath(), strokePaint);
 	}
 
 	public void setOnDragListener(OnDragListener dragListener) {

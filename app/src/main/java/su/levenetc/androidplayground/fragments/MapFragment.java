@@ -3,7 +3,6 @@ package su.levenetc.androidplayground.fragments;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -23,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import su.levenetc.androidplayground.R;
-import su.levenetc.androidplayground.models.MapLine;
+import su.levenetc.androidplayground.models.MapVector;
 import su.levenetc.androidplayground.models.MapLocation;
 import su.levenetc.androidplayground.utils.MapUtils;
 import su.levenetc.androidplayground.utils.ViewUtils;
@@ -175,7 +174,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         pathLocations.get(1).name = "Sackh";
 
         mapEditorLayer.setMapLocations(mapLocations);
-        mapEditorLayer.setMapLine(new MapLine(pathLocations));
+        mapEditorLayer.setMapVector(new MapVector(pathLocations.get(0), pathLocations.get(1)));
 
         dp256 = ViewUtils.dpToPx(getContext(), 256);
 
