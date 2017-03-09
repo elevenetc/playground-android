@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent">
+
+	<su.levenetc.androidplayground.views.StickyScrollView
+			android:fillViewport="true"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent">
+
+
+		<LinearLayout
+				android:orientation="vertical"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content">
+
+			<View
+					android:id="@+id/view_gap"
+					android:layout_width="match_parent"
+					android:layout_height="100dp"/>
+
+			<FrameLayout android:layout_width="match_parent"
+			             android:background="#00FFFF"
+			             android:layout_height="wrap_content">
+
+				<View android:background="#00FF00"
+				      android:id="@+id/top_container"
+				      android:layout_width="match_parent"
+				      android:layout_height="700dp"/>
+
+				<View android:background="#FF0000"
+				      android:id="@+id/stick"
+				      android:layout_width="match_parent"
+				      android:layout_height="100dp"/>
+
+			</FrameLayout>
+		</LinearLayout>
+
+
+	</su.levenetc.androidplayground.views.StickyScrollView>
+
+</FrameLayout>

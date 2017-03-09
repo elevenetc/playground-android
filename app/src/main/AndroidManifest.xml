@@ -53,6 +53,7 @@
 		<activity android:name=".activities.OpenGLSampleActivity"/>
 		<activity android:name=".activities.CanvasActivity"/>
 		<activity android:name=".activities.MapEditorActivity"/>
+		<activity android:name=".activities.StickyScrollViewActivity"/>
 
 		<service android:name=".services.AlarmStatusService"/>
 		<service android:name=".services.SensorsDataCollectorService"/>
