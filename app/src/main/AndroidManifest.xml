@@ -54,11 +54,13 @@
 		<activity android:name=".activities.CanvasActivity"/>
 		<activity android:name=".activities.MapEditorActivity"/>
 		<activity android:name=".activities.StickyScrollViewActivity"/>
+		<activity android:name=".activities.MergeViewActivity"/>
 
 		<service android:name=".services.AlarmStatusService"/>
 		<service android:name=".services.SensorsDataCollectorService"/>
 
-		<meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyAaPC86oWIiG1tcnKHvr8ioBpfmOcnWtxQ"/>
+		<meta-data android:name="com.google.android.geo.API_KEY"
+		           android:value="AIzaSyAaPC86oWIiG1tcnKHvr8ioBpfmOcnWtxQ"/>
 	</application>
 
 </manifest>
