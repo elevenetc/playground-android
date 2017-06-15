@@ -93,6 +93,39 @@ public class MergeView extends View {
 			path.moveTo(xLeft, yLeft);
 			path.cubicTo(xLeftControl, yLeftControl, xRightControl, yRightControl, xRight, yRight);
 			canvas.drawPath(path, yellowStroke);
+		} else if (leftMarker != null) {
+			float xLeft = 0;
+			float yLeft = leftMarker.getY();
+
+			float xRight = canvas.getWidth();
+			float yRight = -10;
+
+			float xLeftControl = canvas.getWidth() / 2;
+			float yLeftControl = yLeft;
+
+			float xRightControl = canvas.getWidth() / 2;
+			float yRightControl = yRight;
+
+			Path path = new Path();
+			path.moveTo(xLeft, yLeft);
+			path.cubicTo(xLeftControl, yLeftControl, xRightControl, yRightControl, xRight, yRight);
+			canvas.drawPath(path, yellowStroke);
+		} else if (rightMarker != null) {
+			float xLeft = 0;
+			float yLeft = -10;
+			float xRight = canvas.getWidth();
+			float yRight = rightMarker.getY();
+
+			float xLeftControl = canvas.getWidth() / 2;
+			float yLeftControl = yLeft;
+
+			float xRightControl = canvas.getWidth() / 2;
+			float yRightControl = yRight;
+
+			Path path = new Path();
+			path.moveTo(xLeft, yLeft);
+			path.cubicTo(xLeftControl, yLeftControl, xRightControl, yRightControl, xRight, yRight);
+			canvas.drawPath(path, yellowStroke);
 		}
 
 
