@@ -11,7 +11,7 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import su.levenetc.androidplayground.R;
-import su.levenetc.androidplayground.mergeview.BracketR;
+import su.levenetc.androidplayground.mergeview.BracketRorZ;
 import su.levenetc.androidplayground.mergeview.Mergable;
 import su.levenetc.androidplayground.mergeview.MergableItemView;
 import su.levenetc.androidplayground.mergeview.MergeView;
@@ -34,14 +34,14 @@ public class MergeViewActivity extends AppCompatActivity {
 		ButterKnife.bind(this);
 
 
-		List<Mergable> leftData = getLeftData(50);
+		List<Mergable> leftData = getLeftData(55);
 		List<Mergable> rightData = getRightData(100);
 		final Context context = this;
 
 		mergeView.setData(leftData, rightData, () -> new TV(context));
 	}
 
-	static class TV extends TextView implements MergableItemView<BracketR> {
+	static class TV extends TextView implements MergableItemView<BracketRorZ> {
 
 		public TV(Context context) {
 			super(context);
@@ -51,7 +51,7 @@ public class MergeViewActivity extends AppCompatActivity {
 			super(context, attrs);
 		}
 
-		@Override public void set(BracketR data) {
+		@Override public void set(BracketRorZ data) {
 			setText(data.getValue());
 		}
 	}
@@ -61,9 +61,11 @@ public class MergeViewActivity extends AppCompatActivity {
 		for (int i = 0; i < length; i++) {
 
 			if (i == 3) {
-				result.add(new BracketR("hello{R}"));
+				result.add(new BracketRorZ("hell\no{R}"));
+			} else if (i == 27) {
+				result.add(new BracketRorZ("hell\n\no{Z}"));
 			} else {
-				result.add(new BracketR("Ssss"));
+				result.add(new BracketRorZ("Ssss"));
 			}
 
 		}
@@ -75,9 +77,11 @@ public class MergeViewActivity extends AppCompatActivity {
 		for (int i = 0; i < length; i++) {
 
 			if (i == 10) {
-				result.add(new BracketR("hello{R}"));
+				result.add(new BracketRorZ("hello{R}"));
+			} else if (i == 13) {
+				result.add(new BracketRorZ("hello{Z}"));
 			} else {
-				result.add(new BracketR("Zzzz..."));
+				result.add(new BracketRorZ("Zzzz..."));
 			}
 
 		}

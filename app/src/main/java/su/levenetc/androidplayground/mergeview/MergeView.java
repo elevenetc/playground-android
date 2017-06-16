@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import su.levenetc.androidplayground.adapters.MergeAdapter;
 import su.levenetc.androidplayground.utils.ViewUtils;
-import su.levenetc.androidplayground.views.MergeViewSeparator;
 
 import java.util.List;
 
