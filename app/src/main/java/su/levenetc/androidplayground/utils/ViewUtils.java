@@ -7,15 +7,7 @@ import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Path;
-import android.graphics.Point;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
-import android.graphics.Rect;
+import android.graphics.*;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -24,15 +16,11 @@ import android.support.annotation.DimenRes;
 import android.support.annotation.NonNull;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.view.WindowManager;
+import android.view.*;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
@@ -50,7 +38,22 @@ public class ViewUtils {
 	private static Point screenSize;
 	private static float defaultToolbarHeight;
 
-	public static TextView createTextView(Context context, String text){
+	public static LinearLayout.LayoutParams linearWM() {
+		LinearLayout.LayoutParams result = new LinearLayout.LayoutParams(
+				ViewGroup.LayoutParams.WRAP_CONTENT,
+				ViewGroup.LayoutParams.MATCH_PARENT);
+		return result;
+	}
+
+	public static LinearLayout.LayoutParams linearWM(int weight) {
+		LinearLayout.LayoutParams result = new LinearLayout.LayoutParams(
+				ViewGroup.LayoutParams.WRAP_CONTENT,
+				ViewGroup.LayoutParams.MATCH_PARENT,
+				weight);
+		return result;
+	}
+
+	public static TextView createTextView(Context context, String text) {
 		TextView result = new TextView(context);
 		result.setText(text);
 		return result;

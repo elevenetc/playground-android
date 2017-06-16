@@ -1,82 +1,87 @@
 package su.levenetc.androidplayground.activities;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.util.AttributeSet;
 import android.view.View;
+import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import su.levenetc.androidplayground.R;
-import su.levenetc.androidplayground.adapters.TextLinesAdapter;
-import su.levenetc.androidplayground.views.MergeView;
+import su.levenetc.androidplayground.mergeview.BracketR;
+import su.levenetc.androidplayground.mergeview.Mergable;
+import su.levenetc.androidplayground.mergeview.MergableItemView;
+import su.levenetc.androidplayground.mergeview.MergeView;
+
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by eugene.levenetc on 15/06/2017.
  */
 public class MergeViewActivity extends AppCompatActivity {
 
-	@BindView(R.id.list_left) RecyclerView leftList;
-	@BindView(R.id.list_right) RecyclerView rightList;
 	@BindView(R.id.merge_view) MergeView mergeView;
+
+	View activeList;
 
 	@Override protected void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_merge_view);
 		ButterKnife.bind(this);
-		leftList.setLayoutManager(new LinearLayoutManager(this));
-		rightList.setLayoutManager(new LinearLayoutManager(this));
 
 
-		leftList.setOnScrollChangeListener(new View.OnScrollChangeListener() {
-			@Override public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-				mergeView.invalidate();
-			}
-		});
+		List<Mergable> leftData = getLeftData(50);
+		List<Mergable> rightData = getRightData(100);
+		final Context context = this;
 
-		rightList.setOnScrollChangeListener(new View.OnScrollChangeListener() {
-			@Override public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-				mergeView.invalidate();
-			}
-		});
-
-		String[] leftData = getLeftData();
-		String[] rightData = getRightData();
-
-		leftList.setAdapter(new TextLinesAdapter(leftData));
-		rightList.setAdapter(new TextLinesAdapter(rightData));
-
-		mergeView.setLists(leftList, rightList);
+		mergeView.setData(leftData, rightData, () -> new TV(context));
 	}
 
-	@NonNull private String[] getLeftData() {
-		String[] leftData = new String[100];
-		for (int i = 0; i < leftData.length; i++) {
+	static class TV extends TextView implements MergableItemView<BracketR> {
+
+		public TV(Context context) {
+			super(context);
+		}
+
+		public TV(Context context, AttributeSet attrs) {
+			super(context, attrs);
+		}
+
+		@Override public void set(BracketR data) {
+			setText(data.getValue());
+		}
+	}
+
+	@NonNull private List<Mergable> getLeftData(int length) {
+		List<Mergable> result = new LinkedList<>();
+		for (int i = 0; i < length; i++) {
 
 			if (i == 3) {
-				leftData[i] = "bbb";
+				result.add(new BracketR("hello{R}"));
 			} else {
-				leftData[i] = "Zzz";
+				result.add(new BracketR("Ssss"));
 			}
 
 		}
-		return leftData;
+		return result;
 	}
 
-	@NonNull private String[] getRightData() {
-		String[] leftData = new String[100];
-		for (int i = 0; i < leftData.length; i++) {
+	@NonNull private List<Mergable> getRightData(int length) {
+		List<Mergable> result = new LinkedList<>();
+		for (int i = 0; i < length; i++) {
 
 			if (i == 10) {
-				leftData[i] = "bbb";
+				result.add(new BracketR("hello{R}"));
 			} else {
-				leftData[i] = "Fff";
+				result.add(new BracketR("Zzzz..."));
 			}
 
 		}
-		return leftData;
+		return result;
 	}
 
 }
