@@ -76,7 +76,7 @@ public class MergeViewActivity extends AppCompatActivity {
 		List<Mergable> result = new LinkedList<>();
 		for (int i = 0; i < length; i++) {
 
-			if (i == 10) {
+			if (i == 7) {
 				result.add(new BracketRorZ("hello{R}"));
 			} else if (i == 13) {
 				result.add(new BracketRorZ("hello{Z}"));

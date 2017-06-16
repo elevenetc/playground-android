@@ -28,11 +28,15 @@ public class MergeAdapter extends RecyclerView.Adapter<MergeAdapter.Holder> {
 	}
 
 	@Override public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
-		return new Holder((View) viewFactory.create());
+		final MergableItemView view = viewFactory.create();
+		((View) view).setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+		return new Holder((View) view);
 	}
 
 	@Override public void onBindViewHolder(Holder holder, int position) {
-		((MergableItemView) holder.itemView).set(data.get(position));
+		final MergableItemView view = (MergableItemView) holder.itemView;
+		((View)view).setBackgroundColor(0);
+		view.set(data.get(position));
 	}
 
 	@Override public int getItemCount() {

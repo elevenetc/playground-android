@@ -73,6 +73,9 @@ public class MergeViewSeparator extends View {
 					rightLM.findLastVisibleItemPosition()
 			);
 
+			if (leftView != null) leftView.setBackgroundColor(Color.RED);
+			if (rightView != null) rightView.setBackgroundColor(Color.RED);
+
 			pairView.drawConnection(leftView, rightView, canvas);
 		}
 	}

@@ -34,7 +34,7 @@ public class PairView {
 		rectColor.setColor(Color.BLUE);
 
 		pathColor.setStrokeWidth(5);
-		pathColor.setStyle(Paint.Style.STROKE);
+		pathColor.setStyle(Paint.Style.FILL);
 		pathColor.setColor(Color.RED);
 	}
 
@@ -43,7 +43,7 @@ public class PairView {
 		if (leftHeight == -1 && leftView != null) leftHeight = leftView.getHeight();
 		if (rightHeight == -1 && rightView != null) rightHeight = rightView.getHeight();
 
-		drawRect(leftView, rightView, canvas);
+		//drawRect(leftView, rightView, canvas);
 		drawPath(leftView, rightView, canvas);
 	}
 
@@ -102,18 +102,30 @@ public class PairView {
 			}
 		}
 
-		drawPath(xLeft, yLeft, xRight, yRight, xLeftControl, yLeftControl, xRightControl, yRightControl, canvas, pathColor);
+		path.reset();
+		buildTopPath(xLeft, yLeft, xRight, yRight, xLeftControl, yLeftControl, xRightControl, yRightControl);
+		path.rLineTo(0, rightHeight);
+		buildBottomPath(xLeft, yLeft + leftHeight, xLeftControl, yLeftControl + leftHeight, xRightControl, yRightControl + rightHeight);
+		path.close();
+		canvas.drawPath(path, pathColor);
 	}
 
-	void drawPath(float xLeft, float yLeft,
-	              float xRight, float yRight,
-	              float xLeftControl, float yLeftControl,
-	              float xRightControl, float yRightControl,
-	              Canvas canvas, Paint paint) {
-		path.reset();
+	void buildTopPath(float xLeft, float yLeft,
+	                  float xRight, float yRight,
+	                  float xLeftControl, float yLeftControl,
+	                  float xRightControl, float yRightControl) {
+
 		path.moveTo(xLeft, yLeft);
 		path.cubicTo(xLeftControl, yLeftControl, xRightControl, yRightControl, xRight, yRight);
-		canvas.drawPath(path, paint);
+
+	}
+
+	void buildBottomPath(float xLeft, float yLeft,
+	                     float xLeftControl, float yLeftControl,
+	                     float xRightControl, float yRightControl) {
+
+		path.cubicTo(xRightControl, yRightControl, xLeftControl, yLeftControl, xLeft, yLeft);
+
 	}
 
 	void drawRect(float left, float top, float bottom, Canvas canvas) {
