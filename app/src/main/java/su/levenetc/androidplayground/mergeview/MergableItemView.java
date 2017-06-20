@@ -5,4 +5,5 @@ package su.levenetc.androidplayground.mergeview;
  */
 public interface MergableItemView<T extends Mergable> {
 	void set(T data);
+	T get();
 }

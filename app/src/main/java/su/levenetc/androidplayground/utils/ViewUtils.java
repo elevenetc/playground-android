@@ -38,6 +38,10 @@ public class ViewUtils {
 	private static Point screenSize;
 	private static float defaultToolbarHeight;
 
+	public static ViewGroup.LayoutParams viewGroupMW() {
+		return new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+	}
+
 	public static LinearLayout.LayoutParams linearWM() {
 		LinearLayout.LayoutParams result = new LinearLayout.LayoutParams(
 				ViewGroup.LayoutParams.WRAP_CONTENT,

@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import su.levenetc.androidplayground.adapters.MergeAdapter;
 import su.levenetc.androidplayground.utils.ViewUtils;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import static su.levenetc.androidplayground.utils.ViewUtils.linearWM;
@@ -24,6 +25,8 @@ public class MergeView extends LinearLayout {
 	private RecyclerView rightList;
 	private MergeViewSeparator separator;
 	private View activeList;
+	private MergeAdapter leftAdapter;
+	private MergeAdapter rightAdapter;
 
 	public MergeView(Context context) {
 		super(context);
@@ -111,11 +114,50 @@ public class MergeView extends LinearLayout {
 	}
 
 	public void setData(List<Mergable> leftData, List<Mergable> rightData, ViewItemFactory viewFactory) {
-		leftList.setAdapter(new MergeAdapter(leftData, viewFactory));
-		rightList.setAdapter(new MergeAdapter(rightData, viewFactory));
-		PairBuilder pairBuilder = new PairBuilder(leftData, rightData);
+		leftAdapter = new MergeAdapter(leftData, viewFactory);
+		rightAdapter = new MergeAdapter(rightData, viewFactory);
 
-		separator.buildPairs(pairBuilder.getPairs());
+		leftList.setAdapter(leftAdapter);
+		rightList.setAdapter(rightAdapter);
+
+		leftAdapter.setClickHandler(new MergeAdapter.ClickHandler() {
+			@Override public void onClicked(Mergable data) {
+				delete(data);
+			}
+		});
+
+		rightAdapter.setClickHandler(new MergeAdapter.ClickHandler() {
+			@Override public void onClicked(Mergable data) {
+
+			}
+		});
+
+		separator.buildPairs(buildPairs(leftData, rightData));
 		separator.setLists(leftList, rightList);
+	}
+
+	public List<Pair> buildPairs(List<Mergable> left, List<Mergable> right) {
+		List<Pair> result = new LinkedList<>();
+		for (int l = 0; l < left.size(); l++) {
+			Mergable leftValue = left.get(l);
+			for (int r = 0; r < right.size(); r++) {
+				Mergable rightValue = right.get(r);
+				if (leftValue.mergableWith(rightValue)) {
+					result.add(new Pair(leftValue, rightValue, l, r));
+				}
+
+			}
+		}
+		return result;
+	}
+
+	private void delete(Mergable data) {
+		int position = leftAdapter.getPosition(data);
+		leftAdapter.delete(data);
+		leftAdapter.notifyItemRemoved(position);
+	}
+
+	private void remove(Mergable data) {
+
 	}
 }

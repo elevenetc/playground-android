@@ -33,15 +33,15 @@ public class MergeViewActivity extends AppCompatActivity {
 		setContentView(R.layout.activity_merge_view);
 		ButterKnife.bind(this);
 
-
 		List<Mergable> leftData = getLeftData(55);
 		List<Mergable> rightData = getRightData(100);
-		final Context context = this;
 
-		mergeView.setData(leftData, rightData, () -> new TV(context));
+		mergeView.setData(leftData, rightData, () -> new TV(this));
 	}
 
 	static class TV extends TextView implements MergableItemView<BracketRorZ> {
+
+		private BracketRorZ data;
 
 		public TV(Context context) {
 			super(context);
@@ -52,7 +52,12 @@ public class MergeViewActivity extends AppCompatActivity {
 		}
 
 		@Override public void set(BracketRorZ data) {
+			this.data = data;
 			setText(data.getValue());
+		}
+
+		@Override public BracketRorZ get() {
+			return data;
 		}
 	}
 
@@ -60,13 +65,18 @@ public class MergeViewActivity extends AppCompatActivity {
 		List<Mergable> result = new LinkedList<>();
 		for (int i = 0; i < length; i++) {
 
+			String value;
 			if (i == 3) {
-				result.add(new BracketRorZ("hell\no{R}"));
+				value = "hell\no{R}";
 			} else if (i == 27) {
-				result.add(new BracketRorZ("hell\n\no{Z}"));
+				value = "hell\n\no{Z}";
 			} else {
-				result.add(new BracketRorZ("Ssss"));
+				value = "Ssss";
 			}
+
+			value = i + "-" + value;
+
+			result.add(new BracketRorZ(value));
 
 		}
 		return result;

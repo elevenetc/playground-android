@@ -17,16 +17,5 @@ public class PairBuilder {
 		this.right = right;
 	}
 
-	public List<Pair> getPairs() {
-		List<Pair> result = new LinkedList<>();
-		for (int l = 0; l < left.size(); l++) {
-			Mergable leftValue = left.get(l);
-			for (int r = 0; r < right.size(); r++) {
-				Mergable rightValue = right.get(r);
-				if (leftValue.mergableWith(rightValue))
-					result.add(new Pair(leftValue, rightValue, l, r));
-			}
-		}
-		return result;
-	}
+
 }
