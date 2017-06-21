@@ -11,10 +11,7 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import su.levenetc.androidplayground.R;
-import su.levenetc.androidplayground.mergeview.BracketRorZ;
-import su.levenetc.androidplayground.mergeview.Mergable;
-import su.levenetc.androidplayground.mergeview.MergableItemView;
-import su.levenetc.androidplayground.mergeview.MergeView;
+import su.levenetc.androidplayground.mergeview.*;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -36,7 +33,7 @@ public class MergeViewActivity extends AppCompatActivity {
 		List<Mergable> leftData = getLeftData(55);
 		List<Mergable> rightData = getRightData(100);
 
-		mergeView.setData(leftData, rightData, () -> new TV(this));
+		mergeView.setAdapter(new MergeViewAdapter(leftData, rightData, () -> new TV(this)));
 	}
 
 	static class TV extends TextView implements MergableItemView<BracketRorZ> {
