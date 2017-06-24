@@ -13,13 +13,13 @@ import java.util.List;
 /**
  * Created by eugene.levenetc on 15/06/2017.
  */
-public class MergeAdapter extends RecyclerView.Adapter<MergeAdapter.Holder> {
+public class MergeListAdapter extends RecyclerView.Adapter<MergeListAdapter.Holder> {
 
 	private List<Mergable> data;
 	private ViewItemFactory viewFactory;
 	private ClickHandler clickHandler;
 
-	public MergeAdapter(List<Mergable> data, ViewItemFactory viewFactory) {
+	public MergeListAdapter(List<Mergable> data, ViewItemFactory viewFactory) {
 
 		this.data = data;
 		this.viewFactory = viewFactory;

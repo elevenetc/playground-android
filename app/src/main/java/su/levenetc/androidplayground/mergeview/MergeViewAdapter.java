@@ -1,7 +1,7 @@
 package su.levenetc.androidplayground.mergeview;
 
 import android.support.v7.widget.RecyclerView;
-import su.levenetc.androidplayground.adapters.MergeAdapter;
+import su.levenetc.androidplayground.adapters.MergeListAdapter;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -11,8 +11,8 @@ import java.util.List;
  */
 public class MergeViewAdapter {
 
-	private MergeAdapter leftAdapter;
-	private MergeAdapter rightAdapter;
+	private MergeListAdapter leftAdapter;
+	private MergeListAdapter rightAdapter;
 	private RecyclerView leftList;
 	private RecyclerView rightList;
 	private MergeViewSeparator separator;
@@ -22,8 +22,8 @@ public class MergeViewAdapter {
 	public MergeViewAdapter(List<Mergable> leftData, List<Mergable> rightData, ViewItemFactory viewFactory) {
 		this.leftData = leftData;
 		this.rightData = rightData;
-		leftAdapter = new MergeAdapter(leftData, viewFactory);
-		rightAdapter = new MergeAdapter(rightData, viewFactory);
+		leftAdapter = new MergeListAdapter(leftData, viewFactory);
+		rightAdapter = new MergeListAdapter(rightData, viewFactory);
 
 
 	}
@@ -32,12 +32,12 @@ public class MergeViewAdapter {
 		int position = leftAdapter.getPosition(data);
 		leftAdapter.delete(data);
 		leftAdapter.notifyItemRemoved(position);
+		separator.replace(position, data);
 	}
 
 	private void remove(Mergable data) {
 
 	}
-
 
 	public void setViews(RecyclerView leftList, RecyclerView rightList, MergeViewSeparator separator) {
 		this.separator = separator;
@@ -53,13 +53,13 @@ public class MergeViewAdapter {
 		this.leftList.setAdapter(leftAdapter);
 		this.rightList.setAdapter(rightAdapter);
 
-		leftAdapter.setClickHandler(new MergeAdapter.ClickHandler() {
+		leftAdapter.setClickHandler(new MergeListAdapter.ClickHandler() {
 			@Override public void onClicked(Mergable data) {
 				delete(data);
 			}
 		});
 
-		rightAdapter.setClickHandler(new MergeAdapter.ClickHandler() {
+		rightAdapter.setClickHandler(new MergeListAdapter.ClickHandler() {
 			@Override public void onClicked(Mergable data) {
 
 			}
