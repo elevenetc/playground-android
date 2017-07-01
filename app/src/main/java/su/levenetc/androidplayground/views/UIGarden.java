@@ -4,8 +4,11 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Path;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.BaseInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import su.levenetc.androidplayground.utils.BezierBuilder;
 import su.levenetc.androidplayground.utils.CanvasGrid;
 import su.levenetc.androidplayground.utils.Paints;
@@ -47,32 +50,57 @@ public class UIGarden extends View {
 		super.onLayout(changed, left, top, right, bottom);
 		final int width = getWidth();
 		final int height = getHeight();
+
+		float startX = 50;
+		float startY = 50;
+		int steps = 50;
+
 		final List<BezierBuilder.Step> points = new BezierBuilder(
-				100, 100,
-				900, 900,
-				300, 50,
-				50
+				startX, startY,
+				width - 50, height - 50,
+				width / 2, 50,
+				steps
 		).get();
 
-		path.moveTo(100, 100);
+		path.moveTo(startX, startY);
 
 		AccelerateDecelerateInterpolator inter = new AccelerateDecelerateInterpolator();
+//		BaseInterpolator inter = new LinearInterpolator();
+//		BaseInterpolator inter = new DecelerateInterpolator();
+
+		float timeDiff = 0;
+		float prevTime = 0;
+		long baseTime = 1000;
 
 		for (BezierBuilder.Step step : points) {
 			final float x = step.xValue;
 			final float y = step.yValue;
 			final float stepTime = step.step;
 			final float interpolatedStepTime = inter.getInterpolation(stepTime);
-			final long time = (long) (interpolatedStepTime * 100);
+
+			float intTime = interpolatedStepTime;
+			float delay = 0;
+
+			if (prevTime == 0) {
+				prevTime = intTime;
+			} else {
+				timeDiff = intTime - prevTime;
+				prevTime = intTime;
+			}
+
+			long timeResult = (long) (timeDiff * baseTime);
+
+			Log.d("delay", timeResult + "");
 			sequenceCaller.add(() -> {
 				path.lineTo(x, y);
 				invalidate();
 
-			}, time);
+			}, timeResult);
 		}
 
 
-		sequenceCaller.start();
+		postDelayed(() -> sequenceCaller.start(), 500);
+
 	}
 
 	@Override protected void onDraw(Canvas canvas) {
