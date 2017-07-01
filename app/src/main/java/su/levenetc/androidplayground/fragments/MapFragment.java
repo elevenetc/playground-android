@@ -104,7 +104,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 //		map.getUiSettings().setMyLocationButtonEnabled(true);
         map.setMyLocationEnabled(true);
 
-        // Needs to call MapsInitializer before doing any CameraUpdateFactory calls
+        // Needs to run MapsInitializer before doing any CameraUpdateFactory calls
         MapsInitializer.initialize(this.getActivity());
 
         // Updates the location and zoom of the MapView

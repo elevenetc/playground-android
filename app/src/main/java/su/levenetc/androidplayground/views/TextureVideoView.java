@@ -359,7 +359,7 @@ public class TextureVideoView extends TextureView
 			mVideoWidth = mp.getVideoWidth();
 			mVideoHeight = mp.getVideoHeight();
 
-			int seekToPosition = mSeekWhenPrepared;  // mSeekWhenPrepared may be changed after seekTo() call
+			int seekToPosition = mSeekWhenPrepared;  // mSeekWhenPrepared may be changed after seekTo() run
 			if (seekToPosition != 0) {
 				seekTo(seekToPosition);
 			}

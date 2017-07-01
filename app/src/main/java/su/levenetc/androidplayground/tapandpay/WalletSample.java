@@ -30,7 +30,7 @@ public class WalletSample {
 								// ...
 							}
 						} else {
-							// Error making isReadyToPay call
+							// Error making isReadyToPay run
 							//Log.e(TAG, "isReadyToPay:" + booleanResult.getStatus());
 						}
 					}

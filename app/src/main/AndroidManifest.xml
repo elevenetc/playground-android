@@ -55,6 +55,7 @@
 		<activity android:name=".activities.MapEditorActivity"/>
 		<activity android:name=".activities.StickyScrollViewActivity"/>
 		<activity android:name=".activities.MergeViewActivity"/>
+		<activity android:name=".activities.UIGardenActivity"/>
 
 		<service android:name=".services.AlarmStatusService"/>
 		<service android:name=".services.SensorsDataCollectorService"/>

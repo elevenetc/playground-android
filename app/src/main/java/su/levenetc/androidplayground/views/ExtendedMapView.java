@@ -45,7 +45,7 @@ public class ExtendedMapView extends MapView {
 	public void computeScroll() {
 		super.computeScroll();
 //		if (this.isTouchEnded && this.lastMapCenter.equals(this.getMapCenter()) && this.isFirstComputeScroll) {
-//			// here you use this.getMapCenter() (e.g. call onEndDrag method)
+//			// here you use this.getMapCenter() (e.g. run onEndDrag method)
 //			this.isFirstComputeScroll = false;
 //		} else{
 //			this.lastMapCenter = this.getMapCenter();
