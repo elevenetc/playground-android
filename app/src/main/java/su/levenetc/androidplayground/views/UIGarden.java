@@ -3,9 +3,9 @@ package su.levenetc.androidplayground.views;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Path;
-import android.graphics.PointF;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import su.levenetc.androidplayground.utils.BezierBuilder;
 import su.levenetc.androidplayground.utils.CanvasGrid;
 import su.levenetc.androidplayground.utils.Paints;
@@ -47,23 +47,30 @@ public class UIGarden extends View {
 		super.onLayout(changed, left, top, right, bottom);
 		final int width = getWidth();
 		final int height = getHeight();
-		final List<PointF> points = new BezierBuilder(
+		final List<BezierBuilder.Step> points = new BezierBuilder(
 				100, 100,
 				900, 900,
 				300, 50,
-				10
+				50
 		).get();
 
 		path.moveTo(100, 100);
 
-		for (PointF point : points) {
-			final float x = point.x;
-			final float y = point.y;
+		AccelerateDecelerateInterpolator inter = new AccelerateDecelerateInterpolator();
+
+		for (BezierBuilder.Step step : points) {
+			final float x = step.xValue;
+			final float y = step.yValue;
+			final float stepTime = step.step;
+			final float interpolatedStepTime = inter.getInterpolation(stepTime);
+			final long time = (long) (interpolatedStepTime * 100);
 			sequenceCaller.add(() -> {
 				path.lineTo(x, y);
 				invalidate();
-			}, 500);
+
+			}, time);
 		}
+
 
 		sequenceCaller.start();
 	}

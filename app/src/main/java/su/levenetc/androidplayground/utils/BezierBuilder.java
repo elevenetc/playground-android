@@ -1,7 +1,5 @@
 package su.levenetc.androidplayground.utils;
 
-import android.graphics.PointF;
-
 import java.util.LinkedList;
 import java.util.List;
 
@@ -34,15 +32,28 @@ public class BezierBuilder {
 		this.steps = steps;
 	}
 
-	public List<PointF> get() {
+	public List<Step> get() {
 		float t = 0;
-		List<PointF> result = new LinkedList<>();
+		List<Step> result = new LinkedList<>();
 		for (int i = 0; i < steps; i++) {
 			t += 1f / steps;
 			float x = (1 - t) * (1 - t) * fromX + 2 * (1 - t) * t * controlX + t * t * toX;
 			float y = (1 - t) * (1 - t) * fromY + 2 * (1 - t) * t * controlY + t * t * toY;
-			result.add(new PointF(x, y));
+
+			result.add(new Step(x, y, t));
 		}
 		return result;
+	}
+
+	public static class Step {
+		public float xValue;
+		public float yValue;
+		public float step;
+
+		public Step(float xValue, float yValue, float step) {
+			this.xValue = xValue;
+			this.yValue = yValue;
+			this.step = step;
+		}
 	}
 }
