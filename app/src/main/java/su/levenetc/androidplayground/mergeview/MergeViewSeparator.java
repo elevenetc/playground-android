@@ -9,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.View;
 
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -17,6 +16,10 @@ import java.util.List;
  * Created by eugene.levenetc on 15/06/2017.
  */
 public class MergeViewSeparator extends View {
+
+	private RecyclerView leftList;
+	private RecyclerView rightList;
+	private Paint red = new Paint();
 	private Paint blue = new Paint();
 	private Paint green = new Paint();
 	private Paint yellowStroke = new Paint();
@@ -38,6 +41,8 @@ public class MergeViewSeparator extends View {
 	private void init() {
 		blue.setStyle(Paint.Style.FILL);
 		blue.setColor(Color.BLUE);
+		red.setStyle(Paint.Style.FILL);
+		red.setColor(Color.RED);
 		green.setStyle(Paint.Style.FILL);
 		green.setColor(Color.GREEN);
 		yellowStroke.setStyle(Paint.Style.STROKE);
@@ -47,6 +52,9 @@ public class MergeViewSeparator extends View {
 
 	public void setLists(RecyclerView leftList, RecyclerView rightList) {
 
+		this.leftList = leftList;
+		this.rightList = rightList;
+
 		leftLM = (LinearLayoutManager) leftList.getLayoutManager();
 		rightLM = (LinearLayoutManager) rightList.getLayoutManager();
 	}
@@ -55,8 +63,8 @@ public class MergeViewSeparator extends View {
 		super.onDraw(canvas);
 
 		for (PairView pairView : pairViews) {
-			final View leftListItem = leftLM.findViewByPosition(pairView.leftIndex);
-			final View rightListItem = rightLM.findViewByPosition(pairView.rightIndex);
+			final View leftView = leftLM.findViewByPosition(pairView.leftIndex);
+			final View rightView = rightLM.findViewByPosition(pairView.rightIndex);
 
 			pairView.setVisible(
 					leftLM.findFirstVisibleItemPosition(),
@@ -65,14 +73,10 @@ public class MergeViewSeparator extends View {
 					rightLM.findLastVisibleItemPosition()
 			);
 
-			if (leftListItem != null) {
-				leftListItem.setBackgroundColor(Color.RED);
-			}
-			if (rightListItem != null) {
-				rightListItem.setBackgroundColor(Color.RED);
-			}
+			if (leftView != null) leftView.setBackgroundColor(Color.RED);
+			if (rightView != null) rightView.setBackgroundColor(Color.RED);
 
-			pairView.drawConnection(leftListItem, rightListItem, canvas);
+			pairView.drawConnection(leftView, rightView, canvas);
 		}
 	}
 
@@ -84,14 +88,4 @@ public class MergeViewSeparator extends View {
 
 	}
 
-	public void replace(int position, Mergable data) {
-		final Iterator<PairView> it = pairViews.iterator();
-		while (it.hasNext()) {
-			final PairView pair = it.next();
-			if (pair.leftIndex == position) {
-				it.remove();
-				break;
-			}
-		}
-	}
 }
