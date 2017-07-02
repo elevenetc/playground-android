@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Created by eugene.levenetc on 01/07/2017.
  */
-public class BezierBuilder {
+public class BezierCurve {
 
 	private final float fromX;
 	private final float fromY;
@@ -14,13 +14,15 @@ public class BezierBuilder {
 	private final float toY;
 	private final float controlX;
 	private final float controlY;
-	private final int steps;
+	private final int stepsAmount;
 
-	public BezierBuilder(
+	List<Step> steps = new LinkedList<>();
+
+	public BezierCurve(
 			float fromX, float fromY,
 			float toX, float toY,
 			float controlX, float controlY,
-			int steps
+			int stepsAmount
 	) {
 
 		this.fromX = fromX;
@@ -29,20 +31,25 @@ public class BezierBuilder {
 		this.toY = toY;
 		this.controlX = controlX;
 		this.controlY = controlY;
-		this.steps = steps;
+		this.stepsAmount = stepsAmount;
+
+		build();
 	}
 
 	public List<Step> get() {
+		return steps;
+	}
+
+	private void build() {
 		float t = 0;
-		List<Step> result = new LinkedList<>();
-		for (int i = 0; i < steps; i++) {
-			t += 1f / steps;
+
+		for (int i = 0; i < stepsAmount; i++) {
+			t += 1f / stepsAmount;
 			float x = (1 - t) * (1 - t) * fromX + 2 * (1 - t) * t * controlX + t * t * toX;
 			float y = (1 - t) * (1 - t) * fromY + 2 * (1 - t) * t * controlY + t * t * toY;
 
-			result.add(new Step(x, y, t));
+			steps.add(new Step(x, y, t));
 		}
-		return result;
 	}
 
 	public static class Step {

@@ -9,20 +9,27 @@ import android.graphics.Paint;
 public class Paints {
 
 	public static class Stroke {
-		public static Paint Blue = new Paint();
-
-		static {
-			Blue.setStyle(Paint.Style.STROKE);
-			Blue.setColor(Color.BLUE);
-		}
+		public static Paint Blue = stroke(Color.BLUE);
+		public static Paint White = stroke(Color.WHITE);
 	}
 
 	public static class Fill {
-		public static Paint Red = new Paint();
-
-		static {
-			Red.setColor(Color.RED);
-			Red.setStyle(Paint.Style.FILL);
-		}
+		public static Paint Red = fill(Color.RED);
+		public static Paint Grey = fill(Color.DKGRAY);
 	}
+
+	static Paint stroke(int color) {
+		Paint result = new Paint();
+		result.setStyle(Paint.Style.STROKE);
+		result.setColor(color);
+		return result;
+	}
+
+	static Paint fill(int color) {
+		Paint result = new Paint();
+		result.setStyle(Paint.Style.FILL);
+		result.setColor(color);
+		return result;
+	}
+
 }

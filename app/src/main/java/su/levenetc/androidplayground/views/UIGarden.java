@@ -7,10 +7,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.BaseInterpolator;
-import android.view.animation.DecelerateInterpolator;
-import su.levenetc.androidplayground.utils.BezierBuilder;
-import su.levenetc.androidplayground.utils.CanvasGrid;
+import su.levenetc.androidplayground.utils.BezierCurve;
 import su.levenetc.androidplayground.utils.Paints;
 import su.levenetc.androidplayground.utils.SequenceCaller;
 
@@ -25,6 +22,12 @@ public class UIGarden extends View {
 	private SequenceCaller sequenceCaller;
 	private Path path = new Path();
 
+	float startX = 50;
+	float startY = 50;
+	int steps = 50;
+
+	AccelerateDecelerateInterpolator inter = new AccelerateDecelerateInterpolator();
+
 	public UIGarden(Context context) {
 		super(context);
 		init();
@@ -36,26 +39,24 @@ public class UIGarden extends View {
 	}
 
 	private void init() {
-		sequenceCaller = new SequenceCaller(this);
 
-	}
-
-	@Override protected void onAttachedToWindow() {
-		super.onAttachedToWindow();
-		sequenceCaller.start();
-		final int width = getWidth();
 	}
 
 	@Override protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
 		super.onLayout(changed, left, top, right, bottom);
+
+		buildPoints();
+		startDraw();
+	}
+
+	private void buildPoints() {
+
+		sequenceCaller = new SequenceCaller(this);
+
 		final int width = getWidth();
 		final int height = getHeight();
 
-		float startX = 50;
-		float startY = 50;
-		int steps = 50;
-
-		final List<BezierBuilder.Step> points = new BezierBuilder(
+		final List<BezierCurve.Step> points = new BezierCurve(
 				startX, startY,
 				width - 50, height - 50,
 				width / 2, 50,
@@ -64,15 +65,11 @@ public class UIGarden extends View {
 
 		path.moveTo(startX, startY);
 
-		AccelerateDecelerateInterpolator inter = new AccelerateDecelerateInterpolator();
-//		BaseInterpolator inter = new LinearInterpolator();
-//		BaseInterpolator inter = new DecelerateInterpolator();
-
 		float timeDiff = 0;
 		float prevTime = 0;
 		long baseTime = 1000;
 
-		for (BezierBuilder.Step step : points) {
+		for (BezierCurve.Step step : points) {
 			final float x = step.xValue;
 			final float y = step.yValue;
 			final float stepTime = step.step;
@@ -99,26 +96,35 @@ public class UIGarden extends View {
 		}
 
 
-		postDelayed(() -> sequenceCaller.start(), 500);
-
 	}
+
+	private float[] points = new float[]{
+			100, 100,
+			150, 100,
+
+			150, 100,
+			150, 150,
+
+			150, 150,
+			100, 100
+	};
 
 	@Override protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
-		canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), Paints.Fill.Red);
+		canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), Paints.Fill.Grey);
+		canvas.drawPath(path, Paints.Stroke.White);
 
-		final CanvasGrid grid = CanvasGrid.build(canvas);
+		canvas.drawLines(points, Paints.Fill.Red);
+	}
 
-//		if (pathFrame == null) {
-//			pathFrame = new PathFrame(grid.leftCenterX, grid.centerY);
-//		}
-//
-//		path.reset();
-//
-//		path.moveTo(grid.leftCenterX, grid.centerY);
-//		path.lineTo(grid.rightCenterX, grid.centerY);
+	public void restart() {
+		path.reset();
+		buildPoints();
+		startDraw();
+	}
 
-		canvas.drawPath(path, Paints.Stroke.Blue);
+	private void startDraw() {
+		postDelayed(() -> sequenceCaller.start(), 500);
 	}
 
 	static class PathFrame {
