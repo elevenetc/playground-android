@@ -21,7 +21,8 @@ public class UIGarden extends View {
 
 	float startX = 50;
 	float startY = 50;
-	int steps = 50;
+	int steps = 25;
+	long baseTime = 500;
 
 	AccelerateDecelerateInterpolator inter = new AccelerateDecelerateInterpolator();
 
@@ -55,7 +56,7 @@ public class UIGarden extends View {
 
 		final BezierCurve curve = new BezierCurve(
 				startX, startY,
-				width - 50, height - 50,
+				width - startX, height - startY,
 				width / 2, 50,
 				steps
 		);
@@ -65,7 +66,7 @@ public class UIGarden extends View {
 
 		float timeDiff = 0;
 		float prevTime = 0;
-		long baseTime = 2000;
+
 
 		TrunkPath trunkPath = new TrunkPath(curve);
 
@@ -120,6 +121,11 @@ public class UIGarden extends View {
 		canvas.drawPath(path, Paints.Stroke.White);
 
 		canvas.drawLines(points, Paints.Fill.Red);
+
+		canvas.drawRect(startX, startY,
+				canvas.getWidth() - startX, canvas.getHeight() - startY,
+				Paints.Stroke.Red
+		);
 	}
 
 	public void restart() {

@@ -12,7 +12,9 @@ public class MathUtils {
 	 * @param max any value
 	 * @return
 	 */
-	public static float sinValue(float val, float max) {
+	public static float sinValue(float max, float val) {
+		if (val >= max) return 0;
+		if (val <= 0) return 0;
 		return (float) Math.sin((Math.PI * val) / max);
 	}
 

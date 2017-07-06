@@ -30,28 +30,34 @@ public class TrunkPath {
 
 		path.moveTo(start.x, start.y);
 
-		for (int i = 1; i < size; i++) {
+		for (int i = 0; i <= size; i++) {
+
+			final float ratio = MathUtils.sinValue(size, i);
+			stepDeflection = ratio * diff;
+			Out.pln("stepDeflection", stepDeflection);
+
 			PathStep step = steps.get(i);
 
 			path.lineTo(
 					step.x + stepDeflection * controlX,
 					step.y + stepDeflection * controlY
 			);
-
-			stepDeflection = MathUtils.sinValue(i, size) * diff;
 		}
 
 		stepDeflection = 0;
 
-		for (int i = size - 1; i >= 0; i--) {
+		for (int i = size; i > 0; i--) {
 			PathStep step = steps.get(i);
+
 			path.lineTo(
 					step.x - stepDeflection * controlX,
 					step.y - stepDeflection * controlY
 			);
 
-			stepDeflection = MathUtils.sinValue(i, size) * diff;
+			stepDeflection = MathUtils.sinValue(size, i) * diff;
 		}
+
+		path.close();
 
 		return path;
 	}
