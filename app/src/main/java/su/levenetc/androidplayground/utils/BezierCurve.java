@@ -16,7 +16,7 @@ public class BezierCurve {
 	private final float controlY;
 	private final int stepsAmount;
 
-	List<Step> steps = new LinkedList<>();
+	List<PathStep> steps = new LinkedList<>();
 
 	public BezierCurve(
 			float fromX, float fromY,
@@ -36,8 +36,16 @@ public class BezierCurve {
 		build();
 	}
 
-	public List<Step> get() {
+	public List<PathStep> getSteps() {
 		return steps;
+	}
+
+	public float getControlX() {
+		return controlX;
+	}
+
+	public float getControlY() {
+		return controlY;
 	}
 
 	private void build() {
@@ -48,19 +56,8 @@ public class BezierCurve {
 			float x = (1 - t) * (1 - t) * fromX + 2 * (1 - t) * t * controlX + t * t * toX;
 			float y = (1 - t) * (1 - t) * fromY + 2 * (1 - t) * t * controlY + t * t * toY;
 
-			steps.add(new Step(x, y, t));
+			steps.add(new PathStep(x, y, t));
 		}
 	}
 
-	public static class Step {
-		public float xValue;
-		public float yValue;
-		public float step;
-
-		public Step(float xValue, float yValue, float step) {
-			this.xValue = xValue;
-			this.yValue = yValue;
-			this.step = step;
-		}
-	}
 }

@@ -4,12 +4,9 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Path;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import su.levenetc.androidplayground.utils.BezierCurve;
-import su.levenetc.androidplayground.utils.Paints;
-import su.levenetc.androidplayground.utils.SequenceCaller;
+import su.levenetc.androidplayground.utils.*;
 
 import java.util.List;
 
@@ -56,22 +53,26 @@ public class UIGarden extends View {
 		final int width = getWidth();
 		final int height = getHeight();
 
-		final List<BezierCurve.Step> points = new BezierCurve(
+		final BezierCurve curve = new BezierCurve(
 				startX, startY,
 				width - 50, height - 50,
 				width / 2, 50,
 				steps
-		).get();
+		);
+		final List<PathStep> points = curve.getSteps();
 
 		path.moveTo(startX, startY);
 
 		float timeDiff = 0;
 		float prevTime = 0;
-		long baseTime = 1000;
+		long baseTime = 2000;
 
-		for (BezierCurve.Step step : points) {
-			final float x = step.xValue;
-			final float y = step.yValue;
+		TrunkPath trunkPath = new TrunkPath(curve);
+
+		for (int i = 0; i < points.size(); i++) {
+			PathStep step = points.get(i);
+			final float x = step.x;
+			final float y = step.y;
 			final float stepTime = step.step;
 			final float interpolatedStepTime = inter.getInterpolation(stepTime);
 
@@ -87,9 +88,13 @@ public class UIGarden extends View {
 
 			long timeResult = (long) (timeDiff * baseTime);
 
-			Log.d("delay", timeResult + "");
+			//Log.d("delay", timeResult + "");
+
+			final int pos = i;
+
 			sequenceCaller.add(() -> {
-				path.lineTo(x, y);
+				path = trunkPath.get(pos);
+				//path.lineTo(x, y);
 				invalidate();
 
 			}, timeResult);
