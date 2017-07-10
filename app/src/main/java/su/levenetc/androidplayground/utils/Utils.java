@@ -23,6 +23,14 @@ public class Utils {
 	public static final Random RND = new Random();
 	private static HashMap<String, DecimalFormat> decFormats = new HashMap<>();
 
+	public static float randomInRange(float min, float max) {
+		final float result = min + RND.nextFloat() * ((max - min));
+		return result;
+	}
+
+	public static float randomInRangeSigned(float min, float max) {
+		return randomInRange(min, max) * (RND.nextBoolean() ? 1f : -1f);
+	}
 
 	public static String formatFloat(float value, String format) {
 

@@ -25,6 +25,7 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
+import android.graphics.Point;
 
 /**
  * Created by Eugene Levenetc on 16/07/2016.
@@ -193,6 +194,7 @@ public class ViewUtils {
 
 	private static void initScreenSize(Context context) {
 		Point size = new Point();
+
 		WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
 		windowManager.getDefaultDisplay().getSize(size);
 		screenWidth = size.x;
