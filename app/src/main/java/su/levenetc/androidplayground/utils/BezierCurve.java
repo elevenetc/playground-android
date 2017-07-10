@@ -1,5 +1,8 @@
 package su.levenetc.androidplayground.utils;
 
+import android.graphics.Canvas;
+import android.graphics.Path;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -17,6 +20,7 @@ public class BezierCurve {
 	private final int stepsAmount;
 
 	List<PathStep> steps = new LinkedList<>();
+	Path debugPath = new Path();
 
 	public BezierCurve(
 			float fromX, float fromY,
@@ -52,6 +56,7 @@ public class BezierCurve {
 		float t = 0;
 
 		steps.add(new PathStep(fromX, fromY, 0));
+		debugPath.moveTo(fromX, fromY);
 
 		for (int i = 1; i < stepsAmount; i++) {
 			t += 1f / stepsAmount;
@@ -59,9 +64,23 @@ public class BezierCurve {
 			float y = ((1 - t) * (1 - t) * fromY) + (2 * (1 - t) * t * controlY + t * t * toY);
 
 			steps.add(new PathStep(x, y, t));
+			debugPath.lineTo(x, y);
 		}
 
+		debugPath.lineTo(toX, toY);
+
 		steps.add(new PathStep(toX, toY, 1));
+	}
+
+	public void drawDebug(Canvas canvas) {
+		canvas.drawCircle(fromX, fromY, Values.DP_5, Paints.Stroke.GreenBold);
+		canvas.drawCircle(toX, toY, Values.DP_5, Paints.Stroke.GreenBold);
+		canvas.drawCircle(controlX, controlY, Values.DP_5, Paints.Stroke.GreenBold);
+
+		canvas.drawPath(debugPath, Paints.Stroke.GreenBold);
+
+		canvas.drawLine(fromX, fromY, controlX, controlY, Paints.Stroke.Green);
+		canvas.drawLine(toX, toY, controlX, controlY, Paints.Stroke.Green);
 	}
 
 }

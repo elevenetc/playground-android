@@ -18,6 +18,7 @@ public class UIGarden extends View {
 	private PathFrame pathFrame;
 	private SequenceCaller sequenceCaller;
 	private Path path = new Path();
+	private Path debugPath = new Path();
 
 	float startX = 50;
 	float startY = 50;
@@ -25,6 +26,7 @@ public class UIGarden extends View {
 	long baseTime = 2500;
 
 	AccelerateDecelerateInterpolator inter = new AccelerateDecelerateInterpolator();
+	private BezierCurve curve;
 
 	public UIGarden(Context context) {
 		super(context);
@@ -54,7 +56,7 @@ public class UIGarden extends View {
 		final int width = getWidth();
 		final int height = getHeight();
 
-		final BezierCurve curve = new BezierCurve(
+		curve = new BezierCurve(
 				startX, startY,
 				width - startX, height - startY,
 				width / 2, 50,
@@ -78,7 +80,6 @@ public class UIGarden extends View {
 			final float interpolatedStepTime = inter.getInterpolation(stepTime);
 
 			float intTime = interpolatedStepTime;
-			float delay = 0;
 
 			if (prevTime == 0) {
 				prevTime = intTime;
@@ -88,8 +89,6 @@ public class UIGarden extends View {
 			}
 
 			long timeResult = (long) (timeDiff * baseTime);
-
-			//Log.d("delay", timeResult + "");
 
 			final int pos = i;
 
@@ -101,31 +100,19 @@ public class UIGarden extends View {
 			}, timeResult);
 		}
 
-
 	}
-
-	private float[] points = new float[]{
-			100, 100,
-			150, 100,
-
-			150, 100,
-			150, 150,
-
-			150, 150,
-			100, 100
-	};
 
 	@Override protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
 		canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), Paints.Fill.Grey);
 		canvas.drawPath(path, Paints.Stroke.White);
 
-		canvas.drawLines(points, Paints.Fill.Red);
-
 		canvas.drawRect(startX, startY,
 				canvas.getWidth() - startX, canvas.getHeight() - startY,
 				Paints.Stroke.Red
 		);
+
+		curve.drawDebug(canvas);
 	}
 
 	public void restart() {

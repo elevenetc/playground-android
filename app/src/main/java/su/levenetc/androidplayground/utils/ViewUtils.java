@@ -101,17 +101,26 @@ public class ViewUtils {
 		return result;
 	}
 
+	public static float dpToPx(float dp) {
+		if (dp <= 0) return 0;
+		Resources r = Resources.getSystem();
+		return dpToPx(dp, r);
+	}
+
 	public static float dpToPx(Context context, float dp) {
 		if (dp <= 0) return 0;
 		Resources r = context.getResources();
-		return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics());
+		return dpToPx(dp, r);
 	}
-
 
 	public static float dpToPx(float dp, Context context) {
 		if (dp <= 0) return 0;
 		Resources r = context.getResources();
-		return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics());
+		return dpToPx(dp, r);
+	}
+
+	private static float dpToPx(float dp, Resources resources) {
+		return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, resources.getDisplayMetrics());
 	}
 
 	@TargetApi(21) public static void removeElevation(View view) {
