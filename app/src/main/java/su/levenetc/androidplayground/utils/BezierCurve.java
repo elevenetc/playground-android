@@ -55,8 +55,8 @@ public class BezierCurve {
 
 		for (int i = 1; i < stepsAmount; i++) {
 			t += 1f / stepsAmount;
-			float x = (1 - t) * (1 - t) * fromX + 2 * (1 - t) * t * controlX + t * t * toX;
-			float y = (1 - t) * (1 - t) * fromY + 2 * (1 - t) * t * controlY + t * t * toY;
+			float x = ((1 - t) * (1 - t) * fromX) + (2 * (1 - t) * t * controlX + t * t * toX);
+			float y = ((1 - t) * (1 - t) * fromY) + (2 * (1 - t) * t * controlY + t * t * toY);
 
 			steps.add(new PathStep(x, y, t));
 		}

@@ -44,17 +44,14 @@ public class TrunkPath {
 			);
 		}
 
-		stepDeflection = 0;
-
 		for (int i = size; i > 0; i--) {
 			PathStep step = steps.get(i);
+			stepDeflection = MathUtils.sinValue(size, i) * diff;
 
 			path.lineTo(
 					step.x - stepDeflection * controlX,
 					step.y - stepDeflection * controlY
 			);
-
-			stepDeflection = MathUtils.sinValue(size, i) * diff;
 		}
 
 		path.close();

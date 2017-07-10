@@ -22,7 +22,7 @@ public class UIGarden extends View {
 	float startX = 50;
 	float startY = 50;
 	int steps = 25;
-	long baseTime = 500;
+	long baseTime = 2500;
 
 	AccelerateDecelerateInterpolator inter = new AccelerateDecelerateInterpolator();
 
