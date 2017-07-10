@@ -5,7 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import su.levenetc.androidplayground.R;
-import su.levenetc.androidplayground.views.UIGarden;
+import su.levenetc.androidplayground.uigarden.UIGarden;
 
 /**
  * Created by eugene.levenetc on 01/07/2017.

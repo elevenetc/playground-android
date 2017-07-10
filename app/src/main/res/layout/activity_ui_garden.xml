@@ -4,7 +4,7 @@
              android:layout_width="match_parent"
              android:layout_height="match_parent">
 
-	<su.levenetc.androidplayground.views.UIGarden
+	<su.levenetc.androidplayground.uigarden.UIGarden
 			android:id="@+id/ui_garden"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"/>
