@@ -31,7 +31,7 @@ public class UIGarden extends View {
 	@Override protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
 		super.onLayout(changed, left, top, right, bottom);
 
-		randomCurve = new RandomCurve(50, 50, 400, 200, 3, 0.2f);
+		randomCurve = new RandomCurve(50, 50, 400, 200, 4, 0.3f);
 
 		//controller.init();
 		//startDraw();
