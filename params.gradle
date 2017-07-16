@@ -1,4 +1,4 @@
 rootProject.ext {
-    googlePlusApiKey = '"AIzaSyBmd_ww1KP1_7hHkp7rHOnCH7-ZUqnudCI"';
-    testGooglePlusUserId = '"113181101324425321108"';
+    googlePlusApiKey = '""'
+    testGooglePlusUserId = '""'
 }
