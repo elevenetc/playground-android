@@ -5,10 +5,10 @@ sudo: false
 android:
   components:
     - tools
-    - platform-tools
-    - tools
     - build-tools-25.0.2
-    - android-25
+    - platform-tools
+    - extra-android-m2repository
+    - extra-google-android-support
   before_cache:
     - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
     - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
