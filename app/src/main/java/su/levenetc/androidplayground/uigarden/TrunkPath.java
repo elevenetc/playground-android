@@ -1,7 +1,7 @@
 package su.levenetc.androidplayground.uigarden;
 
 import android.graphics.Path;
-import su.levenetc.androidplayground.utils.BezierCurve;
+import su.levenetc.androidplayground.utils.BezierCurveQuadratic;
 import su.levenetc.androidplayground.utils.MathUtils;
 import su.levenetc.androidplayground.utils.Out;
 import su.levenetc.androidplayground.utils.PathStep;
@@ -13,11 +13,11 @@ import java.util.List;
  */
 public class TrunkPath {
 
-	BezierCurve curve;
+	BezierCurveQuadratic curve;
 	Path path = new Path();
 	private float diff = 50;
 
-	public TrunkPath(BezierCurve curve) {
+	public TrunkPath(BezierCurveQuadratic curve) {
 		this.curve = curve;
 	}
 

@@ -3,7 +3,7 @@ package su.levenetc.androidplayground.uigarden;
 import android.graphics.Canvas;
 import android.graphics.Path;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import su.levenetc.androidplayground.utils.BezierCurve;
+import su.levenetc.androidplayground.utils.BezierCurveQuadratic;
 import su.levenetc.androidplayground.utils.Paints;
 import su.levenetc.androidplayground.utils.PathStep;
 import su.levenetc.androidplayground.utils.SequenceCaller;
@@ -25,7 +25,7 @@ public class PathController {
 	float startY = 50;
 	int steps = 25;
 	long baseTime = 2500;
-	private BezierCurve curve;
+	private BezierCurveQuadratic curve;
 
 	public PathController(UIGarden garden) {
 
@@ -55,7 +55,7 @@ public class PathController {
 		final int height = garden.getHeight();
 
 		sequenceCaller = new SequenceCaller(garden);
-		curve = new BezierCurve(
+		curve = new BezierCurveQuadratic(
 				startX, startY,
 				width - startX, height - startY,
 				width / 2, 50,

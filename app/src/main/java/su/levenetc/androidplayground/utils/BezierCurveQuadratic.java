@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Created by eugene.levenetc on 01/07/2017.
  */
-public class BezierCurve {
+public class BezierCurveQuadratic {
 
 	private final float fromX;
 	private final float fromY;
@@ -22,7 +22,7 @@ public class BezierCurve {
 	List<PathStep> steps = new LinkedList<>();
 	Path debugPath = new Path();
 
-	public BezierCurve(
+	public BezierCurveQuadratic(
 			float fromX, float fromY,
 			float toX, float toY,
 			float controlX, float controlY,
@@ -60,11 +60,9 @@ public class BezierCurve {
 
 		for (int i = 1; i < stepsAmount; i++) {
 			t += 1f / stepsAmount;
-			float x = ((1 - t) * (1 - t) * fromX) + (2 * (1 - t) * t * controlX + t * t * toX);
-			float y = ((1 - t) * (1 - t) * fromY) + (2 * (1 - t) * t * controlY + t * t * toY);
-
-			steps.add(new PathStep(x, y, t));
-			debugPath.lineTo(x, y);
+			final float[] coords = DrawUtils.quadraticBezier(t, fromX, fromY, toX, toY, controlX, controlY);
+			steps.add(new PathStep(coords[0], coords[1], t));
+			debugPath.lineTo(coords[0], coords[1]);
 		}
 
 		debugPath.lineTo(toX, toY);
