@@ -56,6 +56,7 @@
 		<activity android:name=".activities.StickyScrollViewActivity"/>
 		<activity android:name=".activities.MergeViewActivity"/>
 		<activity android:name=".activities.UIGardenActivity"/>
+		<activity android:name=".activities.RoomActivity"/>
 
 		<service android:name=".services.AlarmStatusService"/>
 		<service android:name=".services.SensorsDataCollectorService"/>
