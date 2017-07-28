@@ -352,7 +352,7 @@ public class SystemUtils {
         return android.os.Build.VERSION.SDK_INT > apiLevel;
     }
 
-    public static void showKeyboard(EditText view) {
+    public static void showKeyboard(View view) {
         InputMethodManager inputManager = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         inputManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
 //		inputManager.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);

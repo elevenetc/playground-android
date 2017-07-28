@@ -1,5 +1,6 @@
 package su.levenetc.androidplayground.utils;
 
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Paint;
 
@@ -21,6 +22,12 @@ public class Paints {
 		public static Paint Grey = fill(Color.DKGRAY);
 	}
 
+	public static class Font {
+		public static Paint Red_26 = font(Color.RED, 26);
+		public static Paint Black_26 = font(Color.BLACK, 26);
+		public static Paint Black_26_Alpha_50 = font(Color.BLACK, 26, 255 / 2);
+	}
+
 	static Paint strokeBold(int color) {
 		final Paint result = stroke(color);
 		result.setStrokeWidth(Values.DP_2);
@@ -40,6 +47,22 @@ public class Paints {
 		result.setStyle(Paint.Style.FILL);
 		result.setColor(color);
 		return result;
+	}
+
+	static Paint font(int color, float spSize) {
+		return font(color, spSize, 255);
+	}
+
+	static Paint font(int color, float spSize, int alpha) {
+		Paint result = new Paint();
+		result.setTextSize(spSize * Resources.getSystem().getDisplayMetrics().scaledDensity);
+		result.setStyle(Paint.Style.FILL);
+		result.setColor(addAlpha(color, alpha));
+		return result;
+	}
+
+	static int addAlpha(int color, int alpha) {
+		return Color.argb(alpha, Color.red(color), Color.green(color), Color.blue(color));
 	}
 
 }

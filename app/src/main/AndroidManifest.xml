@@ -57,6 +57,9 @@
 		<activity android:name=".activities.MergeViewActivity"/>
 		<activity android:name=".activities.UIGardenActivity"/>
 		<activity android:name=".activities.RoomActivity"/>
+		<activity android:name=".activities.QueryLineActivity"
+		          android:windowSoftInputMode="adjustResize"
+		/>
 
 		<service android:name=".services.AlarmStatusService"/>
 		<service android:name=".services.SensorsDataCollectorService"/>
