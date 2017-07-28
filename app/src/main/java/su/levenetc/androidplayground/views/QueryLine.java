@@ -45,7 +45,7 @@ public class QueryLine extends View {
 		setOnKeyListener((v, keyCode, event) -> {
 			if (event.getAction() == KeyEvent.ACTION_DOWN) {
 				if (keyCode == 66) {
-					apply();
+					completeCurrent();
 				}
 				Log.i(TAG, "keyCode:" + keyCode);
 			}
@@ -86,8 +86,9 @@ public class QueryLine extends View {
 		invalidate();
 	}
 
-	private void apply() {
-
+	private void completeCurrent() {
+		queryModel.completeCurrent();
+		invalidate();
 	}
 
 	class MyInputConnection extends BaseInputConnection {

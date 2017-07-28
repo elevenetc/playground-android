@@ -41,7 +41,9 @@ public class QueryModel {
 		for (Group group : groups) {
 			if (toConvert == group) {
 				groups.remove(group);
-				groups.addLast(new FixedGroup(group));
+				groups.addLast(new FixedGroup(this, group));
+				groups.add(new AutoCompleteGroup(this, autocomplete));
+				break;
 			}
 		}
 	}
@@ -62,27 +64,52 @@ public class QueryModel {
 		if (!groups.isEmpty()) {
 			final Group last = groups.getLast();
 
-			if (last instanceof AutoCompleteGroup) {
-				((AutoCompleteGroup) last).deleteLast();
-				((AutoCompleteGroup) last).updateAutoComplete();
-			} else if (last instanceof FixedGroup) {
+			if (last.isEmpty()) {
 				groups.removeLast();
+			} else {
+				if (last instanceof AutoCompleteGroup) {
+					((AutoCompleteGroup) last).deleteLast();
+					((AutoCompleteGroup) last).updateAutoComplete();
+				} else if (last instanceof FixedGroup) {
+					groups.removeLast();
+				}
 			}
+
+
+		}
+	}
+
+	private float getXShift(Group group) {
+		float shift = 0;
+		for (Group g : groups) {
+			if (g == group) {
+				return shift;
+			} else {
+				shift += g.getWidth();
+			}
+		}
+		return 0;
+	}
+
+	public void completeCurrent() {
+		if (!groups.isEmpty() && groups.getLast() instanceof AutoCompleteGroup) {
+			((AutoCompleteGroup) groups.getLast()).tryToComplete();
 		}
 	}
 
 	static class AutoCompleteGroup extends Group {
 
 		StringBuilder autoComplete = new StringBuilder();
-		private QueryModel queryModel;
 		private Set<String> autocomplete;
 
 		public AutoCompleteGroup(QueryModel queryModel, Set<String> autocomplete) {
-			this.queryModel = queryModel;
+			super(queryModel);
 			this.autocomplete = autocomplete;
 		}
 
-		@Override void draw(Canvas canvas) {
+		@Override void drawGroup(Canvas canvas) {
+
+
 			final String str = text.toString();
 			Paints.Font.Black_26.getTextBounds(str, 0, str.length(), textBounds);
 			canvas.drawText(str, 0, textBounds.height(), Paints.Font.Black_26);
@@ -152,16 +179,23 @@ public class QueryModel {
 			}
 		}
 
+		public void tryToComplete() {
+			if (autoComplete.length() > 0) {
+				set(autoComplete.toString());
+				queryModel.convertToFixed(this);
+			}
+		}
 	}
 
 	static class FixedGroup extends Group {
 
-		public FixedGroup(Group group) {
+		public FixedGroup(QueryModel queryModel, Group group) {
+			super(queryModel);
 			text.setLength(0);
 			text.append(group.toString());
 		}
 
-		@Override void draw(Canvas canvas) {
+		@Override void drawGroup(Canvas canvas) {
 			final String str = text.toString();
 			Paints.Font.Black_26.getTextBounds(str, 0, text.length(), textBounds);
 			canvas.drawText(str, 0, textBounds.height(), Paints.Font.Black_26);
@@ -173,6 +207,12 @@ public class QueryModel {
 
 		protected StringBuilder text = new StringBuilder();
 		protected Rect textBounds = new Rect();
+
+		protected QueryModel queryModel;
+
+		public Group(QueryModel queryModel) {
+			this.queryModel = queryModel;
+		}
 
 		@Override public String toString() {
 			return text.toString();
@@ -191,6 +231,23 @@ public class QueryModel {
 			text.append(value);
 		}
 
-		abstract void draw(Canvas canvas);
+		void draw(Canvas canvas) {
+			canvas.save();
+			canvas.translate(queryModel.getXShift(this), 0);
+
+			drawGroup(canvas);
+
+			canvas.restore();
+		}
+
+		abstract void drawGroup(Canvas canvas);
+
+		public boolean isEmpty() {
+			return text.length() == 0;
+		}
+
+		public float getWidth() {
+			return textBounds.width();
+		}
 	}
 }
