@@ -145,6 +145,10 @@ dependencies {
     //ButterKnife
     compile 'com.jakewharton:butterknife:8.4.0'
     apt 'com.jakewharton:butterknife-compiler:8.4.0'
+    //Room
+    compile "android.arch.persistence.room:runtime:1.0.0-alpha5"
+    annotationProcessor "android.arch.persistence.room:compiler:1.0.0-alpha5"
+    compile "android.arch.persistence.room:rxjava2:1.0.0-alpha5"
     //Testing
     testCompile 'junit:junit:4.12'
     testCompile 'junit:junit:4.12'
