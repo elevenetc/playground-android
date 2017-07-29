@@ -7,9 +7,7 @@ import su.levenetc.androidplayground.queryline.nodes.Node;
 import su.levenetc.androidplayground.queryline.nodes.StaticNode;
 
 import java.util.Deque;
-import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.Set;
 
 public class QueryModel {
 
@@ -17,31 +15,35 @@ public class QueryModel {
 	private DrawersFactory drawersFactory;
 
 	public QueryModel(DrawersFactory drawersFactory) {
-
 		this.drawersFactory = drawersFactory;
 	}
 
-	public void append(String ch) {
+	@Override public String toString() {
+		StringBuilder sb = new StringBuilder();
+		for (Node node : nodes) sb.append(node.toString());
+		return sb.toString();
+	}
 
-		if (nodes.isEmpty()) {
-			final AutoCompleteNode chars = drawersFactory.autoComplete();
-			nodes.add(chars);
+	public void draw(Canvas canvas) {
+		for (Node node : nodes) node.draw(canvas);
+	}
+
+	public float getXShift(Node node) {
+		float shift = 0;
+		for (Node g : nodes) {
+			if (g == node) return shift;
+			else shift += g.getWidth();
 		}
-
-		nodes.getLast().append(ch);
-
-		if (nodes.getLast() instanceof AutoCompleteNode) {
-			((AutoCompleteNode) nodes.getLast()).updateAutoComplete();
-		}
+		return 0;
 	}
 
 	public void convertToStatic(Node toConvert) {
 
-		for (Node node : nodes) {
-			if (toConvert == node) {
-				nodes.remove(node);
+		for (Node toRemove : nodes) {
+			if (toConvert == toRemove) {
+				nodes.remove(toRemove);
 				final StaticNode staticNode = drawersFactory.staticNode();
-				staticNode.setText(node);
+				staticNode.setText(toRemove);
 				nodes.addLast(staticNode);
 				nodes.add(drawersFactory.space());
 				nodes.add(drawersFactory.autoComplete());
@@ -50,17 +52,20 @@ public class QueryModel {
 		}
 	}
 
-	@Override public String toString() {
-		StringBuilder sb = new StringBuilder();
-		for (Node node : nodes) {
-			sb.append(node.toString());
+	public void append(char string) {
+
+		if (nodes.isEmpty()) {
+			final AutoCompleteNode chars = drawersFactory.autoComplete();
+			nodes.add(chars);
 		}
-		return sb.toString();
+
+		nodes.getLast().append(string);
+
+		if (nodes.getLast() instanceof AutoCompleteNode) {
+			((AutoCompleteNode) nodes.getLast()).updateAutoComplete();
+		}
 	}
 
-	public void draw(Canvas canvas) {
-		for (Node node : nodes) node.draw(canvas);
-	}
 
 	public void deleteLast() {
 		if (!nodes.isEmpty()) {
@@ -79,18 +84,6 @@ public class QueryModel {
 
 
 		}
-	}
-
-	public float getXShift(Node node) {
-		float shift = 0;
-		for (Node g : nodes) {
-			if (g == node) {
-				return shift;
-			} else {
-				shift += g.getWidth();
-			}
-		}
-		return 0;
 	}
 
 	public void completeCurrent() {

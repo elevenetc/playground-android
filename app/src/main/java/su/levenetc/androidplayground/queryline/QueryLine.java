@@ -75,6 +75,12 @@ public class QueryLine extends View {
 			if (event.getAction() == KeyEvent.ACTION_DOWN) {
 				if (keyCode == 66) {
 					completeCurrent();
+				} else if (keyCode == 67) {
+					deleteLast();
+				} else if (keyCode == 61) {
+					completeCurrent();
+				} else {
+					append((char) event.getUnicodeChar());
 				}
 				Log.i(TAG, "keyCode:" + keyCode);
 			}
@@ -106,8 +112,9 @@ public class QueryLine extends View {
 		return new MyInputConnection(this, true);
 	}
 
-	private void append(CharSequence string) {
-		queryModel.append(String.valueOf(string));
+	private void append(char chars) {
+		queryModel.append(chars);
+		invalidate();
 	}
 
 	private void deleteLast() {
@@ -150,8 +157,7 @@ public class QueryLine extends View {
 		public boolean commitText(CharSequence text, int newCursorPosition) {
 			//spannavleSb.append(text);
 			//sb.append(text);
-			append(text);
-			invalidate();
+			append(text.charAt(0));
 			return false;
 		}
 	}

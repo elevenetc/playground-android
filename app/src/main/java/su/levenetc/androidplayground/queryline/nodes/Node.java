@@ -28,7 +28,7 @@ public abstract class Node {
 		return text.toString();
 	}
 
-	public void append(String value) {
+	public void append(char value) {
 		text.append(value);
 	}
 
@@ -42,7 +42,7 @@ public abstract class Node {
 	}
 
 	public void draw(Canvas canvas) {
-		drawer.draw(canvas);
+		drawer.measureLayoutDraw(canvas);
 	}
 
 	public boolean isEmpty() {

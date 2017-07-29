@@ -18,20 +18,30 @@ public abstract class BaseNodeDrawer<N extends Node> implements NodeDrawer {
 		this.queryModel = queryModel;
 	}
 
-	@Override public void draw(Canvas canvas) {
+	@Override public void measureLayoutDraw(Canvas canvas) {
+
+		measureText();
+
 		canvas.save();
 		canvas.translate(queryModel.getXShift(node), 0);
 
-		final String string = node.toString();
-		Paints.Font.Black_26.getTextBounds(string, 0, string.length(), node.bounds());
-
-		//node.drawText(canvas);
 		drawText(canvas);
 
 		canvas.restore();
 	}
 
+	/**
+	 * Default implementation
+	 */
 	void drawText(Canvas canvas) {
 		canvas.drawText(node.toString(), 0, node.bounds().height(), Paints.Font.Black_26);
+	}
+
+	/**
+	 * Default implementation
+	 */
+	void measureText() {
+		final String string = node.toString();
+		Paints.Font.Black_26.getTextBounds(string, 0, string.length(), node.bounds());
 	}
 }
