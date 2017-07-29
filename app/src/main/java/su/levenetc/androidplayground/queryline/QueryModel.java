@@ -18,6 +18,14 @@ public class QueryModel {
 		this.drawersFactory = drawersFactory;
 	}
 
+	public int size() {
+		return nodes.size();
+	}
+
+	public void addNode(Node node) {
+		nodes.add(node);
+	}
+
 	@Override public String toString() {
 		StringBuilder sb = new StringBuilder();
 		for (Node node : nodes) sb.append(node.toString());
@@ -46,7 +54,7 @@ public class QueryModel {
 				staticNode.setText(toRemove);
 				nodes.addLast(staticNode);
 				nodes.add(drawersFactory.space());
-				nodes.add(drawersFactory.autoComplete());
+				nodes.add(drawersFactory.next());
 				break;
 			}
 		}

@@ -14,13 +14,12 @@ import android.view.inputmethod.BaseInputConnection;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import su.levenetc.androidplayground.queryline.drawers.*;
-import su.levenetc.androidplayground.queryline.nodes.AutoCompleteNode;
-import su.levenetc.androidplayground.queryline.nodes.Node;
-import su.levenetc.androidplayground.queryline.nodes.SpaceNode;
-import su.levenetc.androidplayground.queryline.nodes.StaticNode;
+import su.levenetc.androidplayground.queryline.nodes.*;
 import su.levenetc.androidplayground.utils.SystemUtils;
 
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 
 public class QueryLine extends View {
 
@@ -42,10 +41,11 @@ public class QueryLine extends View {
 
 	private void init() {
 
+
 		queryModel = new QueryModel(new DrawersFactory() {
 			@Override public AutoCompleteNode autoComplete() {
 				final AutoCompleteNode result = new AutoCompleteNode(new HashSet<String>() {{
-					add("hello");
+					add("select");
 					add("father");
 				}});
 				return bindDrawerAndNode(result, new AutoCompleteDrawer());
@@ -59,6 +59,18 @@ public class QueryLine extends View {
 				return bindDrawerAndNode(new StaticNode(), new StaticNodeDrawer());
 			}
 
+			@Override public Node next() {
+				final int size = queryModel.size();
+				if (size == 0) {
+					return bindDrawerAndNode(new SQLiteInitNode(), new AutoCompleteDrawer());
+				} else if (size == 1) {
+					return bindDrawerAndNode(new SQLiteColumnsNode(), new AutoCompleteDrawer());
+				} else {
+					return bindDrawerAndNode(new SQLiteColumnsNode(), new AutoCompleteDrawer());
+				}
+			}
+
+
 			<N extends Node> N bindDrawerAndNode(N node, BaseNodeDrawer<N> drawer) {
 				node.setQueryModel(queryModel);
 				node.setDrawer(drawer);
@@ -67,6 +79,12 @@ public class QueryLine extends View {
 				return node;
 			}
 		});
+
+		List<NodeBuildAction> actionsList = new LinkedList<>();
+		actionsList.add(new NodeBuildAction(queryModel, SQLiteInitNode::new, AutoCompleteDrawer::new));
+		actionsList.add(new NodeBuildAction(queryModel, SQLiteColumnsNode::new, AutoCompleteDrawer::new));
+		
+		queryModel.addNode(actionsList.get(0).build());
 
 		setFocusableInTouchMode(true);
 		setFocusable(true);
@@ -82,10 +100,41 @@ public class QueryLine extends View {
 				} else {
 					append((char) event.getUnicodeChar());
 				}
-				Log.i(TAG, "keyCode:" + keyCode);
+				Log.i(TAG, "keyCode:" + keyCode + " - " + (char) event.getUnicodeChar());
 			}
 			return true;
 		});
+	}
+
+	static class NodeBuildAction {
+
+		QueryModel queryModel;
+		NodeBuilder nodeBuilder;
+		DrawerBuilder drawerBuilder;
+
+		public NodeBuildAction(QueryModel queryModel, NodeBuilder nodeBuilder, DrawerBuilder drawerBuilder) {
+			this.queryModel = queryModel;
+			this.nodeBuilder = nodeBuilder;
+			this.drawerBuilder = drawerBuilder;
+		}
+
+		Node build() {
+			final Node node = nodeBuilder.build();
+			final BaseNodeDrawer drawer = drawerBuilder.build();
+			node.setQueryModel(queryModel);
+			node.setDrawer(drawer);
+			drawer.setQueryModel(queryModel);
+			drawer.setNode(node);
+			return node;
+		}
+	}
+
+	interface NodeBuilder {
+		Node build();
+	}
+
+	interface DrawerBuilder {
+		BaseNodeDrawer build();
 	}
 
 	@Override protected void onDraw(Canvas canvas) {
@@ -137,6 +186,7 @@ public class QueryLine extends View {
 
 		@Override public boolean deleteSurroundingText(int beforeLength, int afterLength) {
 			//return super.deleteSurroundingText(beforeLength, afterLength);
+			Log.i(TAG, "delete char");
 			deleteLast();
 			invalidate();
 			return true;
@@ -155,9 +205,9 @@ public class QueryLine extends View {
 		}
 
 		public boolean commitText(CharSequence text, int newCursorPosition) {
-			//spannavleSb.append(text);
-			//sb.append(text);
-			append(text.charAt(0));
+			final char ch = text.charAt(0);
+			Log.i(TAG, "keyboard input:" + ch);
+			append(ch);
 			return false;
 		}
 	}
