@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import su.levenetc.androidplayground.R;
-import su.levenetc.androidplayground.views.QueryLine;
+import su.levenetc.androidplayground.queryline.QueryLine;
 
 public class QueryLineActivity extends AppCompatActivity {
 

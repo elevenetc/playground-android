@@ -3,7 +3,7 @@
              android:layout_width="match_parent"
              android:layout_height="match_parent">
 
-	<su.levenetc.androidplayground.views.QueryLine
+	<su.levenetc.androidplayground.queryline.QueryLine
 			android:id="@+id/query_line"
 			android:background="#64FF0000"
 			android:layout_gravity="bottom"

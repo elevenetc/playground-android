@@ -1,4 +1,4 @@
-package su.levenetc.androidplayground.views;
+package su.levenetc.androidplayground.queryline;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -13,8 +13,14 @@ import android.view.View;
 import android.view.inputmethod.BaseInputConnection;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
-import su.levenetc.androidplayground.models.QueryModel;
+import su.levenetc.androidplayground.queryline.drawers.*;
+import su.levenetc.androidplayground.queryline.nodes.AutoCompleteNode;
+import su.levenetc.androidplayground.queryline.nodes.Node;
+import su.levenetc.androidplayground.queryline.nodes.SpaceNode;
+import su.levenetc.androidplayground.queryline.nodes.StaticNode;
 import su.levenetc.androidplayground.utils.SystemUtils;
+
+import java.util.HashSet;
 
 public class QueryLine extends View {
 
@@ -22,7 +28,7 @@ public class QueryLine extends View {
 
 	private boolean edit;
 	StringBuilder sb = new StringBuilder();
-	QueryModel queryModel = new QueryModel();
+	QueryModel queryModel;
 
 	public QueryLine(Context context) {
 		super(context);
@@ -36,8 +42,31 @@ public class QueryLine extends View {
 
 	private void init() {
 
-		queryModel.addAutoComplete("hello");
-		queryModel.addAutoComplete("father");
+		queryModel = new QueryModel(new DrawersFactory() {
+			@Override public AutoCompleteNode autoComplete() {
+				final AutoCompleteNode result = new AutoCompleteNode(new HashSet<String>() {{
+					add("hello");
+					add("father");
+				}});
+				return bindDrawerAndNode(result, new AutoCompleteDrawer());
+			}
+
+			@Override public SpaceNode space() {
+				return bindDrawerAndNode(new SpaceNode(), new SpaceNodeDrawer());
+			}
+
+			@Override public StaticNode staticNode() {
+				return bindDrawerAndNode(new StaticNode(), new StaticNodeDrawer());
+			}
+
+			<N extends Node> N bindDrawerAndNode(N node, BaseNodeDrawer<N> drawer) {
+				node.setQueryModel(queryModel);
+				node.setDrawer(drawer);
+				drawer.setNode(node);
+				drawer.setQueryModel(queryModel);
+				return node;
+			}
+		});
 
 		setFocusableInTouchMode(true);
 		setFocusable(true);
