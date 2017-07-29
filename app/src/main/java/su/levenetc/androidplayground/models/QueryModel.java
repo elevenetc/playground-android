@@ -42,6 +42,7 @@ public class QueryModel {
 			if (toConvert == group) {
 				groups.remove(group);
 				groups.addLast(new FixedGroup(this, group));
+				groups.add(new Space(this));
 				groups.add(new AutoCompleteGroup(this, autocomplete));
 				break;
 			}
@@ -109,10 +110,7 @@ public class QueryModel {
 
 		@Override void drawGroup(Canvas canvas) {
 
-
-			final String str = text.toString();
-			Paints.Font.Black_26.getTextBounds(str, 0, str.length(), textBounds);
-			canvas.drawText(str, 0, textBounds.height(), Paints.Font.Black_26);
+			canvas.drawText(text.toString(), 0, textBounds.height(), Paints.Font.Black_26);
 
 			if (autoComplete.length() > 0) {
 				final CharSequence complete = autoComplete.subSequence(text.length(), autoComplete.length());
@@ -139,7 +137,6 @@ public class QueryModel {
 		}
 
 		private void updateAutoComplete() {
-			//final AutoCompleteGroup auto = (AutoCompleteGroup) groups.getLast();
 			final String toComplete = toString();
 			if (toComplete.isEmpty()) return;
 
@@ -196,10 +193,24 @@ public class QueryModel {
 		}
 
 		@Override void drawGroup(Canvas canvas) {
-			final String str = text.toString();
-			Paints.Font.Black_26.getTextBounds(str, 0, text.length(), textBounds);
-			canvas.drawText(str, 0, textBounds.height(), Paints.Font.Black_26);
+			canvas.drawText(text.toString(), 0, textBounds.height(), Paints.Font.Black_26);
 			canvas.drawRect(0, 0, textBounds.width(), textBounds.height(), Paints.Stroke.Red);
+		}
+	}
+
+	static class Space extends Group {
+
+		public Space(QueryModel queryModel) {
+			super(queryModel);
+			text.append(" ");
+		}
+
+		@Override void drawGroup(Canvas canvas) {
+			canvas.drawText(text.toString(), 0, textBounds.height(), Paints.Font.Black_26);
+		}
+
+		@Override public boolean isEmpty() {
+			return true;
 		}
 	}
 
@@ -234,6 +245,9 @@ public class QueryModel {
 		void draw(Canvas canvas) {
 			canvas.save();
 			canvas.translate(queryModel.getXShift(this), 0);
+
+			final String string = text.toString();
+			Paints.Font.Black_26.getTextBounds(string, 0, string.length(), textBounds);
 
 			drawGroup(canvas);
 
