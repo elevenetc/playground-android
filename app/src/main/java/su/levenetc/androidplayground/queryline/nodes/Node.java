@@ -1,16 +1,13 @@
 package su.levenetc.androidplayground.queryline.nodes;
 
-import android.graphics.Canvas;
 import android.graphics.Rect;
 import su.levenetc.androidplayground.queryline.QueryModel;
-import su.levenetc.androidplayground.queryline.drawers.NodeDrawer;
 
 public abstract class Node {
 
 	protected StringBuilder text = new StringBuilder();
 	protected Rect bounds = new Rect();
 	protected QueryModel queryModel;
-	private NodeDrawer drawer;
 
 	public Node() {
 
@@ -18,10 +15,6 @@ public abstract class Node {
 
 	public void setQueryModel(QueryModel queryModel) {
 		this.queryModel = queryModel;
-	}
-
-	public void setDrawer(NodeDrawer drawer) {
-		this.drawer = drawer;
 	}
 
 	@Override public String toString() {
@@ -39,10 +32,6 @@ public abstract class Node {
 	public void setText(String value) {
 		text.setLength(0);
 		text.append(value);
-	}
-
-	public void draw(Canvas canvas) {
-		drawer.measureLayoutDraw(canvas);
 	}
 
 	public boolean isEmpty() {

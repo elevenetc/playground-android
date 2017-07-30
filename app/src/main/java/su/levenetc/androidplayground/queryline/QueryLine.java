@@ -17,17 +17,15 @@ import su.levenetc.androidplayground.queryline.drawers.*;
 import su.levenetc.androidplayground.queryline.nodes.*;
 import su.levenetc.androidplayground.utils.SystemUtils;
 
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Map;
 
 public class QueryLine extends View {
 
 	public static final String TAG = QueryLine.class.getSimpleName();
-
-	private boolean edit;
-	StringBuilder sb = new StringBuilder();
 	QueryModel queryModel;
+	Map<Class, BaseNodeDrawer> drawers = new HashMap<>();
 
 	public QueryLine(Context context) {
 		super(context);
@@ -44,47 +42,38 @@ public class QueryLine extends View {
 
 		queryModel = new QueryModel(new DrawersFactory() {
 			@Override public AutoCompleteNode autoComplete() {
-				final AutoCompleteNode result = new AutoCompleteNode(new HashSet<String>() {{
+				return new AutoCompleteNode(new HashSet<String>() {{
 					add("select");
 					add("father");
 				}});
-				return bindDrawerAndNode(result, new AutoCompleteDrawer());
 			}
 
 			@Override public SpaceNode space() {
-				return bindDrawerAndNode(new SpaceNode(), new SpaceNodeDrawer());
+				return new SpaceNode();
 			}
 
 			@Override public StaticNode staticNode() {
-				return bindDrawerAndNode(new StaticNode(), new StaticNodeDrawer());
+				return new StaticNode();
 			}
 
 			@Override public Node next() {
 				final int size = queryModel.size();
 				if (size == 0) {
-					return bindDrawerAndNode(new SQLiteInitNode(), new AutoCompleteDrawer());
+					return new SQLiteInitNode();
 				} else if (size == 1) {
-					return bindDrawerAndNode(new SQLiteColumnsNode(), new AutoCompleteDrawer());
+					return new SQLiteColumnsNode();
 				} else {
-					return bindDrawerAndNode(new SQLiteColumnsNode(), new AutoCompleteDrawer());
+					return new SQLiteColumnsNode();
 				}
-			}
-
-
-			<N extends Node> N bindDrawerAndNode(N node, BaseNodeDrawer<N> drawer) {
-				node.setQueryModel(queryModel);
-				node.setDrawer(drawer);
-				drawer.setNode(node);
-				drawer.setQueryModel(queryModel);
-				return node;
 			}
 		});
 
-		List<NodeBuildAction> actionsList = new LinkedList<>();
-		actionsList.add(new NodeBuildAction(queryModel, SQLiteInitNode::new, AutoCompleteDrawer::new));
-		actionsList.add(new NodeBuildAction(queryModel, SQLiteColumnsNode::new, AutoCompleteDrawer::new));
-		
-		queryModel.addNode(actionsList.get(0).build());
+		drawers.put(SQLiteColumnsNode.class, new AutoCompleteDrawer());
+		drawers.put(SQLiteInitNode.class, new AutoCompleteDrawer());
+		drawers.put(StaticNode.class, new StaticNodeDrawer());
+		drawers.put(SpaceNode.class, new SpaceNodeDrawer());
+
+		queryModel.addNode(new SQLiteInitNode());
 
 		setFocusableInTouchMode(true);
 		setFocusable(true);
@@ -106,45 +95,19 @@ public class QueryLine extends View {
 		});
 	}
 
-	static class NodeBuildAction {
-
-		QueryModel queryModel;
-		NodeBuilder nodeBuilder;
-		DrawerBuilder drawerBuilder;
-
-		public NodeBuildAction(QueryModel queryModel, NodeBuilder nodeBuilder, DrawerBuilder drawerBuilder) {
-			this.queryModel = queryModel;
-			this.nodeBuilder = nodeBuilder;
-			this.drawerBuilder = drawerBuilder;
-		}
-
-		Node build() {
-			final Node node = nodeBuilder.build();
-			final BaseNodeDrawer drawer = drawerBuilder.build();
-			node.setQueryModel(queryModel);
-			node.setDrawer(drawer);
-			drawer.setQueryModel(queryModel);
-			drawer.setNode(node);
-			return node;
-		}
-	}
-
-	interface NodeBuilder {
-		Node build();
-	}
-
-	interface DrawerBuilder {
-		BaseNodeDrawer build();
-	}
-
 	@Override protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
-		queryModel.draw(canvas);
+		for (Node node : queryModel.getNodes()) {
+
+			final BaseNodeDrawer drawer = drawers.get(node.getClass());
+			drawer.setNode(node);
+			drawer.setQueryModel(queryModel);
+			drawer.measureLayoutDraw(canvas);
+		}
 	}
 
 	@Override public boolean onTouchEvent(MotionEvent event) {
 		if (event.getAction() == MotionEvent.ACTION_UP) {
-			edit = true;
 			requestFocus();
 			SystemUtils.showKeyboard(this);
 		}

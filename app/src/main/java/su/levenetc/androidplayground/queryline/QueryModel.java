@@ -1,6 +1,5 @@
 package su.levenetc.androidplayground.queryline;
 
-import android.graphics.Canvas;
 import su.levenetc.androidplayground.queryline.drawers.DrawersFactory;
 import su.levenetc.androidplayground.queryline.nodes.AutoCompleteNode;
 import su.levenetc.androidplayground.queryline.nodes.Node;
@@ -12,10 +11,10 @@ import java.util.LinkedList;
 public class QueryModel {
 
 	Deque<Node> nodes = new LinkedList<>();
-	private DrawersFactory drawersFactory;
+	private DrawersFactory nodesFactory;
 
-	public QueryModel(DrawersFactory drawersFactory) {
-		this.drawersFactory = drawersFactory;
+	public QueryModel(DrawersFactory nodesFactory) {
+		this.nodesFactory = nodesFactory;
 	}
 
 	public int size() {
@@ -32,8 +31,8 @@ public class QueryModel {
 		return sb.toString();
 	}
 
-	public void draw(Canvas canvas) {
-		for (Node node : nodes) node.draw(canvas);
+	public Deque<Node> getNodes() {
+		return nodes;
 	}
 
 	public float getXShift(Node node) {
@@ -50,11 +49,11 @@ public class QueryModel {
 		for (Node toRemove : nodes) {
 			if (toConvert == toRemove) {
 				nodes.remove(toRemove);
-				final StaticNode staticNode = drawersFactory.staticNode();
+				final StaticNode staticNode = nodesFactory.staticNode();
 				staticNode.setText(toRemove);
 				nodes.addLast(staticNode);
-				nodes.add(drawersFactory.space());
-				nodes.add(drawersFactory.next());
+				nodes.add(nodesFactory.space());
+				nodes.add(nodesFactory.next());
 				break;
 			}
 		}
@@ -63,7 +62,7 @@ public class QueryModel {
 	public void append(char string) {
 
 		if (nodes.isEmpty()) {
-			final AutoCompleteNode chars = drawersFactory.autoComplete();
+			final AutoCompleteNode chars = nodesFactory.autoComplete();
 			nodes.add(chars);
 		}
 
