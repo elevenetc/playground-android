@@ -18,7 +18,6 @@ import su.levenetc.androidplayground.queryline.nodes.*;
 import su.levenetc.androidplayground.utils.SystemUtils;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 
 public class QueryLine extends View {
@@ -40,21 +39,7 @@ public class QueryLine extends View {
 	private void init() {
 
 
-		queryModel = new QueryModel(new DrawersFactory() {
-			@Override public AutoCompleteNode autoComplete() {
-				return new AutoCompleteNode(new HashSet<String>() {{
-					add("select");
-					add("father");
-				}});
-			}
-
-			@Override public SpaceNode space() {
-				return new SpaceNode();
-			}
-
-			@Override public StaticNode staticNode() {
-				return new StaticNode();
-			}
+		queryModel = new QueryModel(new NodesFactory() {
 
 			@Override public Node next() {
 				final int size = queryModel.size();
@@ -135,7 +120,7 @@ public class QueryLine extends View {
 	}
 
 	private void completeCurrent() {
-		queryModel.completeCurrent();
+		queryModel.tryToComplete();
 		invalidate();
 	}
 

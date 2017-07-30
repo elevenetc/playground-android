@@ -13,8 +13,8 @@ public class AutoCompleteDrawer extends BaseNodeDrawer<AutoCompleteNode> {
 
 		canvas.drawText(text, 0, node.bounds().height(), Paints.Font.Black_26);
 
-		if (node.autoComplete.length() > 0) {
-			final CharSequence complete = node.autoComplete.subSequence(text.length(), node.autoComplete.length());
+		if (node.autoCompleteText.length() > 0) {
+			final CharSequence complete = node.autoCompleteText.subSequence(text.length(), node.autoCompleteText.length());
 			canvas.drawText(String.valueOf(complete), node.bounds().width(), bounds.height(), Paints.Font.Black_26_Alpha_50);
 		}
 	}

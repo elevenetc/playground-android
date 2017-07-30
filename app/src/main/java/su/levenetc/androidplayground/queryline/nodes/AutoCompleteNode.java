@@ -4,29 +4,29 @@ import java.util.Set;
 
 public class AutoCompleteNode extends Node {
 
-	public StringBuilder autoComplete = new StringBuilder();
-	private Set<String> autocomplete;
+	public StringBuilder autoCompleteText = new StringBuilder();
+	private Set<String> variants;
 
-	public AutoCompleteNode(Set<String> autocomplete) {
-		this.autocomplete = autocomplete;
+	public AutoCompleteNode(Set<String> variants) {
+		this.variants = variants;
 	}
 
 	public void setAuto(String value) {
 		if (value == null) {
-			autoComplete.setLength(0);
+			autoCompleteText.setLength(0);
 		} else {
-			autoComplete.setLength(0);
-			autoComplete.append(value);
+			autoCompleteText.setLength(0);
+			autoCompleteText.append(value);
 		}
 
 	}
 
 	public boolean isFilled() {
-		return autoComplete.length() == text.length();
+		return autoCompleteText.length() == currentText.length();
 	}
 
 	public void deleteLast() {
-		text.setLength(text.length() - 1);
+		currentText.setLength(currentText.length() - 1);
 	}
 
 	public void updateAutoComplete() {
@@ -37,7 +37,7 @@ public class AutoCompleteNode extends Node {
 		final char[] charsToComplete = toComplete.toCharArray();
 		String v = null;
 
-		for (String value : autocomplete) {
+		for (String value : variants) {
 
 			if (charsToComplete.length > value.length()) continue;
 			int length = 0;
@@ -61,7 +61,7 @@ public class AutoCompleteNode extends Node {
 			setAuto(v);
 
 			if (isFilled()) {
-				queryModel.convertToStatic(this);
+				queryModel.handleFilledNode();
 			}
 
 		} else {
@@ -70,9 +70,9 @@ public class AutoCompleteNode extends Node {
 	}
 
 	public void tryToComplete() {
-		if (autoComplete.length() > 0) {
-			setText(autoComplete.toString());
-			queryModel.convertToStatic(this);
+		if (autoCompleteText.length() > 0) {
+			setText(autoCompleteText.toString());
+			queryModel.handleFilledNode();
 		}
 	}
 }

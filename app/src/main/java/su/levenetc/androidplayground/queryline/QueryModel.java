@@ -1,20 +1,20 @@
 package su.levenetc.androidplayground.queryline;
 
-import su.levenetc.androidplayground.queryline.drawers.DrawersFactory;
 import su.levenetc.androidplayground.queryline.nodes.AutoCompleteNode;
 import su.levenetc.androidplayground.queryline.nodes.Node;
+import su.levenetc.androidplayground.queryline.nodes.NodesFactory;
 import su.levenetc.androidplayground.queryline.nodes.StaticNode;
 
-import java.util.Deque;
 import java.util.LinkedList;
 
 public class QueryModel {
 
-	Deque<Node> nodes = new LinkedList<>();
-	private DrawersFactory nodesFactory;
+	LinkedList<Node> nodes = new LinkedList<>();
+	private NodesFactory nodesFactory;
 
-	public QueryModel(DrawersFactory nodesFactory) {
+	public QueryModel(NodesFactory nodesFactory) {
 		this.nodesFactory = nodesFactory;
+		nodesFactory.setQueryModel(this);
 	}
 
 	public int size() {
@@ -31,7 +31,7 @@ public class QueryModel {
 		return sb.toString();
 	}
 
-	public Deque<Node> getNodes() {
+	public LinkedList<Node> getNodes() {
 		return nodes;
 	}
 
@@ -44,29 +44,18 @@ public class QueryModel {
 		return 0;
 	}
 
-	public void convertToStatic(Node toConvert) {
-
-		for (Node toRemove : nodes) {
-			if (toConvert == toRemove) {
-				nodes.remove(toRemove);
-				final StaticNode staticNode = nodesFactory.staticNode();
-				staticNode.setText(toRemove);
-				nodes.addLast(staticNode);
-				nodes.add(nodesFactory.space());
-				nodes.add(nodesFactory.next());
-				break;
-			}
-		}
+	public void handleFilledNode() {
+		nodes.add(nodesFactory.next());
 	}
 
-	public void append(char string) {
+	public void append(char ch) {
 
 		if (nodes.isEmpty()) {
-			final AutoCompleteNode chars = nodesFactory.autoComplete();
-			nodes.add(chars);
+			final Node node = nodesFactory.next();
+			nodes.add(node);
 		}
 
-		nodes.getLast().append(string);
+		nodes.getLast().append(ch);
 
 		if (nodes.getLast() instanceof AutoCompleteNode) {
 			((AutoCompleteNode) nodes.getLast()).updateAutoComplete();
@@ -93,7 +82,7 @@ public class QueryModel {
 		}
 	}
 
-	public void completeCurrent() {
+	public void tryToComplete() {
 		if (!nodes.isEmpty() && nodes.getLast() instanceof AutoCompleteNode) {
 			((AutoCompleteNode) nodes.getLast()).tryToComplete();
 		}

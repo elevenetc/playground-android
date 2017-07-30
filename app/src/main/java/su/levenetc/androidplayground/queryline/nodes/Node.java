@@ -5,7 +5,7 @@ import su.levenetc.androidplayground.queryline.QueryModel;
 
 public abstract class Node {
 
-	protected StringBuilder text = new StringBuilder();
+	protected StringBuilder currentText = new StringBuilder();
 	protected Rect bounds = new Rect();
 	protected QueryModel queryModel;
 
@@ -18,24 +18,24 @@ public abstract class Node {
 	}
 
 	@Override public String toString() {
-		return text.toString();
+		return currentText.toString();
 	}
 
 	public void append(char value) {
-		text.append(value);
+		currentText.append(value);
 	}
 
-	public void setText(Node node) {
+	public void setCurrentText(Node node) {
 		setText(node.toString());
 	}
 
 	public void setText(String value) {
-		text.setLength(0);
-		text.append(value);
+		currentText.setLength(0);
+		currentText.append(value);
 	}
 
 	public boolean isEmpty() {
-		return text.length() == 0;
+		return currentText.length() == 0;
 	}
 
 	public float getWidth() {
