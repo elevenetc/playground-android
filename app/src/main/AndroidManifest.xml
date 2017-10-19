@@ -66,6 +66,13 @@
 
 		<meta-data android:name="com.google.android.geo.API_KEY"
 		           android:value="AIzaSyAaPC86oWIiG1tcnKHvr8ioBpfmOcnWtxQ"/>
+
+		<receiver android:name=".services.DebugCommandsReceiver">
+			<intent-filter>
+				<action android:name="su.elevenetc.android.intent.DEBUG_COMMAND"/>
+				<category android:name="su.elevenetc.android.commandreceiver"/>
+			</intent-filter>
+		</receiver>
 	</application>
 
 </manifest>
