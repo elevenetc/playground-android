@@ -8,12 +8,16 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
 import android.graphics.*;
+import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DimenRes;
 import android.support.annotation.NonNull;
+import android.support.v4.view.PagerAdapter;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.*;
@@ -25,7 +29,6 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
-import android.graphics.Point;
 
 /**
  * Created by Eugene Levenetc on 16/07/2016.
@@ -38,6 +41,103 @@ public class ViewUtils {
 	private static int screenHeight = -1;
 	private static Point screenSize;
 	private static float defaultToolbarHeight;
+
+	/**
+	 * @return "[package]:id/[xml-id]"
+	 * where [package] is your package and [xml-id] is id of view
+	 * or no-id if there is no id
+	 */
+	public static String getId(View view) {
+		if (view.getId() == 0xffffffff) return "no-id";
+		else return view.getResources().getResourceName(view.getId());
+	}
+
+	public static void drawDebugTree(View view, Canvas canvas, float offsetX, float offsetY) {
+
+		float x = view.getX() + offsetX;
+		float y = view.getY() + offsetY;
+		int width = view.getWidth();
+		int height = view.getHeight();
+
+		if (view instanceof ViewGroup) {
+			canvas.drawText(getLocString(x, y, width, height), x, y, Paints.Font.Black_9);
+			canvas.drawRect(x, y, x + width, y + height, Paints.Stroke.Red);
+
+			ViewGroup group = (ViewGroup) view;
+			int childCount = group.getChildCount();
+
+			for (int i = childCount - 1; i >= 0; i--) {
+				drawDebugTree(group.getChildAt(i), canvas, x, y);
+			}
+		} else {
+			canvas.drawText(getLocString(x, y, width, height), x, y, Paints.Font.Black_9);
+			canvas.drawRect(x, y, x + width, y + height, Paints.Stroke.Blue);
+		}
+	}
+
+	private static String getLocString(float x, float y, float width, float height) {
+		return String.format("x: %f y: %f width: %f height: %f", x, y, width, height);
+	}
+
+	public static View getJustView(Context context, int color) {
+		View result = new View(context);
+		result.setBackgroundColor(color);
+		return result;
+	}
+
+	public static PagerAdapter getFilledViewPagerAdapter(Context context, int size) {
+		return new PagerAdapter() {
+
+			@Override public int getCount() {
+				return size;
+			}
+
+			@Override public boolean isViewFromObject(View view, Object object) {
+				return view == object;
+			}
+
+			@Override public void destroyItem(ViewGroup container, int position, Object object) {
+				container.removeView((View) object);
+			}
+
+			@Override public Object instantiateItem(ViewGroup container, int position) {
+				View view = getJustView(context, (position % 2 == 0 ? Color.RED : Color.BLUE));
+				container.addView(view);
+				return view;
+			}
+		};
+	}
+
+	public static RecyclerView getFilledRecyclerView(Context context) {
+		RecyclerView result = new RecyclerView(context);
+		result.setLayoutManager(new LinearLayoutManager(context));
+		result.setAdapter(getFilledRecyclerViewAdapter());
+		return result;
+	}
+
+	@NonNull public static RecyclerView.Adapter getFilledRecyclerViewAdapter() {
+		return new RecyclerView.Adapter() {
+
+			@Override public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+				return new Holder(new TextView(parent.getContext()));
+			}
+
+			@Override public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+				((TextView) holder.itemView).setText(String.format("Item: %d", position));
+			}
+
+			@Override public int getItemCount() {
+				return 100;
+			}
+
+			class Holder extends RecyclerView.ViewHolder {
+
+				Holder(TextView itemView) {
+					super(itemView);
+				}
+			}
+		};
+	}
 
 	public static ViewGroup.LayoutParams viewGroupMW() {
 		return new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -163,7 +263,7 @@ public class ViewUtils {
 		return textView.getText().toString().isEmpty();
 	}
 
-	public static boolean isViewContains(View view, int rx, int ry) {
+	public static boolean isViewContains(View view, int touchX, int touchY) {
 		int[] l = new int[2];
 		view.getLocationOnScreen(l);
 		int x = l[0];
@@ -171,10 +271,19 @@ public class ViewUtils {
 		int w = view.getWidth();
 		int h = view.getHeight();
 
-		if (rx < x || rx > x + w || ry < y || ry > y + h) {
+		return isContains(touchX, touchY, x, y, w, h);
+	}
+
+	public static boolean isContains(float touchX, float touchY, float x, float y, float w, float h) {
+		return isContains((int) touchX, (int) touchY, (int) x, (int) y, (int) w, (int) h);
+	}
+
+	public static boolean isContains(int touchX, int touchY, int x, int y, int w, int h) {
+		if (touchX < x || touchX > x + w || touchY < y || touchY > y + h) {
 			return false;
+		} else {
+			return true;
 		}
-		return true;
 	}
 
 	public static void setColorState(TextView textView, int resColorId) {

@@ -24,6 +24,8 @@ public class Paints {
 
 	public static class Font {
 		public static Paint Red_26 = font(Color.RED, 26);
+		public static Paint Black_8 = font(Color.BLACK, 8);
+		public static Paint Black_9 = font(Color.BLACK, 9);
 		public static Paint Black_26 = font(Color.BLACK, 26);
 		public static Paint Black_26_Alpha_50 = font(Color.BLACK, 26, 255 / 2);
 	}
@@ -58,6 +60,7 @@ public class Paints {
 		result.setTextSize(spSize * Resources.getSystem().getDisplayMetrics().scaledDensity);
 		result.setStyle(Paint.Style.FILL);
 		result.setColor(addAlpha(color, alpha));
+		result.setAntiAlias(true);
 		return result;
 	}
 
