@@ -9,7 +9,7 @@ public class BootActivity extends AppCompatActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		startActivity(TouchEventsActivity.class);
+		startActivity(TouchDiffuserActivity.class);
 	}
 
 	private void startActivity(Class c) {

@@ -6,7 +6,7 @@
 		android:layout_height="match_parent"
 		android:orientation="vertical"
 		android:id="@+id/root_container"
-		tools:context=".activities.TouchEventsActivity">
+		tools:context=".activities.TouchDiffuserActivity">
 
 	<android.support.v4.view.ViewPager
 			android:id="@+id/view_pager"

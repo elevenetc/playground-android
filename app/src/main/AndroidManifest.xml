@@ -57,7 +57,7 @@
 		<activity android:name=".activities.MergeViewActivity"/>
 		<activity android:name=".activities.UIGardenActivity"/>
 		<activity android:name=".activities.RoomActivity"/>
-		<activity android:name=".activities.TouchEventsActivity"/>
+		<activity android:name=".activities.TouchDiffuserActivity"/>
 		<activity android:name=".activities.QueryLineActivity"
 		          android:windowSoftInputMode="adjustResize"
 		/>
