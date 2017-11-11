@@ -24,13 +24,13 @@ public class TouchLinearLayout extends LinearLayout {
 		setWillNotDraw(false);
 	}
 
-//	@Override public boolean onInterceptTouchEvent(MotionEvent ev) {
-//		return TouchDiffuser.inst.onInterceptTouchEvent(this, ev);
-//	}
+	@Override public boolean onInterceptTouchEvent(MotionEvent ev) {
+		return TouchDiffuser.inst.onInterceptTouchEvent(this, ev);
+	}
 //
-//	@Override public boolean onTouchEvent(MotionEvent event) {
-//		return TouchDiffuser.inst.onTouchEvent(this, event);
-//	}
+	@Override public boolean onTouchEvent(MotionEvent event) {
+		return TouchDiffuser.inst.onTouchEvent(this, event);
+	}
 
 	@Override protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);

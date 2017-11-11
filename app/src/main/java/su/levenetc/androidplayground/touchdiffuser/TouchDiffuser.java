@@ -62,6 +62,7 @@ public class TouchDiffuser {
 
 	private void dispatchEvent(MotionEvent event, View view) {
 		Log.d(TAG, "dispatch:" + ViewUtils.getId(view));
+		NetworkEventsDiffuser.diffuse(event, view);
 		view.dispatchTouchEvent(MotionEvent.obtain(event));
 	}
 

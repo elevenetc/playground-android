@@ -35,15 +35,16 @@ public class TouchDiffuserActivity extends AppCompatActivity {
 		Dialog dialog = new Dialog(this);
 		dialog.setTitle("hello");
 		dialog.show();
+
 	}
 
-	@Override public boolean dispatchTouchEvent(MotionEvent event) {
-		View v = getCurrentFocus();
-		boolean ret = super.dispatchTouchEvent(event);
-		return true;
-	}
+//	@Override public boolean dispatchTouchEvent(MotionEvent event) {
+//		View v = getCurrentFocus();
+//		boolean ret = super.dispatchTouchEvent(event);
+//		return true;
+//	}
 
-	@Override public boolean onTouchEvent(MotionEvent event) {
-		return TouchDiffuser.inst.onTouchEvent(rootView, event);
-	}
+//	@Override public boolean onTouchEvent(MotionEvent event) {
+//		return TouchDiffuser.inst.onTouchEvent(rootView, event);
+//	}
 }
