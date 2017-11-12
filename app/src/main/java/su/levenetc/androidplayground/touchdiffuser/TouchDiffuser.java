@@ -26,6 +26,13 @@ public class TouchDiffuser {
 	}
 
 	private boolean internalTouchEventHandler(ViewGroup view, MotionEvent event, float offX, float offY) {
+
+		int source = event.getSource();
+
+		if (source == 666) {
+			return false;
+		}
+
 		Log.d("touch", "group:onTouchEvent:" + MotionEvent.actionToString(event.getAction()));
 
 		int eventX = (int) event.getX();

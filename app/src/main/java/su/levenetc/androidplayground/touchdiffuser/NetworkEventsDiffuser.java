@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import su.levenetc.androidplayground.utils.ByteUtils;
+import su.levenetc.androidplayground.utils.NetUtils;
 import su.levenetc.androidplayground.utils.ThreadUtils;
 
 import java.io.IOException;
@@ -13,6 +14,8 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.util.Arrays;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class NetworkEventsDiffuser {
 
@@ -23,16 +26,47 @@ public class NetworkEventsDiffuser {
 	static StringBuilder stringBuilder = new StringBuilder();
 
 	private static int SERVER_PORT = 6666;
+	private static MotionEventsReceiver receiver;
+	private static BlockingQueue<DiffuseEvent> eventsQueue = new LinkedBlockingQueue<>();
 
 	static {
 		initServerSocket();
 		initClientSocket();
 	}
 
+	public static void setMotionReceiver(MotionEventsReceiver receiver) {
+		NetworkEventsDiffuser.receiver = receiver;
+	}
+
 	private static void initClientSocket() {
 		try {
 			clientSocket = new DatagramSocket();
 			clientSocket.setBroadcast(true);
+
+			new Thread(() -> {
+				while (true) {
+					try {
+						DiffuseEvent diffuseEvent = eventsQueue.take();
+
+						MotionEvent event = diffuseEvent.event;
+						View view = diffuseEvent.view;
+
+						try {
+							byte[] bytes = eventToByteArray(event, view);
+							DatagramPacket packet = new DatagramPacket(bytes, 0, bytes.length, InetAddress.getByName("255.255.255.255"), SERVER_PORT);
+							Log.d(TAG, "new event sending");
+							clientSocket.send(packet);
+						} catch (Exception e) {
+							Log.d(TAG, "diffuse error");
+							e.printStackTrace();
+						}
+
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			}).start();
+
 		} catch (SocketException e) {
 			Log.d(TAG, "initClientSocket error");
 			e.printStackTrace();
@@ -50,7 +84,12 @@ public class NetworkEventsDiffuser {
 						DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
 						serverSocket.receive(packet);
 
+						if (NetUtils.isFromCurrentMachine(packet)) continue;
+
 						MotionEvent motionEvent = byteArrayToMotionEvent(packet.getData());
+
+						if (receiver != null) receiver.handle(motionEvent);
+
 						Log.d(TAG, "new motion even received:" + motionEvent.getAction());
 
 					} catch (IOException e) {
@@ -68,16 +107,19 @@ public class NetworkEventsDiffuser {
 		}
 	}
 
+
 	public static void diffuse(MotionEvent event, View view) {
 
-		try {
-			byte[] bytes = eventToByteArray(event, view);
-			DatagramPacket packet = new DatagramPacket(bytes, 0, bytes.length, InetAddress.getByName("255.255.255.255"), SERVER_PORT);
-			Log.d(TAG, "new event sending");
-			clientSocket.send(packet);
-		} catch (Exception e) {
-			Log.d(TAG, "diffuse error");
-			e.printStackTrace();
+		eventsQueue.add(new DiffuseEvent(event, view));
+	}
+
+	static class DiffuseEvent {
+		MotionEvent event;
+		View view;
+
+		public DiffuseEvent(MotionEvent event, View view) {
+			this.event = event;
+			this.view = view;
 		}
 	}
 
@@ -91,7 +133,9 @@ public class NetworkEventsDiffuser {
 		int action = ByteUtils.byteToInt(actionBytes);
 		long currentTime = SystemClock.uptimeMillis();
 
-		return MotionEvent.obtain(currentTime, currentTime, action, x, y, 0);
+		MotionEvent result = MotionEvent.obtain(currentTime, currentTime, action, x, y, 0);
+		result.setSource(666);
+		return result;
 	}
 
 	static byte[] eventToByteArray(MotionEvent event, View view) {
@@ -116,5 +160,9 @@ public class NetworkEventsDiffuser {
 
 	static void appendDivider() {
 		stringBuilder.append("|");
+	}
+
+	public interface MotionEventsReceiver {
+		void handle(MotionEvent event);
 	}
 }

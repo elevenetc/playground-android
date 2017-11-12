@@ -1,6 +1,5 @@
 package su.levenetc.androidplayground.activities;
 
-import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
@@ -8,10 +7,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MotionEvent;
-import android.view.View;
 import android.view.ViewGroup;
 import su.levenetc.androidplayground.R;
-import su.levenetc.androidplayground.touchdiffuser.TouchDiffuser;
+import su.levenetc.androidplayground.touchdiffuser.NetworkEventsDiffuser;
 import su.levenetc.androidplayground.utils.ViewUtils;
 
 public class TouchDiffuserActivity extends AppCompatActivity {
@@ -32,10 +30,7 @@ public class TouchDiffuserActivity extends AppCompatActivity {
 
 		rootView = (ViewGroup) findViewById(android.R.id.content);
 
-		Dialog dialog = new Dialog(this);
-		dialog.setTitle("hello");
-		dialog.show();
-
+		NetworkEventsDiffuser.setMotionReceiver(rootContainer::dispatchTouchEvent);
 	}
 
 //	@Override public boolean dispatchTouchEvent(MotionEvent event) {
