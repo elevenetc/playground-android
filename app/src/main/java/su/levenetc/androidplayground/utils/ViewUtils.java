@@ -42,6 +42,18 @@ public class ViewUtils {
 	private static Point screenSize;
 	private static float defaultToolbarHeight;
 
+	public static View findViewById(ViewGroup container, String id) {
+
+		if (id == null || id.isEmpty()) return null;
+
+		id = id.split("/")[1];
+
+		Resources resources = container.getResources();
+		String packageName = container.getContext().getPackageName();
+		int intId = resources.getIdentifier(id, "id", packageName);
+		return container.findViewById(intId);
+	}
+
 	/**
 	 * @return "[package]:id/[xml-id]"
 	 * where [package] is your package and [xml-id] is id of view

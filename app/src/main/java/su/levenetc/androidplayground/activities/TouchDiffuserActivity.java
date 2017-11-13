@@ -6,7 +6,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.MotionEvent;
+import android.view.View;
 import android.view.ViewGroup;
 import su.levenetc.androidplayground.R;
 import su.levenetc.androidplayground.touchdiffuser.NetworkEventsDiffuser;
@@ -30,7 +30,19 @@ public class TouchDiffuserActivity extends AppCompatActivity {
 
 		rootView = (ViewGroup) findViewById(android.R.id.content);
 
-		NetworkEventsDiffuser.setMotionReceiver(rootContainer::dispatchTouchEvent);
+		NetworkEventsDiffuser.setMotionReceiver(new NetworkEventsDiffuser.MotionEventsReceiver() {
+			@Override public void handle(NetworkEventsDiffuser.ArrivedMotionEvent event) {
+				View view = ViewUtils.findViewById(rootContainer, event.id);
+				if (view != null) {
+					view.post(new Runnable() {
+						@Override public void run() {
+							view.dispatchTouchEvent(event.event);
+						}
+					});
+
+				}
+			}
+		});
 	}
 
 //	@Override public boolean dispatchTouchEvent(MotionEvent event) {

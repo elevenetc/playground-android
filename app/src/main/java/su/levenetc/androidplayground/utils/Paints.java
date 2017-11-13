@@ -19,7 +19,9 @@ public class Paints {
 
 	public static class Fill {
 		public static Paint Red = fill(Color.RED);
+		public static Paint Blue = fill(Color.BLUE);
 		public static Paint Grey = fill(Color.DKGRAY);
+		public static Paint Black = fill(Color.BLACK);
 	}
 
 	public static class Font {

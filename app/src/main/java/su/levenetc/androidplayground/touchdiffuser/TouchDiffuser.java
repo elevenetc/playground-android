@@ -30,7 +30,12 @@ public class TouchDiffuser {
 		int source = event.getSource();
 
 		if (source == 666) {
-			return false;
+			event.setSource(777);
+			boolean result = view.dispatchTouchEvent(MotionEvent.obtain(event));
+			Log.d(TAG, "handled777:" + result);
+			return result;
+		} else if (source == 777) {
+			return true;
 		}
 
 		Log.d("touch", "group:onTouchEvent:" + MotionEvent.actionToString(event.getAction()));
