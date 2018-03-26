@@ -23,15 +23,6 @@ public class RayTracerTests {
     }
 
     @Test
-    public void test01() {
-        Vector horiz = new Vector(0, 0, 100, 0);
-        Vector vert = new Vector(0, 0, 100, 100);
-
-        double actual = RayMath.dotProduct(horiz, vert);
-        assertThat(actual).isZero();
-    }
-
-    @Test
     public void testAngles() {
         assertThat(RayMath.angleBetween(horiz(), diag45())).isEqualTo(45);
         assertThat(RayMath.angleBetween(horiz(), vert())).isEqualTo(90);
