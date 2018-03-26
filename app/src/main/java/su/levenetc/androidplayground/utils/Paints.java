@@ -15,13 +15,16 @@ public class Paints {
 		public static Paint Green = stroke(Color.GREEN);
 		public static Paint GreenBold = strokeBold(Color.GREEN);
 		public static Paint Red = stroke(Color.RED);
+		public static Paint Yellow = stroke(Color.YELLOW);
 	}
 
 	public static class Fill {
 		public static Paint Red = fill(Color.RED);
 		public static Paint Blue = fill(Color.BLUE);
 		public static Paint Grey = fill(Color.DKGRAY);
+		public static Paint Green = fill(Color.GREEN);
 		public static Paint Black = fill(Color.BLACK);
+		public static Paint Yellow = fill(Color.YELLOW);
 	}
 
 	public static class Font {

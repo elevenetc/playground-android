@@ -11,8 +11,23 @@ import java.util.List;
 
 public class RayMath {
 
+    public static double angleBetween(Vector a, Vector b) {
+        double angle1 = Math.atan2(a.y1 - a.y2, a.x1 - a.x2);
+        double angle2 = Math.atan2(b.y1 - b.y2, b.x1 - b.x2);
+        double result = (angle2 - angle1) * 180 / Math.PI;
+        if (result < 0) {
+            result += 360;
+        }
+        return result;
+    }
+
+    public static double dotProduct(Vector a, Vector b) {
+        return a.x1 * b.x1 + a.y1 * b.y1 +
+                a.x2 * b.x2 + a.y2 * b.y2;
+    }
+
     public static double angle(Vector v1, Vector v2) {
-        double normProduct = v1.getNorm() * v2.getNorm();
+        //double normProduct = v1.getNorm() * v2.getNorm();
 //        if (normProduct == 0) {
 //            throw new MathArithmeticException(LocalizedFormats.ZERO_NORM);
 //        }
@@ -40,7 +55,7 @@ public class RayMath {
         return Math.sqrt(x1 * x1 + y1 * y1);
     }
 
-    public static Point getClosestWallIntersection(Vector vector, EnvModel model) {
+    public static Point getClosestWallIntersection(Vector vector, Rect model) {
         List<Vector> walls = new LinkedList<>();
 
         //get all bounds towards ray

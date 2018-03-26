@@ -13,7 +13,7 @@ import android.view.View;
 
 public class RayCasterView extends View {
 
-    private EnvModel model = new EnvModel();
+    private Rect boundRect = new Rect();
 
     private Ray ray = new Ray();
 
@@ -28,7 +28,7 @@ public class RayCasterView extends View {
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
-        model.set(left, top, bottom, right);
+        boundRect.set(left, top, bottom, right);
     }
 
     @Override
@@ -43,7 +43,8 @@ public class RayCasterView extends View {
 
         ray.init(cx, cy, 3000, 3000);
 
-        RayTracer.trace(ray, model);
+        RayTracer.trace(ray, boundRect);
+        RayDrawer.draw(boundRect, canvas);
         RayDrawer.draw(ray, canvas);
     }
 }

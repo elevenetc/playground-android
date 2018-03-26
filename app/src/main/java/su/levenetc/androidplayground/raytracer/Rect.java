@@ -7,7 +7,7 @@ import java.util.List;
  * Created by eugene.levenetc on 08/03/2018.
  */
 
-public class EnvModel {
+public class Rect {
 
     double left;
     double top;
@@ -21,7 +21,7 @@ public class EnvModel {
 
     List<Vector> allBounds = new LinkedList<>();
 
-    public EnvModel() {
+    public Rect() {
         allBounds.add(topBound);
         allBounds.add(bottomBound);
         allBounds.add(leftBound);
@@ -38,5 +38,11 @@ public class EnvModel {
         bottomBound.set(left, bottom, right, bottom);
         leftBound.set(left, bottom, left, top);
         rightBound.set(right, bottom, right, top);
+
+        topBound.setNormal((right - left) / 2, top, (right - left) / 2, top + 100);
+        bottomBound.setNormal((right - left) / 2, bottom, (right - left) / 2, bottom - 100);
+
+        leftBound.setNormal(left, (bottom - top) / 2, left + 100, (bottom - top) / 2);
+        rightBound.setNormal(right, (bottom - top) / 2, right - 100, (bottom - top) / 2);
     }
 }
