@@ -1,4 +1,4 @@
-package su.levenetc.androidplayground.raycaster;
+package su.levenetc.androidplayground.raytracer;
 
 import java.util.LinkedList;
 import java.util.List;

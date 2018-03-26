@@ -1,4 +1,4 @@
-package su.levenetc.androidplayground.raycaster;
+package su.levenetc.androidplayground.raytracer;
 
 import android.support.annotation.NonNull;
 
@@ -13,43 +13,65 @@ public class RayMath {
 
     public static double angle(Vector v1, Vector v2) {
         double normProduct = v1.getNorm() * v2.getNorm();
-        if (normProduct == 0) {
-            throw new MathArithmeticException(LocalizedFormats.ZERO_NORM);
-        }
+//        if (normProduct == 0) {
+//            throw new MathArithmeticException(LocalizedFormats.ZERO_NORM);
+//        }
+//
+//        double dot = v1.dotProduct(v2);
+//        double threshold = normProduct * 0.9999;
+//        if ((dot < -threshold) || (dot > threshold)) {
+//            // the vectors are almost aligned, compute using the sine
+//            final double n = FastMath.abs(MathArrays.linearCombination(v1.x, v2.y, -v1.y, v2.x));
+//            if (dot >= 0) {
+//                return FastMath.asin(n / normProduct);
+//            }
+//            return FastMath.PI - FastMath.asin(n / normProduct);
+//        }
+//
+//        // the vectors are sufficiently separated to use the cosine
+//        return FastMath.acos(dot / normProduct);
 
-        double dot = v1.dotProduct(v2);
-        double threshold = normProduct * 0.9999;
-        if ((dot < -threshold) || (dot > threshold)) {
-            // the vectors are almost aligned, compute using the sine
-            final double n = FastMath.abs(MathArrays.linearCombination(v1.x, v2.y, -v1.y, v2.x));
-            if (dot >= 0) {
-                return FastMath.asin(n / normProduct);
-            }
-            return FastMath.PI - FastMath.asin(n / normProduct);
-        }
-
-        // the vectors are sufficiently separated to use the cosine
-        return FastMath.acos(dot / normProduct);
+        return 0;
     }
 
-    public static Point getClosestWall(Vector vector, EnvModel model) {
+    public static double distance(double x1, double y1, double x2, double y2) {
+        x1 -= x2;
+        y1 -= y2;
+        return Math.sqrt(x1 * x1 + y1 * y1);
+    }
+
+    public static Point getClosestWallIntersection(Vector vector, EnvModel model) {
         List<Vector> walls = new LinkedList<>();
+
+        //get all bounds towards ray
         for (Vector bound : model.allBounds) {
             if (hasIntersection(vector, bound)) {
                 walls.add(bound);
             }
         }
 
-        if (walls.isEmpty()) return null;
-
-        List<Point> intersections = new LinkedList<>();
-
-        for (Vector wall : walls) {
-            Point intersection = getIntersection(vector, wall);
-            intersections.add(intersection);
+        if (walls.isEmpty()) {
+            return null;
+        } else if (walls.size() == 1) {
+            return getIntersection(vector, walls.get(0));
         }
 
-        return null;
+        List<Point> intersections = new LinkedList<>();
+        double minDist = Double.MAX_VALUE;
+        Point result = null;
+
+        //get all intersection points and take with min dist
+        for (Vector wall : walls) {
+            Point inter = getIntersection(vector, wall);
+            double dist = distance(inter.x, inter.y, vector.x1, vector.y1);
+
+            if (dist < minDist) {
+                minDist = dist;
+                result = inter;
+            }
+        }
+
+        return result;
     }
 
     public static Point getIntersection(Vector a, Vector b) {

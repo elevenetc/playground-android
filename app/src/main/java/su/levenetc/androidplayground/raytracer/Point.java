@@ -1,4 +1,4 @@
-package su.levenetc.androidplayground.raycaster;
+package su.levenetc.androidplayground.raytracer;
 
 /**
  * Created by eugene.levenetc on 08/03/2018.

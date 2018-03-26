@@ -1,4 +1,4 @@
-package su.levenetc.androidplayground.raycaster;
+package su.levenetc.androidplayground.raytracer;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -41,9 +41,9 @@ public class RayCasterView extends View {
         double cx = width / 2;
         double cy = height / 2;
 
-        ray.initVector.set(cx, cy, 3000, 3000);
+        ray.init(cx, cy, 3000, 3000);
 
-        RayCaster.cast(ray, model);
+        RayTracer.trace(ray, model);
         RayDrawer.draw(ray, canvas);
     }
 }

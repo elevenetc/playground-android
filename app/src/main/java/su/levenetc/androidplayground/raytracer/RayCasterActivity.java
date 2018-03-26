@@ -1,4 +1,4 @@
-package su.levenetc.androidplayground.raycaster;
+package su.levenetc.androidplayground.raytracer;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
