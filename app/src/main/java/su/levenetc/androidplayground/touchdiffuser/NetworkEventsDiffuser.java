@@ -79,9 +79,12 @@ public class NetworkEventsDiffuser {
 			receiverSocket = new DatagramSocket(SERVER_PORT);
 
 			new Thread(() -> {
+
+				byte[] buffer = new byte[600];
+
 				while (true) {
 					try {
-						byte[] buffer = new byte[1024];
+
 						DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
 						receiverSocket.receive(packet);
 
@@ -109,6 +112,7 @@ public class NetworkEventsDiffuser {
 	public static void diffuse(MotionEvent event, View view) {
 
 		eventsQueue.add(new DiffuseEvent(event, view));
+		Log.d(TAG, "size of queue:" + eventsQueue.size());
 	}
 
 	static class DiffuseEvent {
@@ -171,7 +175,7 @@ public class NetworkEventsDiffuser {
 		void handle(ArrivedMotionEvent event);
 	}
 
-	public static class ArrivedMotionEvent{
+	public static class ArrivedMotionEvent {
 		public String id;
 		public MotionEvent event;
 
