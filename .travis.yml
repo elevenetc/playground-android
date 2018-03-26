@@ -5,8 +5,8 @@ sudo: false
 android:
   components:
     - tools
-    - build-tools-25.0.2
     - platform-tools
+    - build-tools-26.0.2
     - extra-android-m2repository
     - extra-google-android-support
   before_cache:
