@@ -37,6 +37,7 @@ public class Out {
 
 	public static void pln(Object msg) {
 		Log.i("", String.valueOf(msg));
+		System.out.println(msg);
 	}
 
 	public static void time(long ms) {

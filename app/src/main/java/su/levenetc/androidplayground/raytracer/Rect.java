@@ -14,12 +14,12 @@ public class Rect {
     double bottom;
     double right;
 
-    Vector topBound = new Vector();
-    Vector bottomBound = new Vector();
-    Vector leftBound = new Vector();
-    Vector rightBound = new Vector();
+    Line topBound = new Line();
+    Line bottomBound = new Line();
+    Line leftBound = new Line();
+    Line rightBound = new Line();
 
-    List<Vector> allBounds = new LinkedList<>();
+    List<Line> allBounds = new LinkedList<>();
 
     public Rect() {
         allBounds.add(topBound);

@@ -7,6 +7,6 @@ package su.levenetc.androidplayground.raytracer;
 public class RayTracer {
     public static void trace(Ray ray, Rect model) {
         Point intersection = RayMath.getClosestWallIntersection(ray.initVector, model);
-        ray.vectors.add(new Vector(ray.initVector, intersection.x, intersection.y));
+        ray.lines.add(new Line(ray.initVector, intersection.x, intersection.y));
     }
 }

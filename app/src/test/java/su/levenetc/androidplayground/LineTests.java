@@ -9,7 +9,7 @@ import static org.junit.Assert.assertEquals;
 /**
  * Created by eugene.levenetc on 13/07/2017.
  */
-public class VectorTests {
+public class LineTests {
 	@Test
 	public void testIntersection01() {
 		Vector vector = new Vector(null, null);

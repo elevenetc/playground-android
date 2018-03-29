@@ -3,9 +3,8 @@ package su.levenetc.androidplayground;
 import org.assertj.core.data.Offset;
 import org.junit.Test;
 
+import su.levenetc.androidplayground.raytracer.Line;
 import su.levenetc.androidplayground.raytracer.RayMath;
-import su.levenetc.androidplayground.raytracer.Vector;
-import su.levenetc.androidplayground.utils.Out;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -16,48 +15,54 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class RayTracerTests {
     @Test
     public void perpendicularDotProduct() {
-        Vector horiz = new Vector(0, 0, 100, 0);
-        Vector vert = new Vector(0, 0, 0, 100);
+        Line horiz = new Line(0, 0, 100, 0);
+        Line vert = new Line(0, 0, 0, 100);
 
         assertThat(RayMath.dotProduct(horiz, vert)).isZero();
     }
 
     @Test
     public void testAngles() {
-        assertThat(RayMath.angleBetween(horiz(), diag45())).isEqualTo(45);
-        assertThat(RayMath.angleBetween(horiz(), vert())).isEqualTo(90);
-        assertThat(RayMath.angleBetween(horiz(), horizOpposite())).isEqualTo(180);
+        assertThat(RayMath.angleBetween(horiz(), diag45())).isEqualTo(-315);
+        assertThat(RayMath.angleBetween(horiz(), vert())).isEqualTo(-270);
+        assertThat(RayMath.angleBetween(horiz(), horizOpposite())).isEqualTo(-180);
     }
 
     @Test
     public void testMagnitudes() {
-        assertThat(horiz().magnitude()).isEqualTo(100);
-        assertThat(horizOpposite().magnitude()).isEqualTo(100);
-        assertThat(diag45().magnitude()).isCloseTo(141, Offset.offset(0.5));
+        assertThat(horiz().length()).isEqualTo(100);
+        assertThat(horizOpposite().length()).isEqualTo(100);
+        assertThat(diag45().length()).isCloseTo(141, Offset.offset(0.5));
+    }
+
+    @Test
+    public void normals() {
+        Line diag = diag45();
+        diag.translate(50, 50);
+        diag.initLeftNormal();
     }
 
     @Test
     public void test() {
-        Vector a = new Vector(10, 10, 200, 10);
-        Vector b = new Vector(10, 20, 20, 10);
+        Line a = new Line(10, 10, 200, 10);
+        Line b = new Line(10, 20, 20, 10);
         double angle = RayMath.angleBetween(a, b);
-        Out.pln(angle);
     }
 
-    static Vector vert() {
-        return new Vector(0, 0, 0, 100);
+    static Line vert() {
+        return new Line(0, 0, 0, 100);
     }
 
-    static Vector horiz() {
-        return new Vector(0, 0, 100, 0);
+    static Line horiz() {
+        return new Line(0, 0, 100, 0);
     }
 
-    static Vector horizOpposite() {
-        return new Vector(0, 0, -100, 0);
+    static Line horizOpposite() {
+        return new Line(0, 0, -100, 0);
     }
 
-    static Vector diag45() {
-        return new Vector(0, 0, 100, 100);
+    static Line diag45() {
+        return new Line(0, 0, 100, 100);
     }
 
 }

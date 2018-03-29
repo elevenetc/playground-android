@@ -16,6 +16,7 @@ public class RayCasterView extends View {
     private Rect boundRect = new Rect();
 
     private Ray ray = new Ray();
+    private Triangle triangle = new Triangle();
 
     public RayCasterView(Context context) {
         super(context);
@@ -36,15 +37,20 @@ public class RayCasterView extends View {
 
         canvas.drawColor(Color.BLACK);
 
+
         int width = canvas.getWidth();
         int height = canvas.getHeight();
         double cx = width / 2;
         double cy = height / 2;
+
+        triangle.init(cx, cy, cx + 100, cy + 100, cx + 200, cy);
+        //triangle.translate(-100, -100);
 
         ray.init(cx, cy, 3000, 3000);
 
         RayTracer.trace(ray, boundRect);
         RayDrawer.draw(boundRect, canvas);
         RayDrawer.draw(ray, canvas);
+        RayDrawer.draw(triangle, canvas);
     }
 }
