@@ -57,7 +57,7 @@ public class RayMath {
         List<Line> walls = new LinkedList<>();
 
         //get all bounds towards ray
-        for (Line bound : model.allBounds) {
+        for (Line bound : model.lines) {
             if (hasIntersection(line, bound)) {
                 walls.add(bound);
             }
