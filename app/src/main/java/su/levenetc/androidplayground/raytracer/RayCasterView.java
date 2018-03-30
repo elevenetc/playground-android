@@ -7,9 +7,6 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
 
-import java.util.LinkedList;
-import java.util.List;
-
 /**
  * Created by eugene.levenetc on 08/03/2018.
  */
@@ -19,11 +16,11 @@ public class RayCasterView extends View {
 
     Scene scene = new Scene();
 
-    private List<Ray> rays = new LinkedList<>();
     private Triangle triangle = new Triangle();
     private Path path;
     private Rect boundRect;
     private boolean initRender;
+    private Light light;
 
     public RayCasterView(Context context) {
         super(context);
@@ -63,11 +60,7 @@ public class RayCasterView extends View {
             path.initRightNormals();
             scene.add(path);
 
-            //init rays
-            rays.add(new Ray(cx, cy, cx + 1000, cy + 1000));
-            rays.add(new Ray(cx, cy, cx + 1000, cy - 1000));
-//            rays.add(new Ray(cx, cy, cx - 1000, cy + 1000));
-//            rays.add(new Ray(cx, cy, cx - 1000, cy - 1000));
+            light = new ConeLight(cx - 300, cy, cx + 2000, cy);
         }
     }
 
@@ -91,7 +84,7 @@ public class RayCasterView extends View {
 
         RayDrawer.draw(boundRect, canvas);
 
-        for (Ray ray : rays) {
+        for (Ray ray : light.rays) {
             RayTracer.trace(ray, scene);
             RayDrawer.draw(ray, canvas);
         }

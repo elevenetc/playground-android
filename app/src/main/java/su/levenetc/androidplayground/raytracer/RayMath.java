@@ -11,6 +11,23 @@ import java.util.List;
 
 public class RayMath {
 
+    public static void rotateLine(Line line, double degrees) {
+        double rads = Math.toRadians(degrees);
+        double cos = Math.cos(rads);
+        double sin = Math.sin(rads);
+
+        //move to origin
+        line.x2 -= line.x1;
+        line.y2 -= line.y1;
+
+        double x = line.x2 * cos - line.y2 * sin;
+        double y = line.x2 * sin + line.y2 * cos;
+
+        //move back
+        line.x2 = x + line.x1;
+        line.y2 = y + line.y1;
+    }
+
     public static double dotProduct(Line ray, Line line) {
         Line rayOrigin = toOrigin(ray);
         Line normalOrigin = toOrigin(line.normal);
@@ -26,8 +43,15 @@ public class RayMath {
     }
 
     public static double angleBetween(Line a, Line b) {
-        double angleA = Math.atan2(a.y1 - a.y2, a.x1 - a.x2);
-        double angleB = Math.atan2(b.y1 - b.y2, b.x1 - b.x2);
+        return angleBetween(
+                a.x1, a.y1, a.x2, a.y2,
+                b.x1, b.y1, b.x2, b.y2);
+    }
+
+    public static double angleBetween(double ax1, double ay1, double ax2, double ay2,
+                                      double bx1, double by1, double bx2, double by2) {
+        double angleA = Math.atan2(ay1 - ay2, ax1 - ax2);
+        double angleB = Math.atan2(by1 - by2, bx1 - bx2);
         return (angleB - angleA) * 180 / Math.PI;
     }
 

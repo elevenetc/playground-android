@@ -4,13 +4,13 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Light {
-    List<Line> rays = new LinkedList<>();
 
-    public Light() {
-        init();
-    }
+    protected final double x;
+    protected final double y;
+    protected List<Ray> rays = new LinkedList<>();
 
-    private void init() {
-
+    public Light(double x, double y) {
+        this.x = x;
+        this.y = y;
     }
 }
