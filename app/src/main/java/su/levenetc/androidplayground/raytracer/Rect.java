@@ -20,6 +20,7 @@ public class Rect extends Shape {
         lines.get(2).set(right, bottom, left, bottom);//bottom
         lines.get(3).set(left, bottom, left, top);//left
 
-        lines.get(1).initRightNormal();
+        //lines.get(1).initRightNormal();
+        initRightNormals();
     }
 }

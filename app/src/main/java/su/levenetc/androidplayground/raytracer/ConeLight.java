@@ -14,28 +14,27 @@ public class ConeLight extends Light {
 
     private void init() {
 
-        double endX = x + 2000;
-        double endY = y + 2000;
-
         rays.add(new Ray(x, y, dirX, dirY));
 
-        for (int i = 0; i < 10; i++) {
-            rays.add(new Ray(x, y, dirX, dirY));
+        int count = 50;
+        double angleDiff = 45d / count;
+
+        for (int i = 0; i < count; i++) {
+            this.rays.add(new Ray(x, y, dirX, dirY));
         }
 
-        double angle = RayMath.angleBetween(x, y, dirX, dirY, x, y, x + 100, y);
-        double cAngle = angle;
+        double angle = 0;
 
-        for (int i = 0; i <= 4; i++) {
-            cAngle += 5;
-            RayMath.rotateLine(rays.get(i).initVector, cAngle);
+        for (int i = 0; i <= (count / 2) - 1; i++) {
+            angle += angleDiff;
+            RayMath.rotateLine(this.rays.get(i).initVector, angle);
         }
 
-        cAngle = angle;
+        angle = 0;
 
-        for (int i = 5; i <= 9; i++) {
-            cAngle -= 5;
-            RayMath.rotateLine(rays.get(i).initVector, cAngle);
+        for (int i = (count / 2); i <= (count - 1); i++) {
+            angle -= angleDiff;
+            RayMath.rotateLine(this.rays.get(i).initVector, angle);
         }
     }
 }

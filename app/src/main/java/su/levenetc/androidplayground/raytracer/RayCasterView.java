@@ -60,7 +60,7 @@ public class RayCasterView extends View {
             path.initRightNormals();
             scene.add(path);
 
-            light = new ConeLight(cx - 300, cy, cx + 2000, cy);
+            light = new ConeLight(cx - 300, cy, cx + 2000, cy + 800);
         }
     }
 
