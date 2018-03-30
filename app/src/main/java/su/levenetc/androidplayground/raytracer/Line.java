@@ -39,11 +39,11 @@ public class Line {
 
     }
 
-    public void translate(double x, double y) {
-        x1 += x;
-        x2 += x;
-        y1 += y;
-        y2 += y;
+    public void translate(double dx, double dy) {
+        x1 += dx;
+        x2 += dx;
+        y1 += dy;
+        y2 += dy;
     }
 
     public void initLeftNormal() {

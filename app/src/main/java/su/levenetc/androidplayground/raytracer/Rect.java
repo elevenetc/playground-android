@@ -9,11 +9,11 @@ public class Rect extends Shape {
     public Rect(double top, double left, double right, double bottom) {
         super(4);
 
-        int padding = 60;
-        top += padding;
-        bottom -= padding;
-        left += padding;
-        right -= padding;
+//        int padding = 60;
+//        top += padding;
+//        bottom -= padding;
+//        left += padding;
+//        right -= padding;
 
         lines.get(0).set(left, top, right, top);//top
         lines.get(1).set(right, top, right, bottom);//right
@@ -21,6 +21,6 @@ public class Rect extends Shape {
         lines.get(3).set(left, bottom, left, top);//left
 
         //lines.get(1).initRightNormal();
-        initRightNormals();
+        //initRightNormals();
     }
 }
