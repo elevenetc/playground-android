@@ -13,13 +13,17 @@ import android.view.View;
 
 public class RayCasterView extends View {
 
-    private Rect boundRect = new Rect();
+
 
     private Ray ray = new Ray();
     private Triangle triangle = new Triangle();
+    private Path path;
+    private Rect boundRect;
 
     public RayCasterView(Context context) {
         super(context);
+
+
     }
 
     public RayCasterView(Context context, @Nullable AttributeSet attrs) {
@@ -29,7 +33,8 @@ public class RayCasterView extends View {
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
-        boundRect.set(left, top, bottom, right);
+        boundRect = new Rect(top, left, right, bottom);
+        boundRect.initRightNormals();
     }
 
     @Override
@@ -43,6 +48,23 @@ public class RayCasterView extends View {
         double cx = width / 2;
         double cy = height / 2;
 
+        if (path == null) {
+            path = new Path.Builder()
+                    .add(cx - 200, cx - 200)
+                    .append(100, 100)
+                    .append(100, 0)
+                    .append(100, -50)
+                    .append(100, 150)
+                    .append(0, 150)
+                    .append(-100, 0)
+                    .append(-100, -100)
+                    .append(-100, 0)
+                    .append(0, -50)
+                    .build();
+
+            path.initRightNormals();
+        }
+
         triangle.init(cx, cy, cx + 100, cy + 100, cx + 200, cy);
         //triangle.translate(-100, -100);
 
@@ -50,7 +72,8 @@ public class RayCasterView extends View {
 
         RayTracer.trace(ray, boundRect);
         RayDrawer.draw(boundRect, canvas);
-        RayDrawer.draw(ray, canvas);
-        RayDrawer.draw(triangle, canvas);
+        //RayDrawer.draw(ray, canvas);
+        //RayDrawer.draw(triangle, canvas);
+        RayDrawer.draw(path, canvas);
     }
 }

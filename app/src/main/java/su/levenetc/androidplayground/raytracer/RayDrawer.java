@@ -11,13 +11,6 @@ import su.levenetc.androidplayground.utils.Paints;
 
 public class RayDrawer {
 
-    public static void draw(Rect rect, Canvas canvas) {
-        drawLine(canvas, rect.topBound, Paints.Stroke.GreenBold, false);
-        drawLine(canvas, rect.leftBound, Paints.Stroke.GreenBold, false);
-        drawLine(canvas, rect.rightBound, Paints.Stroke.GreenBold, false);
-        drawLine(canvas, rect.bottomBound, Paints.Stroke.GreenBold, false);
-    }
-
     public static void draw(Ray ray, Canvas canvas) {
         Line line = ray.lines.get(0);
         drawLine(canvas, line, Paints.Stroke.Yellow, true);
@@ -29,7 +22,7 @@ public class RayDrawer {
         }
     }
 
-    private static void drawLine(Canvas canvas, Line line, Paint paint, boolean bounds) {
+    private static void drawLine(Canvas canvas, Line line, Paint paint, boolean endings) {
         canvas.drawLine((float) line.x1, (float) line.y1, (float) line.x2, (float) line.y2, paint);
 
         if (line.normal != null) {
@@ -37,9 +30,9 @@ public class RayDrawer {
             canvas.drawCircle((float) line.normal.x2, (float) line.normal.y2, 10, Paints.Stroke.Red);
         }
 
-        if (bounds) {
-            canvas.drawCircle((float) line.x1, (float) line.y1, 25f, Paints.Fill.Yellow);
-            canvas.drawCircle((float) line.x2, (float) line.y2, 15f, Paints.Fill.Green);
+        if (endings) {
+            canvas.drawCircle((float) line.x1, (float) line.y1, 10f, Paints.Stroke.Yellow);
+            canvas.drawCircle((float) line.x2, (float) line.y2, 5f, Paints.Stroke.Green);
         }
     }
 }

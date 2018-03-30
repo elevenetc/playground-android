@@ -1,48 +1,16 @@
 package su.levenetc.androidplayground.raytracer;
 
-import java.util.LinkedList;
-import java.util.List;
-
 /**
  * Created by eugene.levenetc on 08/03/2018.
  */
 
-public class Rect {
+public class Rect extends Shape {
 
-    double left;
-    double top;
-    double bottom;
-    double right;
-
-    Line topBound = new Line();
-    Line bottomBound = new Line();
-    Line leftBound = new Line();
-    Line rightBound = new Line();
-
-    List<Line> allBounds = new LinkedList<>();
-
-    public Rect() {
-        allBounds.add(topBound);
-        allBounds.add(bottomBound);
-        allBounds.add(leftBound);
-        allBounds.add(rightBound);
-    }
-
-    public void set(double left, double top, double bottom, double right) {
-        this.left = left;
-        this.top = top;
-        this.bottom = bottom;
-        this.right = right;
-
-        topBound.set(left, top, right, top);
-        bottomBound.set(left, bottom, right, bottom);
-        leftBound.set(left, bottom, left, top);
-        rightBound.set(right, bottom, right, top);
-
-        topBound.setNormal((right - left) / 2, top, (right - left) / 2, top + 100);
-        bottomBound.setNormal((right - left) / 2, bottom, (right - left) / 2, bottom - 100);
-
-        leftBound.setNormal(left, (bottom - top) / 2, left + 100, (bottom - top) / 2);
-        rightBound.setNormal(right, (bottom - top) / 2, right - 100, (bottom - top) / 2);
+    public Rect(double top, double left, double right, double bottom) {
+        super(4);
+        lines.get(0).set(left, top, right, top);//top
+        lines.get(1).set(right, bottom, right, top);//right
+        lines.get(2).set(left, bottom, right, bottom);//bottom
+        lines.get(3).set(left, bottom, left, top);//left
     }
 }

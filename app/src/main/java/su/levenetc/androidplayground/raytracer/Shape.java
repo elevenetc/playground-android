@@ -14,10 +14,12 @@ public class Shape {
         }
     }
 
-    protected void initNormals() {
-        for (Line line : lines) {
-            line.initLeftNormal();
-        }
+    protected void initRightNormals() {
+        for (Line line : lines) line.initRightNormal();
+    }
+
+    protected void initLeftNormals() {
+        for (Line line : lines) line.initLeftNormal();
     }
 
     public void translate(double x, double y) {
