@@ -12,8 +12,12 @@ import su.levenetc.androidplayground.utils.Paints;
 public class RayDrawer {
 
     public static void draw(Ray ray, Canvas canvas) {
-        Line line = ray.lines.get(0);
-        drawLine(canvas, line, Paints.Stroke.Yellow, true);
+        if (!ray.lines.isEmpty()) {
+            Line line = ray.lines.get(0);
+            drawLine(canvas, line, Paints.Stroke.Yellow, true);
+        } else {
+            drawLine(canvas, ray.initVector, Paints.Stroke.Red, true);
+        }
     }
 
     public static void draw(Shape shape, Canvas canvas) {
@@ -26,8 +30,7 @@ public class RayDrawer {
         canvas.drawLine((float) line.x1, (float) line.y1, (float) line.x2, (float) line.y2, paint);
 
         if (line.normal != null) {
-            canvas.drawLine((float) line.normal.x1, (float) line.normal.y1, (float) line.normal.x2, (float) line.normal.y2, Paints.Stroke.Green);
-            canvas.drawCircle((float) line.normal.x2, (float) line.normal.y2, 10, Paints.Stroke.Red);
+            canvas.drawLine((float) line.normal.x1, (float) line.normal.y1, (float) line.normal.x2, (float) line.normal.y2, Paints.Stroke.Red);
         }
 
         if (endings) {

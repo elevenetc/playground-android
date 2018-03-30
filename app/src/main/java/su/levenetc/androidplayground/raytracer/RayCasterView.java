@@ -7,6 +7,9 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
 
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * Created by eugene.levenetc on 08/03/2018.
  */
@@ -14,11 +17,13 @@ import android.view.View;
 public class RayCasterView extends View {
 
 
+    Scene scene = new Scene();
 
-    private Ray ray = new Ray();
+    private List<Ray> rays = new LinkedList<>();
     private Triangle triangle = new Triangle();
     private Path path;
     private Rect boundRect;
+    private boolean initRender;
 
     public RayCasterView(Context context) {
         super(context);
@@ -30,27 +35,20 @@ public class RayCasterView extends View {
         super(context, attrs);
     }
 
-    @Override
-    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        super.onLayout(changed, left, top, right, bottom);
-        boundRect = new Rect(top, left, right, bottom);
-        boundRect.initRightNormals();
+    private void init() {
+
     }
 
-    @Override
-    protected void onDraw(Canvas canvas) {
+    private void preRenderInit(int width, int height) {
+        if (!initRender) {
+            initRender = true;
 
-        canvas.drawColor(Color.BLACK);
+            double cx = width / 2;
+            double cy = height / 2;
 
 
-        int width = canvas.getWidth();
-        int height = canvas.getHeight();
-        double cx = width / 2;
-        double cy = height / 2;
-
-        if (path == null) {
             path = new Path.Builder()
-                    .add(cx - 200, cx - 200)
+                    .add(cx, cy - 75)
                     .append(100, 100)
                     .append(100, 0)
                     .append(100, -50)
@@ -63,17 +61,41 @@ public class RayCasterView extends View {
                     .build();
 
             path.initRightNormals();
+            scene.add(path);
+
+            //init rays
+            rays.add(new Ray(cx, cy, cx + 1000, cy + 1000));
+            rays.add(new Ray(cx, cy, cx + 1000, cy - 1000));
+//            rays.add(new Ray(cx, cy, cx - 1000, cy + 1000));
+//            rays.add(new Ray(cx, cy, cx - 1000, cy - 1000));
+        }
+    }
+
+    @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        super.onLayout(changed, left, top, right, bottom);
+        boundRect = new Rect(top, left, right, bottom);
+        //boundRect.initRightNormals();
+        scene.add(boundRect);
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+
+        canvas.drawColor(Color.BLACK);
+
+        int width = canvas.getWidth();
+        int height = canvas.getHeight();
+
+        preRenderInit(width, height);
+
+        RayDrawer.draw(boundRect, canvas);
+
+        for (Ray ray : rays) {
+            RayTracer.trace(ray, scene);
+            RayDrawer.draw(ray, canvas);
         }
 
-        triangle.init(cx, cy, cx + 100, cy + 100, cx + 200, cy);
-        //triangle.translate(-100, -100);
-
-        ray.init(cx, cy, 3000, 3000);
-
-        RayTracer.trace(ray, boundRect);
-        RayDrawer.draw(boundRect, canvas);
-        //RayDrawer.draw(ray, canvas);
-        //RayDrawer.draw(triangle, canvas);
         RayDrawer.draw(path, canvas);
     }
 }

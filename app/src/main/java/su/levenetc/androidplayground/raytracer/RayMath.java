@@ -11,40 +11,41 @@ import java.util.List;
 
 public class RayMath {
 
+    public static double dotProduct(Line ray, Line line) {
+        Line rayOrigin = toOrigin(ray);
+        Line normalOrigin = toOrigin(line.normal);
+        return rayOrigin.x2 * normalOrigin.x2 + rayOrigin.y2 * normalOrigin.y2;
+    }
+
+    static Line toOrigin(Line line) {
+        double diffX = line.x1;
+        double diffY = line.y1;
+
+        //TODO: cache instance
+        return new Line(0, 0, line.x2 - diffX, line.y2 - diffY);
+    }
+
     public static double angleBetween(Line a, Line b) {
-        double angle1 = Math.atan2(a.y1 - a.y2, a.x1 - a.x2);
-        double angle2 = Math.atan2(b.y1 - b.y2, b.x1 - b.x2);
-        double result = (angle2 - angle1) * 180 / Math.PI;
-        //if (result < 0) {result += 360;}
+        double angleA = Math.atan2(a.y1 - a.y2, a.x1 - a.x2);
+        double angleB = Math.atan2(b.y1 - b.y2, b.x1 - b.x2);
+        return (angleB - angleA) * 180 / Math.PI;
+    }
+
+    public static boolean isReflectedByNormalAndIntersection(Line ray, Line line) {
+        boolean hasIntersection = hasIntersection(ray, line);
+        boolean reflectedByNormal = isReflectedByNormal(ray, line);
+        return hasIntersection && reflectedByNormal;
+    }
+
+    public static boolean isReflectedByNormal(Line ray, Line line) {
+
+        boolean result = false;
+
+        if (line.hasNormal()) {
+            result = dotProduct(ray, line) < 0;
+        }
+
         return result;
-    }
-
-    public static double dotProduct(Line a, Line b) {
-        return a.x1 * b.x1 + a.y1 * b.y1 +
-                a.x2 * b.x2 + a.y2 * b.y2;
-    }
-
-    public static double angle(Line v1, Line v2) {
-        //double normProduct = v1.getNorm() * v2.getNorm();
-//        if (normProduct == 0) {
-//            throw new MathArithmeticException(LocalizedFormats.ZERO_NORM);
-//        }
-//
-//        double dot = v1.dotProduct(v2);
-//        double threshold = normProduct * 0.9999;
-//        if ((dot < -threshold) || (dot > threshold)) {
-//            // the lines are almost aligned, compute using the sine
-//            final double n = FastMath.abs(MathArrays.linearCombination(v1.x, v2.y, -v1.y, v2.x));
-//            if (dot >= 0) {
-//                return FastMath.asin(n / normProduct);
-//            }
-//            return FastMath.PI - FastMath.asin(n / normProduct);
-//        }
-//
-//        // the lines are sufficiently separated to use the cosine
-//        return FastMath.acos(dot / normProduct);
-
-        return 0;
     }
 
     public static double distance(double x1, double y1, double x2, double y2) {
@@ -53,30 +54,30 @@ public class RayMath {
         return Math.sqrt(x1 * x1 + y1 * y1);
     }
 
-    public static Point getClosestWallIntersection(Line line, Rect model) {
-        List<Line> walls = new LinkedList<>();
+    public static Point getClosestWallIntersection(Line ray, Scene scene) {
 
-        //get all bounds towards ray
-        for (Line bound : model.lines) {
-            if (hasIntersection(line, bound)) {
-                walls.add(bound);
-            }
-        }
+        //TODO: use cached list
+        List<Line> boundaries = new LinkedList<>();
 
-        if (walls.isEmpty()) {
+        //get all intersection lines with array
+        for (Shape object : scene.objects)
+            for (Line bound : object.lines)
+                if (isReflectedByNormalAndIntersection(ray, bound))
+                    boundaries.add(bound);
+
+        if (boundaries.isEmpty()) {
             return null;
-        } else if (walls.size() == 1) {
-            return getIntersection(line, walls.get(0));
+        } else if (boundaries.size() == 1) {
+            return getIntersection(ray, boundaries.get(0));
         }
 
-        List<Point> intersections = new LinkedList<>();
         double minDist = Double.MAX_VALUE;
         Point result = null;
 
-        //get all intersection points and take with min dist
-        for (Line wall : walls) {
-            Point inter = getIntersection(line, wall);
-            double dist = distance(inter.x, inter.y, line.x1, line.y1);
+        //get all intersection points and take closest
+        for (Line bound : boundaries) {
+            Point inter = getIntersection(ray, bound);
+            double dist = distance(inter.x, inter.y, ray.x1, ray.y1);
 
             if (dist < minDist) {
                 minDist = dist;

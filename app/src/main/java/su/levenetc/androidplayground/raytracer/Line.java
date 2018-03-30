@@ -106,6 +106,14 @@ public class Line {
         return x1 == x2;
     }
 
+    public boolean hasNormal() {
+        return normal != null;
+    }
+
+    public Line normal() {
+        return normal;
+    }
+
     public void setNormal(double x1, double y1, double x2, double y2) {
         normal = new Line(x1, y1, x2, y2);
     }
@@ -178,7 +186,7 @@ public class Line {
                 '}';
     }
 
-    enum Direction {
+    public enum Direction {
         N, E, S, W,
         NE, SE, SW, NW
     }
