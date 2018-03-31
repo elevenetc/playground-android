@@ -36,8 +36,6 @@ public class RayMathTests {
 
         assertThat(RayMath.angleBetween(horiz.normal(), sw45())).isEqualTo(45);
         assertThat(RayMath.angleBetween(horiz.normal(), se45())).isEqualTo(-45);
-
-
     }
 
     @Test

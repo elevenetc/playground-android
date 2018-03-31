@@ -17,19 +17,17 @@ public class RayTracerView extends View {
 
     Scene scene = new Scene();
 
-    private Triangle triangle = new Triangle();
-    private Path path;
     private boolean initRender;
     private Light light;
 
     public RayTracerView(Context context) {
         super(context);
-
-
+        init();
     }
 
     public RayTracerView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        init();
     }
 
     private void init() {
@@ -46,7 +44,7 @@ public class RayTracerView extends View {
             double initX = cx;
             double initY = cy - 75;
 
-            path = new Path.Builder()
+            Path path = new Path.Builder()
                     .add(initX, initY)
                     .append(100, 100)
                     .append(100, 0)
