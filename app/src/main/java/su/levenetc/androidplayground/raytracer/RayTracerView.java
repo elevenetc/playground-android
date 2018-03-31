@@ -8,6 +8,9 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+import su.levenetc.androidplayground.raytracer.drawers.DebugDrawer;
+import su.levenetc.androidplayground.raytracer.drawers.Drawer;
+
 /**
  * Created by eugene.levenetc on 08/03/2018.
  */
@@ -16,6 +19,7 @@ public class RayTracerView extends View {
 
 
     Scene scene = new Scene();
+    Drawer drawer = new DebugDrawer();
 
     private boolean initRender;
     private Light light;
@@ -84,7 +88,11 @@ public class RayTracerView extends View {
 
             //
 
-            light = new ConeLight(cx - 300, cy, cx + 2000, cy + 800);
+            light = new ConeLight(
+                    5,
+                    cx - 300, cy,
+                    cx + 2000, cy + 800
+            );
             RayTracer.trace(light, scene);
         }
     }
@@ -126,7 +134,7 @@ public class RayTracerView extends View {
 
         preRenderInit(width, height);
 
-        RayDrawer.draw(scene, canvas);
-        RayDrawer.draw(light, canvas);
+        drawer.draw(scene, canvas);
+        drawer.draw(light, canvas);
     }
 }

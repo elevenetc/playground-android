@@ -14,11 +14,11 @@ import static su.levenetc.androidplayground.raytracer.Line.Direction.W;
 
 public class Line {
 
-    double x1;
-    double y1;
+    public double x1;
+    public double y1;
 
-    double x2;
-    double y2;
+    public double x2;
+    public double y2;
 
     Line normal;
 

@@ -8,6 +8,7 @@ import java.util.List;
  */
 
 public class Ray {
+
     Line initVector = new Line();
     List<Line> lines = new LinkedList<>();
 
@@ -23,5 +24,13 @@ public class Ray {
         initVector.set(x1, y1, x2, y2);
         //TODO: cache/pool
         lines.clear();
+    }
+
+    public List<Line> lines(){
+        return lines;
+    }
+
+    public Line initVector(){
+        return initVector;
     }
 }

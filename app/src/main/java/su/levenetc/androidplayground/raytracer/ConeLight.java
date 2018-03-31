@@ -4,12 +4,13 @@ public class ConeLight extends Light {
 
     private double dirX;
     private double dirY;
-    int count = 100;
+    int raysCount = 100;
 
-    public ConeLight(double x, double y, double dirX, double dirY) {
+    public ConeLight(int rays, double x, double y, double dirX, double dirY) {
         super(x, y);
         this.dirX = dirX;
         this.dirY = dirY;
+        this.raysCount = rays;
         init();
     }
 
@@ -19,18 +20,18 @@ public class ConeLight extends Light {
     }
 
     private void rotateInitVectors() {
-        double angleDiff = 45d / count;
+        double angleDiff = 45d / raysCount;
 
         double angle = 0;
 
-        for (int i = 0; i <= (count / 2) - 1; i++) {
+        for (int i = 0; i <= (raysCount / 2) - 1; i++) {
             angle += angleDiff;
             RayMath.rotateLine(this.rays.get(i).initVector, angle);
         }
 
         angle = 0;
 
-        for (int i = (count / 2); i <= (count - 1); i++) {
+        for (int i = (raysCount / 2); i <= (raysCount - 1); i++) {
             angle -= angleDiff;
             RayMath.rotateLine(this.rays.get(i).initVector, angle);
         }
@@ -54,7 +55,7 @@ public class ConeLight extends Light {
 
     private void initRays() {
         rays.add(new Ray(x, y, dirX, dirY));
-        for (int i = 0; i < count; i++)
+        for (int i = 0; i < raysCount; i++)
             this.rays.add(new Ray(x, y, dirX, dirY));
     }
 

@@ -17,4 +17,8 @@ public class Light {
     public void updatePosition(double x, double y) {
 
     }
+
+    public List<Ray> rays(){
+        return rays;
+    }
 }

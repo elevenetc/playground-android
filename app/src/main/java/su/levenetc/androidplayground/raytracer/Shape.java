@@ -25,4 +25,8 @@ public class Shape {
     public void translate(double x, double y) {
         for (Line line : lines) line.translate(x, y);
     }
+
+    public List<Line> lines() {
+        return lines;
+    }
 }

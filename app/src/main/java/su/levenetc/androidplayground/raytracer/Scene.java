@@ -10,4 +10,8 @@ public class Scene {
     public void add(Shape shape) {
         objects.add(shape);
     }
+
+    public List<Shape> objects() {
+        return objects;
+    }
 }
