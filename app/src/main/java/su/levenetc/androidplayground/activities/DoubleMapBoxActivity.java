@@ -13,7 +13,7 @@ public class DoubleMapBoxActivity extends AppCompatActivity {
 
 		Mapbox.getInstance(this, "pk.eyJ1IjoiZXVnZW5lbGV2ZW5ldGMiLCJhIjoiY2l5ZWxyZXF2MDA5aDMzcXBzcHA5M2h6ZiJ9.MFk21zgnp3syT1f1UFvSsA");
 		setContentView(R.layout.activity_double_mapbox);
-		MapView mapView = (MapView) findViewById(R.id.mapView);
+		MapView mapView = findViewById(R.id.mapView);
 		mapView.onCreate(savedInstanceState);
 	}
 }

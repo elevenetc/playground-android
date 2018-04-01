@@ -143,10 +143,7 @@ public class Vector {
 
 		// check if this is a proper intersection BEFORE truncating values,
 		// to avoid spurious equality comparisons with endpoints
-		isProper = true;
-		if (pa.equals(p1) || pa.equals(p2) || pa.equals(p3) || pa.equals(p4)) {
-			isProper = false;
-		}
+        isProper = !pa.equals(p1) && !pa.equals(p2) && !pa.equals(p3) && !pa.equals(p4);
 
 		pa.fixZeroes();
 

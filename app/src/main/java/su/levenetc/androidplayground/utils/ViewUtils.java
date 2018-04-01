@@ -291,11 +291,7 @@ public class ViewUtils {
 	}
 
 	public static boolean isContains(int touchX, int touchY, int x, int y, int w, int h) {
-		if (touchX < x || touchX > x + w || touchY < y || touchY > y + h) {
-			return false;
-		} else {
-			return true;
-		}
+        return touchX >= x && touchX <= x + w && touchY >= y && touchY <= y + h;
 	}
 
 	public static void setColorState(TextView textView, int resColorId) {

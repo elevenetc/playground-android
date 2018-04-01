@@ -19,16 +19,16 @@ public class TouchDiffuserActivity extends AppCompatActivity {
 	@Override protected void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_touch_events);
-		ViewGroup rootContainer = (ViewGroup) findViewById(R.id.root_container);
-		RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-		ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
+		ViewGroup rootContainer = findViewById(R.id.root_container);
+		RecyclerView recyclerView = findViewById(R.id.recycler_view);
+		ViewPager viewPager = findViewById(R.id.view_pager);
 
 		recyclerView.setLayoutManager(new LinearLayoutManager(this));
 		recyclerView.setAdapter(ViewUtils.getFilledRecyclerViewAdapter());
 
 		viewPager.setAdapter(ViewUtils.getFilledViewPagerAdapter(this, 20));
 
-		rootView = (ViewGroup) findViewById(android.R.id.content);
+		rootView = findViewById(android.R.id.content);
 
 		NetworkEventsDiffuser.setMotionReceiver(new NetworkEventsDiffuser.MotionEventsReceiver() {
 			@Override public void handle(NetworkEventsDiffuser.ArrivedMotionEvent event) {

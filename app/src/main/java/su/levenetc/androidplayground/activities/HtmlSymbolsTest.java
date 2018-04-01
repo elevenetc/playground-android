@@ -24,7 +24,7 @@ public class HtmlSymbolsTest extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_html_symbols);
 
-        textView = (TextView) findViewById(R.id.text_view);
+        textView = findViewById(R.id.text_view);
 
         final ReplaceMethod custom = new ReplaceMethod() {
             @Override

@@ -56,7 +56,7 @@ def loadOrCreateApp() {
     checkAndDeleteApps(apps)
 
     for (int i = 0; i < apps.size(); i++) {
-        def a = apps.get(i);
+        def a = apps.get(i)
         if (a.title == title) {
             app = a
             log('App already created for ' + title)
@@ -157,7 +157,7 @@ def getCurrentBranches() {
     return execGit('branch -a')
 }
 
-def String execGit(String command) {
+String execGit(String command) {
     sh 'git ' + command + ' > ' + Config.tempFileName
     return readFile(Config.tempFileName).trim()
 }
@@ -168,7 +168,7 @@ def createVersion() {
     checkError()
 }
 
-def List loadApps() {
+List loadApps() {
     println 'METHOD: loadApps'
     def response = request('-H "X-HockeyAppToken: ' + Config.hockeyToken + '" https://rink.hockeyapp.net/api/2/apps')
     return response.apps

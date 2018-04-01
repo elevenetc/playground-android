@@ -29,9 +29,9 @@ public class RotationSensorView extends LinearLayout {
 	private void init() {
 		setOrientation(VERTICAL);
 		LayoutInflater.from(getContext()).inflate(R.layout.view_rotation_sensor, this, true);
-		deflectionX = (DeflectionView) findViewById(R.id.deflection_x);
-		deflectionY = (DeflectionView) findViewById(R.id.deflection_y);
-		deflectionZ = (DeflectionView) findViewById(R.id.deflection_z);
+		deflectionX = findViewById(R.id.deflection_x);
+		deflectionY = findViewById(R.id.deflection_y);
+		deflectionZ = findViewById(R.id.deflection_z);
 		setWillNotDraw(false);
 	}
 

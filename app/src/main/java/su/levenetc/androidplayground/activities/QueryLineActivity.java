@@ -13,7 +13,7 @@ public class QueryLineActivity extends AppCompatActivity {
 	@Override protected void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_queryline);
-		queryLine = (QueryLine) findViewById(R.id.query_line);
+		queryLine = findViewById(R.id.query_line);
 	}
 
 	@Override public void onBackPressed() {

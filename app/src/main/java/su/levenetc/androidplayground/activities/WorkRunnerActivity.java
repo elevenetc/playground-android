@@ -54,7 +54,7 @@ public class WorkRunnerActivity extends AppCompatActivity {
         }
 
         @Override
-        public Result call() throws Exception {
+        public Result call() {
             int result = input;
             for (int i = 0; i < 10; i++) {
                 result++;

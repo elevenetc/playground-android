@@ -19,9 +19,9 @@ public class OpenGLSampleActivity extends AppCompatActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_opengl_sample);
-		glView = (GLView) findViewById(R.id.view_gl);
-		textFps = (TextView) findViewById(R.id.text_fps);
-		GLViewConfig glViewConfig = (GLViewConfig) findViewById(R.id.view_gl_config);
+		glView = findViewById(R.id.view_gl);
+		textFps = findViewById(R.id.text_fps);
+		GLViewConfig glViewConfig = findViewById(R.id.view_gl_config);
 
 		glViewConfig.setUpXHandler(value -> {
 			glView.getRenderer().setUpX(value);

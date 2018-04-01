@@ -46,8 +46,8 @@ public class SeekBarExtended extends LinearLayout {
     private void init() {
         setOrientation(HORIZONTAL);
         LayoutInflater.from(getContext()).inflate(R.layout.view_seekbar_extended, this, true);
-        textTitle = (TextView) findViewById(R.id.text_title);
-        seekBar = (SeekBar) findViewById(R.id.seek_bar);
+        textTitle = findViewById(R.id.text_title);
+        seekBar = findViewById(R.id.seek_bar);
 
         if (title == null) title = "Undefined";
 

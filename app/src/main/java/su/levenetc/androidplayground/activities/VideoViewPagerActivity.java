@@ -24,8 +24,8 @@ public class VideoViewPagerActivity extends AppCompatActivity {
 				"Text C"
 		};
 
-		final VideoViewPager videoViewPager = (VideoViewPager) findViewById(R.id.video_viewpager);
-		final AnimatedTextView animatedTextView = (AnimatedTextView) findViewById(R.id.text_animated);
+		final VideoViewPager videoViewPager = findViewById(R.id.video_viewpager);
+		final AnimatedTextView animatedTextView = findViewById(R.id.text_animated);
 		final VideoPagerAdapter adapter = new VideoPagerAdapter(new int[]{
 //				R.raw.video_01,
 //				R.raw.video_02,

@@ -19,6 +19,7 @@ public class Paints {
 	}
 
 	public static class Fill {
+		public static Paint White = fill(Color.WHITE);
 		public static Paint Red = fill(Color.RED);
 		public static Paint Blue = fill(Color.BLUE);
 		public static Paint Grey = fill(Color.DKGRAY);

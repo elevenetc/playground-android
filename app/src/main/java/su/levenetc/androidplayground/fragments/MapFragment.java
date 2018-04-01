@@ -44,13 +44,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         View result = inflater.inflate(R.layout.map_editor_view, container, false);
 
 
-        mapView = (MapView) result.findViewById(R.id.map_view);
-        mapEditorLayer = (MapEditorLayer) result.findViewById(R.id.map_editor_layer);
+        mapView = result.findViewById(R.id.map_view);
+        mapEditorLayer = result.findViewById(R.id.map_editor_layer);
         mapView.onCreate(savedInstanceState);
 
         mapView.getMapAsync(this);
 
-        MapWrapperLayout mapWrapperLayout = (MapWrapperLayout) result.findViewById(R.id.wrapper_layout);
+        MapWrapperLayout mapWrapperLayout = result.findViewById(R.id.wrapper_layout);
 
         mapWrapperLayout.setOnDragListener(new MapWrapperLayout.OnDragListener() {
             @Override

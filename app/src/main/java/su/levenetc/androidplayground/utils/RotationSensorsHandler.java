@@ -217,7 +217,7 @@ public class RotationSensorsHandler implements SensorEventListener {
 		}
 	}
 
-	public static interface Handler {
+	public interface Handler {
 		void handleYawn(float value);
 
 		void handlePitch(float value);

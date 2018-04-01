@@ -16,7 +16,7 @@ public class MapWrapperLayout extends FrameLayout {
 	private GestureDetector gestureDetector;
 
 	public interface OnDragListener {
-		public void onDrag(MotionEvent motionEvent);
+		void onDrag(MotionEvent motionEvent);
 	}
 
 	private VelocityTracker velocityTracker;
