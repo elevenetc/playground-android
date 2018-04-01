@@ -10,6 +10,7 @@ import android.view.View;
 
 import su.levenetc.androidplayground.raytracer.drawers.DebugDrawer;
 import su.levenetc.androidplayground.raytracer.drawers.Drawer;
+import su.levenetc.androidplayground.raytracer.drawers.V1Drawer;
 
 /**
  * Created by eugene.levenetc on 08/03/2018.
@@ -19,7 +20,8 @@ public class RayTracerView extends View {
 
 
     Scene scene = new Scene();
-    Drawer drawer = new DebugDrawer();
+    Drawer debugDrawer = new DebugDrawer();
+    Drawer drawerV1 = new V1Drawer();
 
     private boolean initRender;
     private Light light;
@@ -48,31 +50,31 @@ public class RayTracerView extends View {
             double initX = cx;
             double initY = cy - 75;
 
-            Path path = new Path.Builder()
-                    .add(initX, initY)
-                    .append(100, 100)
-                    .append(100, 0)
-                    .append(100, -50)
-                    .append(100, 150)
-                    .append(0, 150)
-                    .append(-100, 0)
-                    .append(-100, -100)
-                    .append(-100, 0)
-                    .append(0, -50)
-                    .append(-50, 0)
-                    .append(0, 100)
-                    .append(100, 0)
-                    .append(100, 100)
-                    .append(200, 0)
-                    .append(0, -300)
-                    .append(-100, -100)
-                    .append(-100, 0)
-                    .append(-100, 50)
-                    .add(initX, initY)
-                    .build();
-
-            path.initRightNormals();
-            scene.add(path);
+//            Path path = new Path.Builder()
+//                    .add(initX, initY)
+//                    .append(100, 100)
+//                    .append(100, 0)
+//                    .append(100, -50)
+//                    .append(100, 150)
+//                    .append(0, 150)
+//                    .append(-100, 0)
+//                    .append(-100, -100)
+//                    .append(-100, 0)
+//                    .append(0, -50)
+//                    .append(-50, 0)
+//                    .append(0, 100)
+//                    .append(100, 0)
+//                    .append(100, 100)
+//                    .append(200, 0)
+//                    .append(0, -300)
+//                    .append(-100, -100)
+//                    .append(-100, 0)
+//                    .append(-100, 50)
+//                    .add(initX, initY)
+//                    .build();
+//
+//            path.initRightNormals();
+//            scene.add(path);
 
             //
 
@@ -82,27 +84,44 @@ public class RayTracerView extends View {
 
             //
 
-            Rect dummyRect = new Rect(600, 200, 300, 800);
-            dummyRect.initLeftNormals();
-            scene.add(dummyRect);
+            Rect dummyRect01 = Rect.byLoc(700, 300, 150, 150);
+            dummyRect01.initLeftNormals();
+            scene.add(dummyRect01);
+
+            Rect dummyRect02 = Rect.byLoc(300, 470, 150, 150);
+            dummyRect02.initLeftNormals();
+            scene.add(dummyRect02);
+
+            Rect dummyRect03 = Rect.byLoc(300, 670, 250, 20);
+            dummyRect03.initLeftNormals();
+            scene.add(dummyRect03);
+
+            Rect dummyRect04 = Rect.byLoc(400, 770, 50, 50);
+            dummyRect04.initLeftNormals();
+            scene.add(dummyRect04);
+
+            Rect dummyRect05 = Rect.byLoc(400, 850, 50, 50);
+            dummyRect05.initLeftNormals();
+            scene.add(dummyRect05);
+
+            Rect dummyRect06 = Rect.byLoc(400, 930, 50, 50);
+            dummyRect06.initLeftNormals();
+            scene.add(dummyRect06);
+
+            Rect dummyRect10 = Rect.byLoc(600, 1200, 550, 20);
+            dummyRect10.initLeftNormals();
+            scene.add(dummyRect10);
 
             //
 
             light = new ConeLight(
-                    5,
+                    100,
                     cx - 300, cy,
                     cx + 2000, cy + 800
             );
             RayTracer.trace(light, scene);
         }
     }
-
-    @Override
-    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        super.onLayout(changed, left, top, right, bottom);
-
-    }
-
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -134,7 +153,9 @@ public class RayTracerView extends View {
 
         preRenderInit(width, height);
 
-        drawer.draw(scene, canvas);
-        drawer.draw(light, canvas);
+//        debugDrawer.draw(scene, canvas);
+        //debugDrawer.draw(light, canvas);
+
+        drawerV1.draw(light, canvas);
     }
 }

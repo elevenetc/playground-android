@@ -6,6 +6,10 @@ package su.levenetc.androidplayground.raytracer;
 
 public class Rect extends Shape {
 
+    public static Rect byLoc(double x, double y, double width, double height){
+        return new Rect(y, x, x + width, y + height);
+    }
+
     public Rect(double top, double left, double right, double bottom) {
         super(4);
 

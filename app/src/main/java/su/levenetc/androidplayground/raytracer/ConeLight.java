@@ -4,7 +4,7 @@ public class ConeLight extends Light {
 
     private double dirX;
     private double dirY;
-    int raysCount = 100;
+    int raysCount;
 
     public ConeLight(int rays, double x, double y, double dirX, double dirY) {
         super(x, y);
@@ -26,14 +26,14 @@ public class ConeLight extends Light {
 
         for (int i = 0; i <= (raysCount / 2) - 1; i++) {
             angle += angleDiff;
-            RayMath.rotateLine(this.rays.get(i).initVector, angle);
+            RayMath.rotateLine(this.rays.get(i).initVector, angle + getDirectionBias());
         }
 
         angle = 0;
 
         for (int i = (raysCount / 2); i <= (raysCount - 1); i++) {
             angle -= angleDiff;
-            RayMath.rotateLine(this.rays.get(i).initVector, angle);
+            RayMath.rotateLine(this.rays.get(i).initVector, angle + getDirectionBias());
         }
     }
 
@@ -57,6 +57,10 @@ public class ConeLight extends Light {
         rays.add(new Ray(x, y, dirX, dirY));
         for (int i = 0; i < raysCount; i++)
             this.rays.add(new Ray(x, y, dirX, dirY));
+    }
+
+    private double getDirectionBias() {
+        return Math.random() * 0.5;
     }
 
 }
