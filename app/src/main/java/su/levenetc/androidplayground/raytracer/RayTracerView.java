@@ -153,9 +153,9 @@ public class RayTracerView extends View {
 
         preRenderInit(width, height);
 
-//        debugDrawer.draw(scene, canvas);
-        //debugDrawer.draw(light, canvas);
+        debugDrawer.draw(scene, canvas);
+        debugDrawer.draw(light, canvas);
 
-        drawerV1.draw(light, canvas);
+//        drawerV1.draw(light, canvas);
     }
 }

@@ -28,8 +28,11 @@ public class DebugDrawer implements Drawer {
 
     public void draw(Ray ray, Canvas canvas) {
         if (!ray.lines().isEmpty()) {
-            Line line = ray.lines().get(0);
-            drawLine(canvas, line, Paints.Stroke.Yellow, true);
+
+            for (Line line : ray.lines()) {
+                drawLine(canvas, line, Paints.Stroke.Yellow, true);
+            }
+
         } else {
             drawLine(canvas, ray.initVector(), Paints.Stroke.Red, true);
         }

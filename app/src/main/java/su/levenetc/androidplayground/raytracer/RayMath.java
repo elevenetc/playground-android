@@ -78,10 +78,20 @@ public class RayMath {
         return Math.sqrt(x1 * x1 + y1 * y1);
     }
 
-    public static Point getClosestWallIntersection(Line ray, Scene scene) {
+    static class Intersection {
+        public Point point;
+        public Line bound;
+    }
+
+    final static Intersection intersection = new Intersection();
+
+    public static Intersection getClosestWallIntersection(Line ray, Scene scene) {
 
         //TODO: use cached list
         List<Line> boundaries = new LinkedList<>();
+
+        intersection.bound = null;
+        intersection.point = null;
 
         //get all intersection lines with array
         for (Shape object : scene.objects)
@@ -92,11 +102,12 @@ public class RayMath {
         if (boundaries.isEmpty()) {
             return null;
         } else if (boundaries.size() == 1) {
-            return getIntersection(ray, boundaries.get(0));
+            intersection.bound = boundaries.get(0);
+            intersection.point = getIntersection(ray, boundaries.get(0));
+            return intersection;
         }
 
         double minDist = Double.MAX_VALUE;
-        Point result = null;
 
         //get all intersection points and take closest
         for (Line bound : boundaries) {
@@ -105,11 +116,12 @@ public class RayMath {
 
             if (dist < minDist) {
                 minDist = dist;
-                result = inter;
+                intersection.point = inter;
+                intersection.bound = bound;
             }
         }
 
-        return result;
+        return intersection;
     }
 
     public static Point getIntersection(Line a, Line b) {

@@ -33,6 +33,8 @@ public class Out {
     public static void pln(String prefix, Object msg) {
         if (prefix != null) Log.i("", prefix + ":" + msg);
         else Log.i("", msg.toString());
+
+        System.out.println(prefix + ":" + msg);
     }
 
     public static void pln(Object msg) {

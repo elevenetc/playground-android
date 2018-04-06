@@ -186,6 +186,16 @@ public class Line {
                 '}';
     }
 
+    public Line copy() {
+        return new Line(x1, y1, x2, y2);
+    }
+
+    public void translateTo(Point intersection) {
+        double xDiff = intersection.x - x1;
+        double yDiff = intersection.y - y1;
+        translate(xDiff, yDiff);
+    }
+
     public enum Direction {
         N, E, S, W,
         NE, SE, SW, NW
