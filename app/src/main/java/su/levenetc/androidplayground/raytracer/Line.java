@@ -20,6 +20,9 @@ public class Line {
     public double x2;
     public double y2;
 
+    public double start;
+    public double end;
+
     Line normal;
 
     public Line(double x1, double y1, double x2, double y2) {

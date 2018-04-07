@@ -25,10 +25,7 @@ public class V1Drawer implements Drawer {
         List<Ray> rays = light.rays();
 
         for (int i = 0; i < rays.size(); i++) {
-            //float d = ((float) i) / rays.size();
-            //float decay = (float) Math.sin(d * Math.PI);
-            //drawRay(rays.get(i), decay, canvas);
-            drawRay(rays.get(i), 0, canvas);
+            drawRay(rays.get(i), canvas);
         }
     }
 
@@ -38,58 +35,53 @@ public class V1Drawer implements Drawer {
     }
 
     /**
-     * @param decayVelocity 0.0 - 1.0
      */
-    private void drawRay(Ray ray, float decayVelocity, Canvas canvas) {
+    private void drawRay(Ray ray, Canvas canvas) {
 
         paint.setAlpha(255);
+
+        float spotRadius = 10f;//px
+        double step = 5;//px
 
         for (Line line : ray.lines()) {
 
             double dx = line.x2 - line.x1;
             double dy = line.y2 - line.y1;
-            double rayLen = Math.sqrt(dx * dx + dy * dy);
+            double raySegmentLen = Math.sqrt(dx * dx + dy * dy);
 
             double loc;//0.0 - 1.0
-            double currentLen = 0;//px, 0.0 - rayLen
-            double pxStep = 3;//px
-            double stepMagnif = 1.005;//how fast distance between points are increased
-            int step = 0;
+            double currentLen = 0;//px, from 0.0 to raySegmentLen
 
-            while (currentLen <= rayLen) {
+            double fullRayLoc = line.start;
 
-                loc = currentLen / rayLen;
+            while (currentLen <= raySegmentLen) {
 
-                double ratio = rayLen * loc / rayLen;
+                loc = currentLen / raySegmentLen;
+
+                double ratio = raySegmentLen * loc / raySegmentLen;
                 double x = line.x1 + dx * ratio;
                 double y = line.y1 + dy * ratio;
 
-                drawStepArea(canvas, (float) pxStep, (float) x, (float) y, currentLen, decayVelocity);
+                drawStepArea(ray, canvas, (float) x, (float) y, fullRayLoc, spotRadius);
 
-                currentLen += pxStep;
-                pxStep *= stepMagnif;
-                step++;
+                fullRayLoc = line.start + (line.end - line.start) * loc;
+                currentLen += step;
             }
         }
     }
 
-    private void drawStepArea(Canvas canvas, float pxStep,
+    private void drawStepArea(Ray ray,
+                              Canvas canvas,
                               float x, float y,
-                              double currentLen,
-                              double decayVelocity) {
-        paint.setAlpha(getAlpha(currentLen, decayVelocity));
-        float radius = pxStep / 2 + 10f;
-        //canvas.drawCircle(x, y, radius, paint);
-        canvas.drawRect(x, y, x + radius, y + radius, paint);
+                              double fullRayLoc,
+                              float spotRadius) {
+        paint.setAlpha(getAlpha(ray, fullRayLoc));
+        canvas.drawRect(x, y, x + spotRadius, y + spotRadius, paint);
     }
 
-    private int getAlpha(double currentLen, double decayVelocity) {
-        double maxLen = 900;
-        double decayStep = 220;
-        double v = (currentLen + decayStep * decayVelocity) / maxLen;
-
+    private int getAlpha(Ray ray, double fullRayLoc) {
+        double v = fullRayLoc;
         if (v > 1) v = 1;
-
         return (int) (50 * (1 - v));
     }
 }

@@ -11,6 +11,7 @@ public class Ray {
 
     Line initVector = new Line();
     List<Line> lines = new LinkedList<>();
+    public double length = 1200;//px
 
     public Ray() {
 
@@ -26,11 +27,11 @@ public class Ray {
         lines.clear();
     }
 
-    public List<Line> lines(){
+    public List<Line> lines() {
         return lines;
     }
 
-    public Line initVector(){
+    public Line initVector() {
         return initVector;
     }
 }

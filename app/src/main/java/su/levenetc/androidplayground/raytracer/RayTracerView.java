@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -115,7 +116,7 @@ public class RayTracerView extends View {
             //
 
             light = new ConeLight(
-                    100,
+                    300,
                     cx - 300, cy,
                     cx + 2000, cy + 800
             );
@@ -153,9 +154,10 @@ public class RayTracerView extends View {
 
         preRenderInit(width, height);
 
-        debugDrawer.draw(scene, canvas);
-        debugDrawer.draw(light, canvas);
-
-//        drawerV1.draw(light, canvas);
+        //debugDrawer.draw(scene, canvas);
+        //debugDrawer.draw(light, canvas);
+        long start = System.currentTimeMillis();
+        drawerV1.draw(light, canvas);
+        Log.d("time-to-draw", String.valueOf(System.currentTimeMillis() - start));
     }
 }
