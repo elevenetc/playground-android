@@ -15,6 +15,7 @@ public class Paints {
 		public static Paint Green = stroke(Color.GREEN);
 		public static Paint GreenBold = strokeBold(Color.GREEN);
 		public static Paint Red = stroke(Color.RED);
+		public static Paint RedBold = strokeBold(Color.RED);
 		public static Paint Yellow = stroke(Color.YELLOW);
 	}
 

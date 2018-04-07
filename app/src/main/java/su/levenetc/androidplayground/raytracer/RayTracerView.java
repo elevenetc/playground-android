@@ -5,7 +5,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -23,6 +22,7 @@ public class RayTracerView extends View {
     Scene scene = new Scene();
     Drawer debugDrawer = new DebugDrawer();
     Drawer drawerV1 = new V1Drawer();
+    LightController lightController;
 
     private boolean initRender;
     private Light light;
@@ -38,7 +38,6 @@ public class RayTracerView extends View {
     }
 
     private void init() {
-
     }
 
     private void preRenderInit(int width, int height) {
@@ -116,10 +115,13 @@ public class RayTracerView extends View {
             //
 
             light = new ConeLight(
-                    300,
-                    cx - 300, cy,
-                    cx + 2000, cy + 800
+                    100,
+                    cx, cy,
+                    cx + 100, cy + 100
             );
+
+            lightController = new LightController((ConeLight) light);
+
             RayTracer.trace(light, scene);
         }
     }
@@ -127,21 +129,13 @@ public class RayTracerView extends View {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 
-        int action = event.getAction();
-
-        if (action == MotionEvent.ACTION_DOWN) {
-
-        } else if (action == MotionEvent.ACTION_MOVE) {
-            float x = event.getX();
-            float y = event.getY();
-            light.updatePosition(x, y);
+        if (lightController.onTouch(event)) {
             RayTracer.trace(light, scene);
             invalidate();
-        } else if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_CANCEL) {
-
+            return true;
+        } else {
+            return false;
         }
-
-        return true;
     }
 
     @Override
@@ -155,9 +149,8 @@ public class RayTracerView extends View {
         preRenderInit(width, height);
 
         //debugDrawer.draw(scene, canvas);
-        //debugDrawer.draw(light, canvas);
-        long start = System.currentTimeMillis();
+//        debugDrawer.draw(light, canvas);
         drawerV1.draw(light, canvas);
-        Log.d("time-to-draw", String.valueOf(System.currentTimeMillis() - start));
+        lightController.draw(canvas);
     }
 }

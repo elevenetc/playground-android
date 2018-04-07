@@ -2,8 +2,8 @@ package su.levenetc.androidplayground.raytracer;
 
 public class ConeLight extends Light {
 
-    private double dirX;
-    private double dirY;
+    public double dirX;
+    public double dirY;
     int raysCount;
 
     public ConeLight(int rays, double x, double y, double dirX, double dirY) {
@@ -19,22 +19,26 @@ public class ConeLight extends Light {
         rotateInitVectors();
     }
 
-    private void rotateInitVectors() {
-        double angleDiff = 45d / raysCount;
+    public void updateDirection(double x, double y) {
 
-        double angle = 0;
 
-        for (int i = 0; i <= (raysCount / 2) - 1; i++) {
-            angle += angleDiff;
-            RayMath.rotateLine(this.rays.get(i).initVector, angle + getDirectionBias());
+
+
+        double ratio = 100;
+        double dx = x - this.x;
+        double dy = y - this.y;
+        double endX = this.x + dx * ratio;
+        double endY = this.y + dy * ratio;
+
+        this.dirX = x;
+        this.dirY = y;
+
+        for (Ray ray : rays) {
+            ray.initVector.x2 = endX;
+            ray.initVector.y2 = endY;
         }
 
-        angle = 0;
-
-        for (int i = (raysCount / 2); i <= (raysCount - 1); i++) {
-            angle -= angleDiff;
-            RayMath.rotateLine(this.rays.get(i).initVector, angle + getDirectionBias());
-        }
+        rotateInitVectors();
     }
 
     public void updatePosition(double x, double y) {
@@ -54,10 +58,33 @@ public class ConeLight extends Light {
     }
 
     private void initRays() {
-        rays.add(new Ray(x, y, dirX, dirY));
-        for (int i = 0; i < raysCount; i++)
-            this.rays.add(new Ray(x, y, dirX, dirY));
+
+        //define end locations towards direction
+        //should be long to test intersections later
+        double ratio = 100;
+        double dx = dirX - x;
+        double dy = dirY - y;
+        double endX = x + dx * ratio;
+        double endY = y + dy * ratio;
+
+        for (int i = 0; i < raysCount; i++) {
+            rays.add(new Ray(x, y, endX, endY));
+        }
     }
+
+    private void rotateInitVectors() {
+        double coneAngle = 45d;
+        double stepAngle = coneAngle / raysCount;
+
+        double angle = 0;
+
+        for (int i = 0; i < rays.size(); i++) {
+            Ray ray = rays.get(i);
+            RayMath.rotateLine(this.rays.get(i).initVector, angle + getDirectionBias() - coneAngle / 2);
+            angle += stepAngle;
+        }
+    }
+
 
     private double getDirectionBias() {
         return Math.random() * 0.5;

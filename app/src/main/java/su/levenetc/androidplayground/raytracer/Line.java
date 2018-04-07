@@ -49,6 +49,11 @@ public class Line {
         y2 += dy;
     }
 
+    public void translateEnd(double dx2, double dy2){
+        x2 += dx2;
+        y2 += dy2;
+    }
+
     public void initLeftNormal() {
         initNormal(50);
     }
