@@ -10,9 +10,9 @@ public class Triangle extends Shape {
             double x2, double y2,
             double x3, double y3
     ) {
-        lines.get(0).set(x1, y1, x2, y2);
-        lines.get(1).set(x2, y2, x3, y3);
-        lines.get(2).set(x3, y3, x1, y1);
+        edges.get(0).set(x1, y1, x2, y2);
+        edges.get(1).set(x2, y2, x3, y3);
+        edges.get(2).set(x3, y3, x1, y1);
         initRightNormals();
     }
 }

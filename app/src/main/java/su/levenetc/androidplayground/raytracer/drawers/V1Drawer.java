@@ -7,8 +7,8 @@ import android.graphics.Paint;
 import java.util.List;
 
 import su.levenetc.androidplayground.raytracer.Light;
-import su.levenetc.androidplayground.raytracer.Line;
 import su.levenetc.androidplayground.raytracer.Ray;
+import su.levenetc.androidplayground.raytracer.RaySegment;
 import su.levenetc.androidplayground.raytracer.Scene;
 
 public class V1Drawer implements Drawer {
@@ -43,28 +43,28 @@ public class V1Drawer implements Drawer {
         float spotRadius = 10f;//px
         double step = 5;//px
 
-        for (Line line : ray.lines()) {
+        for (RaySegment raySegment : ray.lines()) {
 
-            double dx = line.x2 - line.x1;
-            double dy = line.y2 - line.y1;
+            double dx = raySegment.x2 - raySegment.x1;
+            double dy = raySegment.y2 - raySegment.y1;
             double raySegmentLen = Math.sqrt(dx * dx + dy * dy);
 
             double loc;//0.0 - 1.0
             double currentLen = 0;//px, from 0.0 to raySegmentLen
 
-            double fullRayLoc = line.start;
+            double fullRayLoc = raySegment.start;
 
             while (currentLen <= raySegmentLen) {
 
                 loc = currentLen / raySegmentLen;
 
                 double ratio = raySegmentLen * loc / raySegmentLen;
-                double x = line.x1 + dx * ratio;
-                double y = line.y1 + dy * ratio;
+                double x = raySegment.x1 + dx * ratio;
+                double y = raySegment.y1 + dy * ratio;
 
                 drawStepArea(ray, canvas, (float) x, (float) y, fullRayLoc, spotRadius);
 
-                fullRayLoc = line.start + (line.end - line.start) * loc;
+                fullRayLoc = raySegment.start + (raySegment.end - raySegment.start) * loc;
                 currentLen += step;
             }
         }

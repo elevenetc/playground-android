@@ -123,7 +123,7 @@ public class Vector {
 		}
 
 		/**
-		 *  Line segments intersect: compute intersection point.
+         *  RaySegment segments intersect: compute intersection point.
 		 */
 		double denom = a1 * b2 - a2 * b1;
 		if (denom == 0) {

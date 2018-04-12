@@ -9,8 +9,8 @@ import java.util.List;
 
 public class Ray {
 
-    Line initVector = new Line();
-    List<Line> lines = new LinkedList<>();
+    RaySegment initVector = new RaySegment();
+    List<RaySegment> raySegments = new LinkedList<>();
     public double length = 1200;//px
 
     public Ray() {
@@ -24,14 +24,14 @@ public class Ray {
     public void init(double x1, double y1, double x2, double y2) {
         initVector.set(x1, y1, x2, y2);
         //TODO: cache/pool
-        lines.clear();
+        raySegments.clear();
     }
 
-    public List<Line> lines() {
-        return lines;
+    public List<RaySegment> lines() {
+        return raySegments;
     }
 
-    public Line initVector() {
+    public RaySegment initVector() {
         return initVector;
     }
 }

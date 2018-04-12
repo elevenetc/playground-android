@@ -3,9 +3,9 @@ package su.levenetc.androidplayground;
 import org.assertj.core.data.Offset;
 import org.junit.Test;
 
-import su.levenetc.androidplayground.raytracer.Line;
-import su.levenetc.androidplayground.raytracer.Point;
 import su.levenetc.androidplayground.raytracer.RayMath;
+import su.levenetc.androidplayground.raytracer.RaySegment;
+import su.levenetc.androidplayground.raytracer.geometry.Point;
 import su.levenetc.androidplayground.utils.Out;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -30,9 +30,33 @@ public class RayMathTests {
         assertThat(se45().length()).isCloseTo(141, Offset.offset(0.5));
     }
 
+    static RaySegment vertUp() {
+        return new RaySegment(0, 0, 0, -100);
+    }
+
+    static RaySegment vertDown() {
+        return new RaySegment(0, 0, 0, 100);
+    }
+
+    static RaySegment we() {
+        return new RaySegment(0, 0, 100, 0);
+    }
+
+    static RaySegment horizOpposite() {
+        return new RaySegment(0, 0, -100, 0);
+    }
+
+    static RaySegment se45() {
+        return new RaySegment(0, 0, 100, 100);
+    }
+
+    static RaySegment sw45() {
+        return new RaySegment(100, 0, 0, 100);
+    }
+
     @Test
     public void normals() {
-        Line horiz = we();
+        RaySegment horiz = we();
 
         horiz.initRightNormal();
 
@@ -42,7 +66,7 @@ public class RayMathTests {
 
     @Test
     public void testReflectedByNormal() {
-        Line ground = we();
+        RaySegment ground = we();
         ground.initRightNormal();
 
         assertThat(RayMath.isReflectedByNormal(sw45(), ground)).isTrue();
@@ -53,7 +77,7 @@ public class RayMathTests {
 
     @Test
     public void testReflectedByIntersectionAndNormal() {
-        Line ground = we();
+        RaySegment ground = we();
         ground.initRightNormal();
 
         assertThat(RayMath.isReflectedByNormalAndIntersection(sw45(), ground)).isTrue();
@@ -64,14 +88,14 @@ public class RayMathTests {
 
     @Test
     public void testDirections() {
-        assertThat(sw45().direction()).isEqualTo(Line.Direction.SW);
-        assertThat(se45().direction()).isEqualTo(Line.Direction.SE);
+        assertThat(sw45().direction()).isEqualTo(RaySegment.Direction.SW);
+        assertThat(se45().direction()).isEqualTo(RaySegment.Direction.SE);
     }
 
     @Test
     public void testDotProducts() {
 
-        Line vert = vertDown();
+        RaySegment vert = vertDown();
         vert.initLeftNormal();
 
         assertThat(RayMath.dotProduct(se45(), vert)).isGreaterThan(0);
@@ -80,21 +104,20 @@ public class RayMathTests {
 
     @Test
     public void testReflection() {
-        Line line = we();
-        //Line ray = sw45();
+        RaySegment raySegment = we();
+        //RaySegment ray = sw45();
         //ray.translate(0, -50);
-        Line ray = new Line(100, -25, 0, 50);
+        RaySegment ray = new RaySegment(100, -25, 0, 50);
 
 
-
-        line.initLeftNormal();
-        Out.pln(RayMath.isReflectedByNormalAndIntersection(ray, line));
-        double angle = RayMath.angleBetween(ray, line);
+        raySegment.initLeftNormal();
+        Out.pln(RayMath.isReflectedByNormalAndIntersection(ray, raySegment));
+        double angle = RayMath.angleBetween(ray, raySegment);
         Out.pln("angle", angle);
-        Point intersection = RayMath.getIntersection(ray, line);
+        Point intersection = RayMath.getIntersection(ray, raySegment);
         Out.pln(intersection);
 
-        Line nextRay = ray.copy();
+        RaySegment nextRay = ray.copy();
         nextRay.translateTo(intersection);
         Out.pln();
         Out.pln("original", ray);
@@ -103,34 +126,10 @@ public class RayMathTests {
 
         double newAngle = (angle - 180) * 2;
 
-        RayMath.rotateLine(nextRay, newAngle);
+        RayMath.rotateSegment(nextRay, newAngle);
 
         Out.pln("rotated", nextRay);
         Out.pln();
-    }
-
-    static Line vertUp() {
-        return new Line(0, 0, 0, -100);
-    }
-
-    static Line vertDown() {
-        return new Line(0, 0, 0, 100);
-    }
-
-    static Line we() {
-        return new Line(0, 0, 100, 0);
-    }
-
-    static Line horizOpposite() {
-        return new Line(0, 0, -100, 0);
-    }
-
-    static Line se45() {
-        return new Line(0, 0, 100, 100);
-    }
-
-    static Line sw45() {
-        return new Line(100, 0, 0, 100);
     }
 
 }

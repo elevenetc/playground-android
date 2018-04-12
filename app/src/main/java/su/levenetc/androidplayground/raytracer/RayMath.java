@@ -5,44 +5,47 @@ import android.support.annotation.NonNull;
 import java.util.LinkedList;
 import java.util.List;
 
+import su.levenetc.androidplayground.raytracer.geometry.Point;
+import su.levenetc.androidplayground.raytracer.geometry.Segment;
+
 /**
  * Created by eugene.levenetc on 08/03/2018.
  */
 
 public class RayMath {
 
-    public static void rotateLine(Line line, double degrees) {
+    public static void rotateSegment(Segment segment, double degrees) {
         double rads = Math.toRadians(degrees);
         double cos = Math.cos(rads);
         double sin = Math.sin(rads);
 
         //move to origin
-        line.x2 -= line.x1;
-        line.y2 -= line.y1;
+        segment.x2 -= segment.x1;
+        segment.y2 -= segment.y1;
 
-        double x = line.x2 * cos - line.y2 * sin;
-        double y = line.x2 * sin + line.y2 * cos;
+        double x = segment.x2 * cos - segment.y2 * sin;
+        double y = segment.x2 * sin + segment.y2 * cos;
 
         //move back
-        line.x2 = x + line.x1;
-        line.y2 = y + line.y1;
+        segment.x2 = x + segment.x1;
+        segment.y2 = y + segment.y1;
     }
 
-    public static double dotProduct(Line ray, Line line) {
-        Line rayOrigin = toOrigin(ray);
-        Line normalOrigin = toOrigin(line.normal);
+    public static double dotProduct(RaySegment raySegment, Edge edge) {
+        RaySegment rayOrigin = toOrigin(raySegment);
+        RaySegment normalOrigin = toOrigin(edge.normal);
         return rayOrigin.x2 * normalOrigin.x2 + rayOrigin.y2 * normalOrigin.y2;
     }
 
-    static Line toOrigin(Line line) {
-        double diffX = line.x1;
-        double diffY = line.y1;
+    static RaySegment toOrigin(Segment segment) {
+        double diffX = segment.x1;
+        double diffY = segment.y1;
 
         //TODO: cache instance
-        return new Line(0, 0, line.x2 - diffX, line.y2 - diffY);
+        return new RaySegment(0, 0, segment.x2 - diffX, segment.y2 - diffY);
     }
 
-    public static double angleBetween(Line a, Line b) {
+    public static double angleBetween(Segment a, Segment b) {
         return angleBetween(
                 a.x1, a.y1, a.x2, a.y2,
                 b.x1, b.y1, b.x2, b.y2);
@@ -55,18 +58,18 @@ public class RayMath {
         return (angleB - angleA) * 180 / Math.PI;
     }
 
-    public static boolean isReflectedByNormalAndIntersection(Line ray, Line line) {
-        boolean hasIntersection = hasIntersection(ray, line);
-        boolean reflectedByNormal = isReflectedByNormal(ray, line);
+    public static boolean isReflectedByNormalAndIntersection(RaySegment ray, Edge raySegment) {
+        boolean hasIntersection = hasIntersection(ray, raySegment);
+        boolean reflectedByNormal = isReflectedByNormal(ray, raySegment);
         return hasIntersection && reflectedByNormal;
     }
 
-    public static boolean isReflectedByNormal(Line ray, Line line) {
+    public static boolean isReflectedByNormal(RaySegment ray, Edge raySegment) {
 
         boolean result = false;
 
-        if (line.hasNormal()) {
-            result = dotProduct(ray, line) < 0;
+        if (raySegment.hasNormal()) {
+            result = dotProduct(ray, raySegment) < 0;
         }
 
         return result;
@@ -78,24 +81,17 @@ public class RayMath {
         return Math.sqrt(x1 * x1 + y1 * y1);
     }
 
-    static class Intersection {
-        public Point point;
-        public Line bound;
-    }
-
-    final static Intersection intersection = new Intersection();
-
-    public static Intersection getClosestWallIntersection(Line ray, Scene scene) {
+    public static Intersection getClosestWallIntersection(RaySegment ray, Scene scene) {
 
         //TODO: use cached list
-        List<Line> boundaries = new LinkedList<>();
+        List<Edge> boundaries = new LinkedList<>();
 
         intersection.bound = null;
         intersection.point = null;
 
-        //get all intersection lines with array
+        //get all intersection edges with array
         for (Shape object : scene.objects)
-            for (Line bound : object.lines)
+            for (Edge bound : object.edges)
                 if (isReflectedByNormalAndIntersection(ray, bound))
                     boundaries.add(bound);
 
@@ -110,7 +106,7 @@ public class RayMath {
         double minDist = Double.MAX_VALUE;
 
         //get all intersection points and take closest
-        for (Line bound : boundaries) {
+        for (Edge bound : boundaries) {
             Point inter = getIntersection(ray, bound);
             double dist = distance(inter.x, inter.y, ray.x1, ray.y1);
 
@@ -124,7 +120,9 @@ public class RayMath {
         return intersection;
     }
 
-    public static Point getIntersection(Line a, Line b) {
+    final static Intersection intersection = new Intersection();
+
+    public static Point getIntersection(RaySegment a, Edge b) {
         double x1 = a.x1;
         double y1 = a.y1;
         double x2 = a.x2;
@@ -139,8 +137,23 @@ public class RayMath {
     }
 
     public static Point getIntersection(double x1, double y1, double x2, double y2,
-                                        Line b) {
+                                        RaySegment b) {
         return getIntersection(x1, y1, x2, y2, b.x1, b.y1, b.x2, b.y2);
+    }
+
+    public static boolean hasIntersection(RaySegment a, Edge b) {
+
+        double x1 = a.x1;
+        double y1 = a.y1;
+        double x2 = a.x2;
+        double y2 = a.y2;
+
+        double x3 = b.x1;
+        double y3 = b.y1;
+        double x4 = b.x2;
+        double y4 = b.y2;
+
+        return hasIntersection(x1, y1, x2, y2, x3, y3, x4, y4);
     }
 
     @NonNull
@@ -155,19 +168,9 @@ public class RayMath {
         return new Point(x, y);
     }
 
-    public static boolean hasIntersection(Line a, Line b) {
-
-        double x1 = a.x1;
-        double y1 = a.y1;
-        double x2 = a.x2;
-        double y2 = a.y2;
-
-        double x3 = b.x1;
-        double y3 = b.y1;
-        double x4 = b.x2;
-        double y4 = b.y2;
-
-        return hasIntersection(x1, y1, x2, y2, x3, y3, x4, y4);
+    static class Intersection {
+        public Point point;
+        public Edge bound;
     }
 
     public static boolean hasIntersection(

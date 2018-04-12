@@ -1,4 +1,4 @@
-package su.levenetc.androidplayground.raytracer;
+package su.levenetc.androidplayground.raytracer.geometry;
 
 /**
  * Created by eugene.levenetc on 08/03/2018.
@@ -6,8 +6,8 @@ package su.levenetc.androidplayground.raytracer;
 
 public class Point {
 
-    double x;
-    double y;
+    public double x;
+    public double y;
 
     public Point(double x, double y) {
         this.x = x;

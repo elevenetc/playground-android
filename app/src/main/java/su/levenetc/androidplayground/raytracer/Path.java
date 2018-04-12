@@ -27,10 +27,10 @@ public class Path extends Shape {
             Path path = new Path(segments);
 
             for (int i = 0; i <= segments - 1; i++) {
-                Line line = path.lines.get(i);
+                Edge edge = path.edges.get(i);
                 double[] start = coords.get(i);
                 double[] end = coords.get(i + 1);
-                line.set(start[0], start[1], end[0], end[1]);
+                edge.set(start[0], start[1], end[0], end[1]);
             }
             return path;
         }

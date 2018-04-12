@@ -2,6 +2,8 @@ package su.levenetc.androidplayground.raytracer;
 
 import android.util.Log;
 
+import su.levenetc.androidplayground.raytracer.geometry.Point;
+
 /**
  * Created by eugene.levenetc on 08/03/2018.
  */
@@ -17,11 +19,11 @@ public class RayTracer {
     }
 
     public static void trace(Ray ray, Scene scene) {
-        ray.lines.clear();
+        ray.raySegments.clear();
         traceInternal(ray, ray.initVector, scene, 0);
     }
 
-    private static void traceInternal(Ray ray, Line initVector, Scene scene, double currentLength) {
+    private static void traceInternal(Ray ray, RaySegment initVector, Scene scene, double currentLength) {
 
         if (currentLength >= ray.length) return;
 
@@ -29,20 +31,20 @@ public class RayTracer {
 
         if (intersection != null && intersection.point != null) {
             Point point = intersection.point;
-            Line newVector = new Line(initVector, point.x, point.y);
+            RaySegment newVector = new RaySegment(initVector, point.x, point.y);
 
             //calc fading currentLength
             newVector.start = currentLength == 0 ? 0 : (currentLength / ray.length);
             currentLength += newVector.length();
             newVector.end = currentLength / ray.length;
 
-            ray.lines.add(newVector);
+            ray.raySegments.add(newVector);
 
             double angle = RayMath.angleBetween(initVector, intersection.bound);
-            Line reflected = initVector.copy();
+            RaySegment reflected = initVector.copy();
             reflected.translateTo(point);
             double newAngle = (angle - 180) * 2;
-            RayMath.rotateLine(reflected, newAngle);
+            RayMath.rotateSegment(reflected, newAngle);
 
             traceInternal(ray, reflected, scene, currentLength);
         }

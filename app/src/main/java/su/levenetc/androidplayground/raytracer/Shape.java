@@ -5,28 +5,28 @@ import java.util.List;
 
 public class Shape {
 
-    List<Line> lines;
+    List<Edge> edges;
 
     public Shape(int segments) {
-        lines = new ArrayList<>(segments);
+        edges = new ArrayList<>(segments);
         for (int i = 0; i < segments; i++) {
-            lines.add(new Line());
+            edges.add(new Edge());
         }
     }
 
     protected void initRightNormals() {
-        for (Line line : lines) line.initRightNormal();
+        for (Edge raySegment : edges) raySegment.initRightNormal();
     }
 
     protected void initLeftNormals() {
-        for (Line line : lines) line.initLeftNormal();
+        for (Edge raySegment : edges) raySegment.initLeftNormal();
     }
 
     public void translate(double x, double y) {
-        for (Line line : lines) line.translate(x, y);
+        for (Edge raySegment : edges) raySegment.translate(x, y);
     }
 
-    public List<Line> lines() {
-        return lines;
+    public List<Edge> lines() {
+        return edges;
     }
 }

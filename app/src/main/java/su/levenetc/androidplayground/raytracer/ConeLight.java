@@ -80,7 +80,7 @@ public class ConeLight extends Light {
 
         for (int i = 0; i < rays.size(); i++) {
             Ray ray = rays.get(i);
-            RayMath.rotateLine(this.rays.get(i).initVector, angle + getDirectionBias() - coneAngle / 2);
+            RayMath.rotateSegment(this.rays.get(i).initVector, angle + getDirectionBias() - coneAngle / 2);
             angle += stepAngle;
         }
     }
