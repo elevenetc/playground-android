@@ -11,6 +11,7 @@ import android.view.View;
 import su.levenetc.androidplayground.raytracer.drawers.DebugDrawer;
 import su.levenetc.androidplayground.raytracer.drawers.Drawer;
 import su.levenetc.androidplayground.raytracer.drawers.V1Drawer;
+import su.levenetc.androidplayground.raytracer.utils.Scenes;
 
 /**
  * Created by eugene.levenetc on 08/03/2018.
@@ -19,13 +20,15 @@ import su.levenetc.androidplayground.raytracer.drawers.V1Drawer;
 public class RayTracerView extends View {
 
 
-    Scene scene = new Scene();
+    Scene scene;
     Drawer debugDrawer = new DebugDrawer();
     Drawer drawerV1 = new V1Drawer();
     LightController lightController;
 
     private boolean initRender;
     private Light light;
+    private boolean debugScene;
+    private boolean debugLight;
 
     public RayTracerView(Context context) {
         super(context);
@@ -50,80 +53,15 @@ public class RayTracerView extends View {
             double initX = cx;
             double initY = cy - 75;
 
-//            Path path = new Path.Builder()
-//                    .add(initX, initY)
-//                    .append(100, 100)
-//                    .append(100, 0)
-//                    .append(100, -50)
-//                    .append(100, 150)
-//                    .append(0, 150)
-//                    .append(-100, 0)
-//                    .append(-100, -100)
-//                    .append(-100, 0)
-//                    .append(0, -50)
-//                    .append(-50, 0)
-//                    .append(0, 100)
-//                    .append(100, 0)
-//                    .append(100, 100)
-//                    .append(200, 0)
-//                    .append(0, -300)
-//                    .append(-100, -100)
-//                    .append(-100, 0)
-//                    .append(-100, 50)
-//                    .add(initX, initY)
-//                    .build();
-//
-//            path.initRightNormals();
-//            scene.add(path);
-
-            //
-
-            Rect boundRect = new Rect(60, 60, width - 60, height - 60);
-            boundRect.initRightNormals();
-            scene.add(boundRect);
-
-            //
-
-            Rect dummyRect01 = Rect.byLoc(700, 300, 150, 150);
-            dummyRect01.initLeftNormals();
-            scene.add(dummyRect01);
-
-            Rect dummyRect02 = Rect.byLoc(300, 470, 150, 150);
-            dummyRect02.initLeftNormals();
-            scene.add(dummyRect02);
-
-            Rect dummyRect03 = Rect.byLoc(300, 670, 250, 20);
-            dummyRect03.initLeftNormals();
-            scene.add(dummyRect03);
-
-            Rect dummyRect04 = Rect.byLoc(400, 770, 50, 50);
-            dummyRect04.initLeftNormals();
-            scene.add(dummyRect04);
-
-            Rect dummyRect05 = Rect.byLoc(400, 850, 50, 50);
-            dummyRect05.initLeftNormals();
-            scene.add(dummyRect05);
-
-            Rect dummyRect06 = Rect.byLoc(400, 930, 50, 50);
-            dummyRect06.initLeftNormals();
-            scene.add(dummyRect06);
-
-            Rect dummyRect10 = Rect.byLoc(600, 1200, 550, 20);
-            dummyRect10.initLeftNormals();
-            scene.add(dummyRect10);
-
-            //
-
-            light = new ConeLight(
-                    100,
-                    cx, cy,
-                    cx + 100, cy + 100
-            );
-
-            lightController = new LightController((ConeLight) light);
-
-            RayTracer.trace(light, scene);
+            scene = Scenes.curvePath(width, height, initX, initY);
+            initLight(cx, cy);
         }
+    }
+
+    private void initLight(double cx, double cy) {
+        light = new ConeLight(2, cx, cy, cx + 100, cy + 100);
+        lightController = new LightController((ConeLight) light);
+        RayTracer.trace(light, this.scene);
     }
 
     @Override
@@ -148,9 +86,21 @@ public class RayTracerView extends View {
 
         preRenderInit(width, height);
 
-        //debugDrawer.draw(scene, canvas);
-//        debugDrawer.draw(light, canvas);
+        if (debugScene) debugDrawer.draw(scene, canvas);
+        if (debugLight) debugDrawer.draw(light, canvas);
+
+
         drawerV1.draw(light, canvas);
         lightController.draw(canvas);
+    }
+
+    public void setDebugScene(boolean debug) {
+        this.debugScene = debug;
+        invalidate();
+    }
+
+    public void setDebugLight(boolean debug) {
+        this.debugLight = debug;
+        invalidate();
     }
 }

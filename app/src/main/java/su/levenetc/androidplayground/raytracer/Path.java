@@ -8,9 +8,12 @@ public class Path extends Shape {
         super(segments);
     }
 
-    static class Builder {
+    public static class Builder {
 
         List<double[]> coords = new LinkedList<>();
+
+        private boolean initLeftNormals;
+        private boolean initRightNormals;
 
         public Builder add(double x, double y) {
             coords.add(new double[]{x, y});
@@ -20,6 +23,18 @@ public class Path extends Shape {
         public Builder append(double dx, double dy) {
             double[] last = coords.get(coords.size() - 1);
             return add(last[0] + dx, last[1] + dy);
+        }
+
+        public Builder initRightNormals() {
+            initRightNormals = true;
+            initLeftNormals = false;
+            return this;
+        }
+
+        public Builder initLeftNormals() {
+            initLeftNormals = true;
+            initRightNormals = false;
+            return this;
         }
 
         public Path build() {
