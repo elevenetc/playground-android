@@ -55,4 +55,11 @@ public class Scenes {
                         false)
                 .build();
     }
+
+    public static Scene justVerticalTransparent(int width, int height) {
+        return new SceneBuilder(width, height)
+                .addTransparentEdge(width / 2, 350,
+                        width / 2, height - 350)
+                .build();
+    }
 }

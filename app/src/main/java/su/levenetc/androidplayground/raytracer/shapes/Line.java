@@ -12,4 +12,9 @@ public class Line extends Shape {
         e.y2 = y2;
         edges.add(e);
     }
+
+    public Line(Edge edge) {
+        super(1);
+        edges.add(edge);
+    }
 }

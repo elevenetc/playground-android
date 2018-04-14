@@ -17,11 +17,11 @@ public class Shape {
     }
 
     public void initRightNormals() {
-        for (Edge raySegment : edges) raySegment.initRightNormal();
+        for (Edge raySegment : edges) raySegment.setRightNormal();
     }
 
     public void initLeftNormals() {
-        for (Edge raySegment : edges) raySegment.initLeftNormal();
+        for (Edge raySegment : edges) raySegment.setLeftNormal();
     }
 
     public void translate(double x, double y) {

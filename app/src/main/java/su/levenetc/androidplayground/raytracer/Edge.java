@@ -12,18 +12,27 @@ import static su.levenetc.androidplayground.raytracer.geometry.Segment.Direction
 
 
 public class Edge extends Segment {
-    RaySegment normal;
 
-    public void initLeftNormal() {
-        initNormal(50);
+    Segment normal;
+
+    public void setLeftNormal() {
+        normal = getLeftNormal();
     }
 
-    public void initRightNormal() {
-        initNormal(-50);
+    public void setRightNormal() {
+        normal = getRightNormal();
     }
 
-    private void initNormal(double lengthAndDirection) {
-        normal = new RaySegment();
+    public Segment getRightNormal() {
+        return getNormal(-50);
+    }
+
+    public Segment getLeftNormal() {
+        return getNormal(50);
+    }
+
+    private Segment getNormal(double lengthAndDirection) {
+        Segment normal = new Segment();
         RaySegment.Direction direction = direction();
 
         normal.x1 = (x1 + x2) / 2d;
@@ -62,6 +71,8 @@ public class Edge extends Segment {
             normal.x2 = normalSide;
             normal.y2 = (s * (normalSide) + b);
         }
+
+        return normal;
     }
 
 
@@ -69,7 +80,7 @@ public class Edge extends Segment {
         return normal != null;
     }
 
-    public RaySegment normal() {
+    public Segment normal() {
         return normal;
     }
 

@@ -29,7 +29,7 @@ public class DebugDrawer implements Drawer {
     private static void drawEdge(Canvas canvas, Edge edge, Paint paint, boolean endings) {
         drawLine(canvas, edge, paint);
 
-        RaySegment normal = edge.normal();
+        Segment normal = edge.normal();
         if (normal != null)
             canvas.drawLine((float) normal.x1, (float) normal.y1, (float) normal.x2, (float) normal.y2, Paints.Stroke.Red);
 

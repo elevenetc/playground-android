@@ -27,6 +27,7 @@ public class RayTracer {
     private static void traceInternal(Ray ray, RaySegment initVector, Scene scene, double currentLength) {
 
         if (currentLength >= ray.length) return;
+        Log.d("length", String.valueOf(currentLength));
 
         RayMath.Intersection intersection = RayMath.getClosestWallIntersection(initVector, scene);
 

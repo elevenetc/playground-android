@@ -32,9 +32,15 @@ public class RayMath {
         segment.y2 = y + segment.y1;
     }
 
-    public static double dotProduct(RaySegment raySegment, Edge edge) {
-        RaySegment rayOrigin = toOrigin(raySegment);
+    public static double dotProduct(Segment ray, Edge edge) {
+        RaySegment rayOrigin = toOrigin(ray);
         RaySegment normalOrigin = toOrigin(edge.normal);
+        return rayOrigin.x2 * normalOrigin.x2 + rayOrigin.y2 * normalOrigin.y2;
+    }
+
+    public static double dotProduct(Segment ray, Segment normal) {
+        RaySegment rayOrigin = toOrigin(ray);
+        RaySegment normalOrigin = toOrigin(normal);
         return rayOrigin.x2 * normalOrigin.x2 + rayOrigin.y2 * normalOrigin.y2;
     }
 
@@ -59,18 +65,24 @@ public class RayMath {
         return (angleB - angleA) * 180 / Math.PI;
     }
 
-    public static boolean isReflectedByNormalAndIntersection(RaySegment ray, Edge raySegment) {
-        boolean hasIntersection = hasIntersection(ray, raySegment);
-        boolean reflectedByNormal = isReflectedByNormal(ray, raySegment);
+    public static boolean isReflectedByNormalAndIntersection(Segment ray, Edge edge) {
+        boolean hasIntersection = hasIntersection(ray, edge);
+        boolean reflectedByNormal = isReflectedByNormal(ray, edge);
         return hasIntersection && reflectedByNormal;
     }
 
-    public static boolean isReflectedByNormal(RaySegment ray, Edge raySegment) {
+    public static boolean isReflectedByNormal(Segment ray, Edge edge) {
 
         boolean result = false;
 
-        if (raySegment.hasNormal()) {
-            result = dotProduct(ray, raySegment) < 0;
+        if (edge.hasNormal()) {
+
+            if (edge instanceof DoubleSidedEdge) {
+                result = dotProduct(ray, ((DoubleSidedEdge) edge).leftNormal) < 0 || dotProduct(ray, ((DoubleSidedEdge) edge).rightNormal) < 0;
+            } else {
+                result = dotProduct(ray, edge.normal) < 0;
+            }
+
         }
 
         return result;
@@ -142,7 +154,7 @@ public class RayMath {
         return getIntersection(x1, y1, x2, y2, b.x1, b.y1, b.x2, b.y2);
     }
 
-    public static boolean hasIntersection(RaySegment a, Edge b) {
+    public static boolean hasIntersection(Segment a, Segment b) {
 
         double x1 = a.x1;
         double y1 = a.y1;
