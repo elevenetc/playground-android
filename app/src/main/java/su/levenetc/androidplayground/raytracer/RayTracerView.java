@@ -11,6 +11,10 @@ import android.view.View;
 import su.levenetc.androidplayground.raytracer.drawers.DebugDrawer;
 import su.levenetc.androidplayground.raytracer.drawers.Drawer;
 import su.levenetc.androidplayground.raytracer.drawers.V1Drawer;
+import su.levenetc.androidplayground.raytracer.lights.ConeLight;
+import su.levenetc.androidplayground.raytracer.lights.DirectedLight;
+import su.levenetc.androidplayground.raytracer.lights.Light;
+import su.levenetc.androidplayground.raytracer.lights.LightController;
 import su.levenetc.androidplayground.raytracer.utils.Scenes;
 
 /**
@@ -53,14 +57,15 @@ public class RayTracerView extends View {
             double initX = cx;
             double initY = cy - 75;
 
-            scene = Scenes.curvePath(width, height, initX, initY);
+            scene = Scenes.justVertical(width, height);
             initLight(cx, cy);
         }
     }
 
     private void initLight(double cx, double cy) {
-        light = new ConeLight(2, cx, cy, cx + 100, cy + 100);
-        lightController = new LightController((ConeLight) light);
+//        light = new SingleRayLight(cx, cy, cx + 100, cy + 100);
+        light = new ConeLight(50, cx, cy, cx + 100, cy + 100);
+        lightController = new LightController((DirectedLight) light);
         RayTracer.trace(light, this.scene);
     }
 

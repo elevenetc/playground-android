@@ -1,7 +1,9 @@
-package su.levenetc.androidplayground.raytracer;
+package su.levenetc.androidplayground.raytracer.shapes;
 
 import java.util.LinkedList;
 import java.util.List;
+
+import su.levenetc.androidplayground.raytracer.Edge;
 
 public class Path extends Shape {
     public Path(int segments) {
@@ -47,6 +49,13 @@ public class Path extends Shape {
                 double[] end = coords.get(i + 1);
                 edge.set(start[0], start[1], end[0], end[1]);
             }
+
+            if (initRightNormals) {
+                path.initRightNormals();
+            } else if (initLeftNormals) {
+                path.initLeftNormals();
+            }
+
             return path;
         }
     }

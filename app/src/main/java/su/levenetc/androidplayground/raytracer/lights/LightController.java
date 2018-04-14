@@ -1,4 +1,4 @@
-package su.levenetc.androidplayground.raytracer;
+package su.levenetc.androidplayground.raytracer.lights;
 
 import android.graphics.Canvas;
 import android.view.MotionEvent;
@@ -7,13 +7,13 @@ import su.levenetc.androidplayground.utils.Paints;
 
 public class LightController {
 
-    public ConeLight light;
+    public DirectedLight light;
     private float locRadius = 50;
     private float dirRadius = 30;
     private boolean dragLocation;
     private boolean dragDirection;
 
-    public LightController(ConeLight light) {
+    public LightController(DirectedLight light) {
         this.light = light;
     }
 

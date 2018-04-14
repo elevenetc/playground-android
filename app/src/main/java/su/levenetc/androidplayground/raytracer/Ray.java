@@ -9,7 +9,7 @@ import java.util.List;
 
 public class Ray {
 
-    RaySegment initVector = new RaySegment();
+    public RaySegment initVector = new RaySegment();
     List<RaySegment> raySegments = new LinkedList<>();
     public double length = 1200;//px
 

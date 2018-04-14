@@ -3,6 +3,7 @@ package su.levenetc.androidplayground.raytracer;
 import android.util.Log;
 
 import su.levenetc.androidplayground.raytracer.geometry.Point;
+import su.levenetc.androidplayground.raytracer.lights.Light;
 
 /**
  * Created by eugene.levenetc on 08/03/2018.

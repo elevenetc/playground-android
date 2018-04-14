@@ -3,6 +3,8 @@ package su.levenetc.androidplayground.raytracer;
 import java.util.LinkedList;
 import java.util.List;
 
+import su.levenetc.androidplayground.raytracer.shapes.Shape;
+
 public class Scene {
 
     List<Shape> objects = new LinkedList<>();

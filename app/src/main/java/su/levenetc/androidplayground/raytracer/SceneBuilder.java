@@ -1,5 +1,9 @@
 package su.levenetc.androidplayground.raytracer;
 
+import su.levenetc.androidplayground.raytracer.shapes.Line;
+import su.levenetc.androidplayground.raytracer.shapes.Path;
+import su.levenetc.androidplayground.raytracer.shapes.Rect;
+
 public class SceneBuilder {
 
     private final int screenWidth;
@@ -22,6 +26,19 @@ public class SceneBuilder {
         Rect rect = new Rect(x, y, width, height);
         rect.initLeftNormals();
         scene.add(rect);
+        return this;
+    }
+
+    public SceneBuilder addEdge(double x1, double y1,
+                                double x2, double y2,
+                                boolean leftNormal
+    ) {
+        Line line = new Line(x1, y1, x2, y2);
+
+        if (leftNormal) line.initLeftNormals();
+        else line.initRightNormals();
+
+        scene.add(line);
         return this;
     }
 

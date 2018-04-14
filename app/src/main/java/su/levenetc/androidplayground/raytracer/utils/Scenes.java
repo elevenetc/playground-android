@@ -1,8 +1,8 @@
 package su.levenetc.androidplayground.raytracer.utils;
 
-import su.levenetc.androidplayground.raytracer.Path;
 import su.levenetc.androidplayground.raytracer.Scene;
 import su.levenetc.androidplayground.raytracer.SceneBuilder;
+import su.levenetc.androidplayground.raytracer.shapes.Path;
 
 public class Scenes {
     public static Scene randomSquares(int width, int height) {
@@ -45,6 +45,14 @@ public class Scenes {
                         .add(initX, initY)
                         .initRightNormals()
                         .build())
+                .build();
+    }
+
+    public static Scene justVertical(int width, int height) {
+        return new SceneBuilder(width, height)
+                .addEdge(width / 2, 200,
+                        width / 2, height - 200,
+                        false)
                 .build();
     }
 }

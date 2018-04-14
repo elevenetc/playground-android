@@ -1,11 +1,13 @@
-package su.levenetc.androidplayground.raytracer;
+package su.levenetc.androidplayground.raytracer.shapes;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import su.levenetc.androidplayground.raytracer.Edge;
+
 public class Shape {
 
-    List<Edge> edges;
+    public List<Edge> edges;
 
     public Shape(int segments) {
         edges = new ArrayList<>(segments);
@@ -14,11 +16,11 @@ public class Shape {
         }
     }
 
-    protected void initRightNormals() {
+    public void initRightNormals() {
         for (Edge raySegment : edges) raySegment.initRightNormal();
     }
 
-    protected void initLeftNormals() {
+    public void initLeftNormals() {
         for (Edge raySegment : edges) raySegment.initLeftNormal();
     }
 

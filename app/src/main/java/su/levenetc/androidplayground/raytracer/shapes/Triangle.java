@@ -1,4 +1,4 @@
-package su.levenetc.androidplayground.raytracer;
+package su.levenetc.androidplayground.raytracer.shapes;
 
 public class Triangle extends Shape {
     public Triangle() {

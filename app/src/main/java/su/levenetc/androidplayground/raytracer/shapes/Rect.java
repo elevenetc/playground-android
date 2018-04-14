@@ -1,4 +1,4 @@
-package su.levenetc.androidplayground.raytracer;
+package su.levenetc.androidplayground.raytracer.shapes;
 
 /**
  * Created by eugene.levenetc on 08/03/2018.

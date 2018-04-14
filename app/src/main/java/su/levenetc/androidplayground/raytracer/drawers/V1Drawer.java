@@ -6,10 +6,10 @@ import android.graphics.Paint;
 
 import java.util.List;
 
-import su.levenetc.androidplayground.raytracer.Light;
 import su.levenetc.androidplayground.raytracer.Ray;
 import su.levenetc.androidplayground.raytracer.RaySegment;
 import su.levenetc.androidplayground.raytracer.Scene;
+import su.levenetc.androidplayground.raytracer.lights.Light;
 
 public class V1Drawer implements Drawer {
 

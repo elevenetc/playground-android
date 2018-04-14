@@ -7,6 +7,7 @@ import java.util.List;
 
 import su.levenetc.androidplayground.raytracer.geometry.Point;
 import su.levenetc.androidplayground.raytracer.geometry.Segment;
+import su.levenetc.androidplayground.raytracer.shapes.Shape;
 
 /**
  * Created by eugene.levenetc on 08/03/2018.

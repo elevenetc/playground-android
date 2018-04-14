@@ -4,12 +4,12 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 
 import su.levenetc.androidplayground.raytracer.Edge;
-import su.levenetc.androidplayground.raytracer.Light;
 import su.levenetc.androidplayground.raytracer.Ray;
 import su.levenetc.androidplayground.raytracer.RaySegment;
 import su.levenetc.androidplayground.raytracer.Scene;
-import su.levenetc.androidplayground.raytracer.Shape;
 import su.levenetc.androidplayground.raytracer.geometry.Segment;
+import su.levenetc.androidplayground.raytracer.lights.Light;
+import su.levenetc.androidplayground.raytracer.shapes.Shape;
 import su.levenetc.androidplayground.utils.Paints;
 
 public class DebugDrawer implements Drawer {
