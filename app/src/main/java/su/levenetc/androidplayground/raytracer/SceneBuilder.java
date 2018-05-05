@@ -42,14 +42,23 @@ public class SceneBuilder {
         return this;
     }
 
-    public SceneBuilder addTransparentEdge(double x1, double y1,
-                                           double x2, double y2
+    public SceneBuilder addDoubleSidedEdge(double x1, double y1,
+                                           double x2, double y2,
+                                           String name
     ) {
         DoubleSidedEdge edge = new DoubleSidedEdge();
         edge.set(x1, y1, x2, y2);
+        edge.name = name;
+
         Line line = new Line(edge);
         scene.add(line);
         return this;
+    }
+
+    public SceneBuilder addDoubleSidedEdge(double x1, double y1,
+                                           double x2, double y2
+    ) {
+        return addDoubleSidedEdge(x1, y1, x2, y2, null);
     }
 
     public SceneBuilder add(Path path) {
@@ -59,6 +68,7 @@ public class SceneBuilder {
 
     public Scene build() {
         Rect boundRect = new Rect(padding, padding, screenWidth - padding, screenHeight - padding);
+
         boundRect.initRightNormals();
         scene.add(boundRect);
 

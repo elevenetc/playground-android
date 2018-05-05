@@ -22,6 +22,9 @@ public class RayTracerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         view = new RayTracerView(this);
         setContentView(view);
+
+        view.setDebugLight(true);
+        view.setDebugScene(true);
     }
 
     @Override

@@ -3,6 +3,7 @@ package su.levenetc.androidplayground.raytracer.drawers;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
+import su.levenetc.androidplayground.raytracer.DoubleSidedEdge;
 import su.levenetc.androidplayground.raytracer.Edge;
 import su.levenetc.androidplayground.raytracer.Ray;
 import su.levenetc.androidplayground.raytracer.RaySegment;
@@ -29,11 +30,20 @@ public class DebugDrawer implements Drawer {
     private static void drawEdge(Canvas canvas, Edge edge, Paint paint, boolean endings) {
         drawLine(canvas, edge, paint);
 
-        Segment normal = edge.normal();
-        if (normal != null)
-            canvas.drawLine((float) normal.x1, (float) normal.y1, (float) normal.x2, (float) normal.y2, Paints.Stroke.Red);
+        if (edge instanceof DoubleSidedEdge) {
+            drawNormal(canvas, ((DoubleSidedEdge) edge).leftNormal);
+            drawNormal(canvas, ((DoubleSidedEdge) edge).rightNormal);
+        } else {
+            drawNormal(canvas, edge.normal());
+        }
+
 
         if (endings) drawEndings(canvas, edge);
+    }
+
+    private static void drawNormal(Canvas canvas, Segment normal) {
+        if (normal != null)
+            canvas.drawLine((float) normal.x1, (float) normal.y1, (float) normal.x2, (float) normal.y2, Paints.Stroke.Red);
     }
 
     private static void drawLine(Canvas canvas, Segment edge, Paint paint) {

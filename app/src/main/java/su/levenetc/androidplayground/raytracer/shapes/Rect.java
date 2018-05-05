@@ -17,5 +17,10 @@ public class Rect extends Shape {
         edges.get(1).set(right, top, right, bottom);//right
         edges.get(2).set(right, bottom, left, bottom);//bottom
         edges.get(3).set(left, bottom, left, top);//left
+
+        edges.get(0).name = "top";
+        edges.get(1).name = "right";
+        edges.get(2).name = "bottom";
+        edges.get(3).name = "left";
     }
 }

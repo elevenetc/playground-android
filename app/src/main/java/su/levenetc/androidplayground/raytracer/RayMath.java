@@ -66,9 +66,7 @@ public class RayMath {
     }
 
     public static boolean isReflectedByNormalAndIntersection(Segment ray, Edge edge) {
-        boolean hasIntersection = hasIntersection(ray, edge);
-        boolean reflectedByNormal = isReflectedByNormal(ray, edge);
-        return hasIntersection && reflectedByNormal;
+        return isReflectedByNormal(ray, edge) && hasIntersection(ray, edge);
     }
 
     public static boolean isReflectedByNormal(Segment ray, Edge edge) {
@@ -78,7 +76,8 @@ public class RayMath {
         if (edge.hasNormal()) {
 
             if (edge instanceof DoubleSidedEdge) {
-                result = dotProduct(ray, ((DoubleSidedEdge) edge).leftNormal) < 0 || dotProduct(ray, ((DoubleSidedEdge) edge).rightNormal) < 0;
+                DoubleSidedEdge dEdge = (DoubleSidedEdge) edge;
+                result = dotProduct(ray, dEdge.leftNormal) < 0 || dotProduct(ray, dEdge.rightNormal) < 0;
             } else {
                 result = dotProduct(ray, edge.normal) < 0;
             }

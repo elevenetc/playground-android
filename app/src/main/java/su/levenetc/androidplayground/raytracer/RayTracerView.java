@@ -45,6 +45,7 @@ public class RayTracerView extends View {
     }
 
     private void init() {
+
     }
 
     private void preRenderInit(int width, int height) {

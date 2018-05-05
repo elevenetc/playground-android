@@ -11,6 +11,9 @@ import static su.levenetc.androidplayground.raytracer.geometry.Segment.Direction
 import static su.levenetc.androidplayground.raytracer.geometry.Segment.Direction.W;
 
 public class Segment {
+
+    public String name;
+
     public double x1;
     public double y1;
 
