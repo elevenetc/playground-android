@@ -27,9 +27,8 @@ public class RayTracer {
     private static void traceInternal(Ray ray, RaySegment initVector, Scene scene, double currentLength) {
 
         if (currentLength >= ray.length) return;
-        Log.d("length", String.valueOf(currentLength));
 
-        RayMath.Intersection intersection = RayMath.getClosestWallIntersection(initVector, scene);
+        RayMath.Intersection intersection = RayMath.getClosestIntersection(initVector, scene);
 
         if (intersection != null && intersection.point != null) {
             Point point = intersection.point;
@@ -38,7 +37,6 @@ public class RayTracer {
             RaySegment newVector = new RaySegment(initVector, point.x, point.y);
 
             if (((int) newVector.length()) == 0) {
-                //throw new RuntimeException("Collision");
                 Log.e("rayTracing", "collision" + new RaySegment(initVector, point.x, point.y).length());
                 return;
             }

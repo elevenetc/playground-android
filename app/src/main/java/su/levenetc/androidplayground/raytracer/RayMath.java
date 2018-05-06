@@ -9,11 +9,16 @@ import su.levenetc.androidplayground.raytracer.geometry.Point;
 import su.levenetc.androidplayground.raytracer.geometry.Segment;
 import su.levenetc.androidplayground.raytracer.shapes.Shape;
 
+import static java.lang.Double.compare;
+
 /**
  * Created by eugene.levenetc on 08/03/2018.
  */
 
 public class RayMath {
+
+    private final static Intersection intersection = new Intersection();
+    private final static double doubleEqualityEps = 0.0001;
 
     public static void rotateSegment(Segment segment, double degrees) {
         double rads = Math.toRadians(degrees);
@@ -93,7 +98,7 @@ public class RayMath {
         return Math.sqrt(x1 * x1 + y1 * y1);
     }
 
-    public static Intersection getClosestWallIntersection(RaySegment ray, Scene scene) {
+    public static Intersection getClosestIntersection(RaySegment ray, Scene scene) {
 
         //TODO: use cached list
         List<Edge> boundaries = new LinkedList<>();
@@ -122,7 +127,7 @@ public class RayMath {
             Point inter = getIntersection(ray, bound);
             double dist = distance(inter.x, inter.y, ray.x1, ray.y1);
 
-            if (dist < minDist) {
+            if (compare(dist, 0) > 0 && compare(dist, minDist) < 0) {
                 minDist = dist;
                 intersection.point = inter;
                 intersection.bound = bound;
@@ -132,7 +137,6 @@ public class RayMath {
         return intersection;
     }
 
-    final static Intersection intersection = new Intersection();
 
     public static Point getIntersection(RaySegment a, Edge b) {
         double x1 = a.x1;
@@ -165,7 +169,16 @@ public class RayMath {
         double x4 = b.x2;
         double y4 = b.y2;
 
-        return hasIntersection(x1, y1, x2, y2, x3, y3, x4, y4);
+        boolean has = hasIntersection(x1, y1, x2, y2, x3, y3, x4, y4);
+
+        if (has) {
+            Point intersection = getIntersection(x1, y1, x2, y2, x3, y3, x4, y4);
+            if (pointAtEnds(intersection.x, intersection.y, x1, y1, x2, y2) || pointAtEnds(intersection.x, intersection.y, x3, y3, x4, y4)) {
+                has = false;
+            }
+        }
+
+        return has;
     }
 
     @NonNull
@@ -217,6 +230,15 @@ public class RayMath {
                 }
             }
         }
-        return (ccw < 0.0) ? -1 : ((ccw > 0.0) ? 1 : 0);
+        return compare(ccw, 0.0);
+    }
+
+    private static boolean pointAtEnds(double px, double py, double x1, double y1, double x2, double y2) {
+        return (doubleEquals(px, x1) && doubleEquals(py, y1)) || (doubleEquals(px, x2) && doubleEquals(py, y2));
+    }
+
+    private static boolean doubleEquals(double a, double b) {
+        double diff = Math.abs(a - b);
+        return diff <= doubleEqualityEps;
     }
 }
