@@ -33,7 +33,7 @@ public class Light {
     }
 
     protected void rotateInitVectors(boolean biased) {
-        double coneAngle = 45d;
+        double coneAngle = 25d;
         double stepAngle = coneAngle / rays.size();
 
         double angle = 0;

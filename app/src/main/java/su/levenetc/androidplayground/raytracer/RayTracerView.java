@@ -59,7 +59,8 @@ public class RayTracerView extends View {
             double initY = cy - 75;
 
             //scene = Scenes.justVertical(width, height);
-            scene = Scenes.justVerticalTransparent(width, height);
+//            scene = Scenes.justVerticalTransparent(width, height);
+            scene = Scenes.justPrism(width, height);
             initLight(cx, cy);
         }
     }

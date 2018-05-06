@@ -9,6 +9,10 @@ public class Shape {
 
     public List<Edge> edges;
 
+    public Shape() {
+        edges = new ArrayList<>();
+    }
+
     public Shape(int segments) {
         edges = new ArrayList<>(segments);
         for (int i = 0; i < segments; i++) {

@@ -1,5 +1,6 @@
 package su.levenetc.androidplayground.raytracer;
 
+import su.levenetc.androidplayground.raytracer.shapes.BasicPrism;
 import su.levenetc.androidplayground.raytracer.shapes.Line;
 import su.levenetc.androidplayground.raytracer.shapes.Path;
 import su.levenetc.androidplayground.raytracer.shapes.Rect;
@@ -19,6 +20,12 @@ public class SceneBuilder {
 
     public SceneBuilder setPadding(int padding) {
         this.padding = padding;
+        return this;
+    }
+
+    public SceneBuilder addBasicPrism(double x, double y, double size) {
+        BasicPrism prism = new BasicPrism(x, y, size);
+        scene.add(prism);
         return this;
     }
 

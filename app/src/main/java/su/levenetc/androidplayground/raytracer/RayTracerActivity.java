@@ -23,8 +23,8 @@ public class RayTracerActivity extends AppCompatActivity {
         view = new RayTracerView(this);
         setContentView(view);
 
-        view.setDebugLight(true);
-        view.setDebugScene(true);
+//        view.setDebugLight(true);
+//        view.setDebugScene(true);
     }
 
     @Override

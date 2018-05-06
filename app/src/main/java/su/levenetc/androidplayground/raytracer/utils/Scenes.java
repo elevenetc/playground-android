@@ -63,4 +63,10 @@ public class Scenes {
                         "middle-trans")
                 .build();
     }
+
+    public static Scene justPrism(int width, int height) {
+        return new SceneBuilder(width, height)
+                .addBasicPrism(width / 2, height / 2, 3)
+                .build();
+    }
 }
