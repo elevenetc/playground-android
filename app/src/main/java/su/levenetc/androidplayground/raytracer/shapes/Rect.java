@@ -1,5 +1,7 @@
 package su.levenetc.androidplayground.raytracer.shapes;
 
+import su.levenetc.androidplayground.raytracer.EdgeFactories;
+
 /**
  * Created by eugene.levenetc on 08/03/2018.
  */
@@ -11,7 +13,7 @@ public class Rect extends Shape {
     }
 
     public Rect(double top, double left, double right, double bottom) {
-        super(4);
+        super(4, EdgeFactories.basic());
 
         edges.get(0).set(left, top, right, top);//top
         edges.get(1).set(right, top, right, bottom);//right

@@ -60,7 +60,8 @@ public class RayTracerView extends View {
 
             //scene = Scenes.justVertical(width, height);
 //            scene = Scenes.justVerticalTransparent(width, height);
-            scene = Scenes.justPrism(width, height);
+            scene = Scenes.basicPrism(width, height);
+//            scene = Scenes.basicLens(width, height);
             initLight(cx, cy);
         }
     }

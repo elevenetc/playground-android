@@ -1,22 +1,24 @@
 package su.levenetc.androidplayground.raytracer.shapes;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import su.levenetc.androidplayground.raytracer.Edge;
+import su.levenetc.androidplayground.raytracer.EdgeFactories;
 
 public class Shape {
 
     public List<Edge> edges;
 
     public Shape() {
-        edges = new ArrayList<>();
+        edges = new LinkedList<>();
     }
 
-    public Shape(int segments) {
+    public Shape(int segments, EdgeFactories.EdgeFactory factory) {
         edges = new ArrayList<>(segments);
         for (int i = 0; i < segments; i++) {
-            edges.add(new Edge());
+            edges.add(factory.create());
         }
     }
 

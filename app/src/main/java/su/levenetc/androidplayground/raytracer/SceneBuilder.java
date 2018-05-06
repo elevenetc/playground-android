@@ -93,6 +93,35 @@ public class SceneBuilder {
         return this;
     }
 
+    public SceneBuilder addBasicLens(double x, double y, double size) {
+        Path prism = new Path.Builder()
+                .setFactory(EdgeFactories.transparent())
+                .add(x, y)
+                //right side
+                .append(5 * size, 10 * size)
+                .append(3 * size, 10 * size)
+                .append(2 * size, 10 * size)
+                .append(1 * size, 10 * size)
+                .append(0, 10 * size)
+                .append(-1 * size, 10 * size)
+                .append(-2 * size, 10 * size)
+                .append(-3 * size, 10 * size)
+                .append(-5 * size, 10 * size)
+                //left side
+                .append(-5 * size, -10 * size)
+                .append(-3 * size, -10 * size)
+                .append(-2 * size, -10 * size)
+                .append(-1 * size, -10 * size)
+                .append(0, -10 * size)
+                .append(1 * size, -10 * size)
+                .append(2 * size, -10 * size)
+                .append(3 * size, -10 * size)
+                .append(5 * size, -10 * size)
+                .build();
+        scene.add(prism);
+        return this;
+    }
+
     public Scene build() {
         Rect boundRect = new Rect(padding, padding, screenWidth - padding, screenHeight - padding);
 

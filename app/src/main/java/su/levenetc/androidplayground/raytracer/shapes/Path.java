@@ -4,10 +4,12 @@ import java.util.LinkedList;
 import java.util.List;
 
 import su.levenetc.androidplayground.raytracer.Edge;
+import su.levenetc.androidplayground.raytracer.EdgeFactories;
 
 public class Path extends Shape {
-    public Path(int segments) {
-        super(segments);
+
+    public Path(int segments, EdgeFactories.EdgeFactory factory) {
+        super(segments, factory);
     }
 
     public static class Builder {
@@ -16,6 +18,12 @@ public class Path extends Shape {
 
         private boolean initLeftNormals;
         private boolean initRightNormals;
+        private EdgeFactories.EdgeFactory factory;
+
+        public Builder setFactory(EdgeFactories.EdgeFactory factory) {
+            this.factory = factory;
+            return this;
+        }
 
         public Builder add(double x, double y) {
             coords.add(new double[]{x, y});
@@ -41,7 +49,7 @@ public class Path extends Shape {
 
         public Path build() {
             int segments = coords.size() - 1;
-            Path path = new Path(segments);
+            Path path = new Path(segments, factory);
 
             for (int i = 0; i <= segments - 1; i++) {
                 Edge edge = path.edges.get(i);
