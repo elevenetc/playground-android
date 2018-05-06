@@ -39,7 +39,6 @@ public class Light {
         double angle = 0;
 
         for (int i = 0; i < rays.size(); i++) {
-            Ray ray = rays.get(i);
             RayMath.rotateSegment(this.rays.get(i).initVector, angle + (biased ? getDirectionBias() : 0) - coneAngle / 2);
             angle += stepAngle;
         }

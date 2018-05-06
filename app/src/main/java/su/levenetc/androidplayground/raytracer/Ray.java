@@ -11,7 +11,7 @@ public class Ray {
 
     public RaySegment initVector = new RaySegment();
     List<RaySegment> raySegments = new LinkedList<>();
-    public double length = 1200;//px
+    public double length = 2500;//px
 
     public Ray() {
 

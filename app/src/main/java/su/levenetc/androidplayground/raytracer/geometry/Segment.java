@@ -61,6 +61,14 @@ public class Segment {
         this.y2 = y2;
     }
 
+    public Segment normalized() {
+        double length = length();
+        double origX = x2 - x1;
+        double origY = y2 - y1;
+        //TODO: cache inst
+        return new Segment(0, 0, origX / length, origY / length);
+    }
+
     public double length() {
         //TODO: cache/optimize
         double xSide = x2 - x1;

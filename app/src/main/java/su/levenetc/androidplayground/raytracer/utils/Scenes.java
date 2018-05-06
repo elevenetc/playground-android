@@ -58,9 +58,9 @@ public class Scenes {
 
     public static Scene justVerticalTransparent(int width, int height) {
         return new SceneBuilder(width, height)
-                .addDoubleSidedEdge(width / 2, 350,
+                .addTransparentEdge(width / 2, 350,
                         width / 2, height - 350,
-                        "middle")
+                        "middle-trans")
                 .build();
     }
 }

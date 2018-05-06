@@ -37,16 +37,26 @@ public class RayMath {
         segment.y2 = y + segment.y1;
     }
 
-    public static double dotProduct(Segment ray, Edge edge) {
-        RaySegment rayOrigin = toOrigin(ray);
-        RaySegment normalOrigin = toOrigin(edge.normal);
-        return rayOrigin.x2 * normalOrigin.x2 + rayOrigin.y2 * normalOrigin.y2;
+    public static double dotProduct(Segment a, Segment b) {
+        RaySegment aOrigin = toOrigin(a);
+        RaySegment bOrigin = toOrigin(b);
+        return aOrigin.x2 * bOrigin.x2 + aOrigin.y2 * bOrigin.y2;
     }
 
-    public static double dotProduct(Segment ray, Segment normal) {
-        RaySegment rayOrigin = toOrigin(ray);
-        RaySegment normalOrigin = toOrigin(normal);
-        return rayOrigin.x2 * normalOrigin.x2 + rayOrigin.y2 * normalOrigin.y2;
+    public static double dotProduct(double x1, double y1, double x2, double y2,
+                                    double x3, double y3, double x4, double y4) {
+        //move to origin
+        x2 = x2 - x1;
+        y2 = y2 - y1;
+        x1 = 0;
+        y1 = 0;
+
+        x4 = x4 - x3;
+        y4 = y4 - y3;
+        x3 = 0;
+        y3 = 0;
+
+        return x2 * x4 + y2 * y4;
     }
 
     static RaySegment toOrigin(Segment segment) {

@@ -1,5 +1,6 @@
 package su.levenetc.androidplayground.raytracer;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import su.levenetc.androidplayground.raytracer.geometry.Point;
@@ -49,13 +50,34 @@ public class RayTracer {
 
             ray.raySegments.add(newVector);
 
-            double angle = RayMath.angleBetween(initVector, intersection.bound);
-            RaySegment reflected = initVector.copy();
-            reflected.translateTo(point);
-            double newAngle = (angle - 180) * 2;
-            RayMath.rotateSegment(reflected, newAngle);
+            //rotate init vector
+            RaySegment reflected = rotateInitVector(initVector, intersection);
 
+            //and continue tracing
             traceInternal(ray, reflected, scene, currentLength);
         }
+    }
+
+    @NonNull
+    private static RaySegment rotateInitVector(RaySegment initVector, RayMath.Intersection intersection) {
+
+        double inputAngle = RayMath.angleBetween(initVector, intersection.bound);
+        Point point = intersection.point;
+        RaySegment reflected = initVector.copy();
+
+        reflected.translateTo(point);
+
+        double outputAngle;
+
+        if (intersection.bound instanceof TransparentEdge) {
+            double dot = RayMath.dotProduct(initVector.normalized(), intersection.bound.normalized());
+            outputAngle = 20 * dot;
+        } else {
+            outputAngle = (inputAngle - 180) * 2;
+        }
+
+        RayMath.rotateSegment(reflected, outputAngle);
+
+        return reflected;
     }
 }
