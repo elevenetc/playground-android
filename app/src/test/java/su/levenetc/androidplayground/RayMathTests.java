@@ -126,7 +126,7 @@ public class RayMathTests {
 
         double newAngle = (angle - 180) * 2;
 
-        RayMath.rotateSegment(nextRay, newAngle);
+        RayMath.rotate(nextRay, newAngle);
 
         Out.pln("rotated", nextRay);
         Out.pln();

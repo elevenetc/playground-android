@@ -4,7 +4,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import su.levenetc.androidplayground.raytracer.Ray;
-import su.levenetc.androidplayground.raytracer.RayMath;
 
 public class Light {
 
@@ -32,21 +31,7 @@ public class Light {
         return rays;
     }
 
-    protected void rotateInitVectors(boolean biased) {
-        double coneAngle = 25d;
-        double stepAngle = coneAngle / rays.size();
 
-        double angle = 0;
-
-        for (int i = 0; i < rays.size(); i++) {
-            RayMath.rotateSegment(this.rays.get(i).initVector, angle + (biased ? getDirectionBias() : 0) - coneAngle / 2);
-            angle += stepAngle;
-        }
-    }
-
-    private double getDirectionBias() {
-        return Math.random() * 0.5;
-    }
 
     protected void initRays(int raysCount, double dirX, double dirY) {
 

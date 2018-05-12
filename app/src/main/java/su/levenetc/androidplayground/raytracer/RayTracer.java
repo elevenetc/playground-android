@@ -76,7 +76,7 @@ public class RayTracer {
             outputAngle = (inputAngle - 180) * 2;
         }
 
-        RayMath.rotateSegment(reflected, outputAngle);
+        RayMath.rotate(reflected, outputAngle);
 
         return reflected;
     }

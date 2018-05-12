@@ -66,14 +66,14 @@ public class Scenes {
 
     public static Scene basicPrism(int width, int height) {
         return new SceneBuilder(width, height)
-                .addBasicPrism(width / 2, height / 2, 3)
+                .addBasicPrism(width / 2, height / 3, 3)
                 .build();
     }
 
     public static Scene basicLens(int width, int height) {
 
         double x = width / 2;
-        double y = height / 2;
+        double y = height / 3;
         double size = 10;
 
         return new SceneBuilder(width, height)

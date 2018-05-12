@@ -20,7 +20,31 @@ public class RayMath {
     private final static Intersection intersection = new Intersection();
     private final static double doubleEqualityEps = 0.0001;
 
-    public static void rotateSegment(Segment segment, double degrees) {
+    public static void rotate(Segment segment, double cx, double cy, double degrees) {
+        double rads = Math.toRadians(degrees);
+        double cos = Math.cos(rads);
+        double sin = Math.sin(rads);
+
+        //move to origin
+        segment.x1 -= cx;
+        segment.y1 -= cy;
+        segment.x2 -= cx;
+        segment.y2 -= cy;
+
+        //rotate
+        double x1 = segment.x1 * cos - segment.y1 * sin;
+        double y1 = segment.x1 * sin + segment.y1 * cos;
+        double x2 = segment.x2 * cos - segment.y2 * sin;
+        double y2 = segment.x2 * sin + segment.y2 * cos;
+
+        //move back
+        segment.x1 = x1 + cx;
+        segment.y1 = y1 + cy;
+        segment.x2 = x2 + cx;
+        segment.y2 = y2 + cy;
+    }
+
+    public static void rotate(Segment segment, double degrees) {
         double rads = Math.toRadians(degrees);
         double cos = Math.cos(rads);
         double sin = Math.sin(rads);
@@ -29,6 +53,7 @@ public class RayMath {
         segment.x2 -= segment.x1;
         segment.y2 -= segment.y1;
 
+        //rotate
         double x = segment.x2 * cos - segment.y2 * sin;
         double y = segment.x2 * sin + segment.y2 * cos;
 
