@@ -77,7 +77,7 @@ public class Scenes {
         double size = 10;
 
         return new SceneBuilder(width, height)
-                .addBasicLens(x, y, size)
+                .addBasicLens(x, y, 200, 75)
                 .build();
     }
 }

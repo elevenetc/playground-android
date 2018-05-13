@@ -93,15 +93,16 @@ public class SceneBuilder {
         return this;
     }
 
-    public SceneBuilder addBasicLens(double x, double y, double size) {
+    public SceneBuilder addBasicLens(double x, double y, double width, double height) {
         Path.Builder builder = null;
-        double radius = 250;
+        double radius = height;
+        double ratio = height / width;
         double stepRad = 1;
         double s = 0;
 
         while (s <= 360) {
             double rad = Math.toRadians(s);
-            double xc = (x + radius * Math.sin(rad)) / 2 + x / 2;
+            double xc = x + (radius * Math.sin(rad)) / ratio;
             double yc = y - radius * Math.cos(rad);
 
             if (builder == null) {

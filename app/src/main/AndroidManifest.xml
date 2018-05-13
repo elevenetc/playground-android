@@ -63,7 +63,9 @@
         <activity
             android:name=".activities.QueryLineActivity"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".raytracer.RayTracerActivity" />
+        <activity
+            android:name=".raytracer.RayTracerActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
 
         <service android:name=".services.AlarmStatusService" />
         <service android:name=".services.SensorsDataCollectorService" />

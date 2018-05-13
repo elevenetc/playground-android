@@ -52,9 +52,9 @@ public class LightController {
     }
 
     public void draw(Canvas canvas) {
-        canvas.drawCircle((float) light.x, (float) light.y, locRadius, Paints.Stroke.RedBold);
-        canvas.drawCircle((float) light.dirX, (float) light.dirY, dirRadius, Paints.Stroke.RedBold);
-        canvas.drawLine((float) light.x, (float) light.y, (float) light.dirX, (float) light.dirY, Paints.Stroke.Red);
+        canvas.drawCircle((float) light.x, (float) light.y, locRadius, Paints.Stroke.RedBoldAlpha50);
+        canvas.drawCircle((float) light.dirX, (float) light.dirY, dirRadius, Paints.Stroke.RedBoldAlpha50);
+        canvas.drawLine((float) light.x, (float) light.y, (float) light.dirX, (float) light.dirY, Paints.Stroke.RedAlpha50);
     }
 
     private boolean isAtLocation(float x, float y) {
