@@ -73,7 +73,7 @@ public class Scenes {
     public static Scene basicLens(int width, int height) {
 
         double x = width / 2;
-        double y = height / 3;
+        double y = height / 2;
         double size = 10;
 
         return new SceneBuilder(width, height)

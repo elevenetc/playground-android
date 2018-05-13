@@ -94,31 +94,26 @@ public class SceneBuilder {
     }
 
     public SceneBuilder addBasicLens(double x, double y, double size) {
-        Path prism = new Path.Builder()
-                .setFactory(EdgeFactories.transparent())
-                .add(x, y)
-                //right side
-                .append(5 * size, 10 * size)
-                .append(3 * size, 10 * size)
-                .append(2 * size, 10 * size)
-                .append(1 * size, 10 * size)
-                .append(0, 10 * size)
-                .append(-1 * size, 10 * size)
-                .append(-2 * size, 10 * size)
-                .append(-3 * size, 10 * size)
-                .append(-5 * size, 10 * size)
-                //left side
-                .append(-5 * size, -10 * size)
-                .append(-3 * size, -10 * size)
-                .append(-2 * size, -10 * size)
-                .append(-1 * size, -10 * size)
-                .append(0, -10 * size)
-                .append(1 * size, -10 * size)
-                .append(2 * size, -10 * size)
-                .append(3 * size, -10 * size)
-                .append(5 * size, -10 * size)
-                .build();
-        scene.add(prism);
+        Path.Builder builder = null;
+        double radius = 250;
+        double stepRad = 1;
+        double s = 0;
+
+        while (s <= 360) {
+            double rad = Math.toRadians(s);
+            double xc = (x + radius * Math.sin(rad)) / 2 + x / 2;
+            double yc = y - radius * Math.cos(rad);
+
+            if (builder == null) {
+                builder = new Path.Builder().setFactory(EdgeFactories.transparent()).add(xc, yc);
+            }
+
+            builder.add(xc, yc);
+
+            s += stepRad;
+        }
+
+        scene.add(builder.build());
         return this;
     }
 
