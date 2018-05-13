@@ -5,11 +5,11 @@ import su.levenetc.androidplayground.raytracer.RayMath;
 
 public class PlaneLight extends DirectedLight {
 
-    private double currentAngle = 0;
+    private static final double rayStep = 2;
 
-    public PlaneLight(int rays, double x, double y, double dirX, double dirY) {
-        super(x, y, dirX, dirY);
-        initRays(rays, dirX, dirY);
+    public PlaneLight(double x, double y, double dirX, double dirY, int raysCount) {
+        super(x, y, dirX, dirY, raysCount);
+        initRays();
         arrangeRays();
     }
 
@@ -17,26 +17,21 @@ public class PlaneLight extends DirectedLight {
     public void updateDirection(double dx, double dy) {
 
         double newAngle = RayMath.angleBetween(x, y, x + 10, y, x, y, dx, dy);
-        double currAngle = RayMath.angleBetween(x, y, x + 10, y, x, y, dirX, dirX);
+        double currAngle = RayMath.angleBetween(x, y, x + 10, y, x, y, dirX, dirY);
         double diffAngle = currAngle - newAngle;
         dirX = dx;
         dirY = dy;
         for (int i = 0; i < rays.size(); i++) {
-
             RayMath.rotate(rays.get(i).initVector, x, y, diffAngle);
         }
-
     }
 
     private void arrangeRays() {
-        double trans = 0;
+
+        double trans = (raysCount / 2 * rayStep) * -1;
         for (Ray ray : rays) {
             ray.initVector.translate(0, trans);
-            trans += 4;
+            trans += rayStep;
         }
-    }
-
-    private void rotateInitVectors() {
-
     }
 }

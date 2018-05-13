@@ -8,8 +8,8 @@ abstract public class DirectedLight extends Light {
     double dirY;
     boolean biased = true;
 
-    public DirectedLight(double x, double y, double dirX, double dirY) {
-        super(x, y);
+    public DirectedLight(double x, double y, double dirX, double dirY, int raysCount) {
+        super(x, y, raysCount);
         this.dirX = dirX;
         this.dirY = dirY;
     }
@@ -38,6 +38,21 @@ abstract public class DirectedLight extends Light {
         for (Ray ray : rays) {
             ray.initVector.x2 = endX;
             ray.initVector.y2 = endY;
+        }
+    }
+
+    protected void initRays() {
+
+        //define end locations towards direction
+        //should be long to test intersections later
+        double ratio = 100;
+        double dx = dirX - x;
+        double dy = dirY - y;
+        double endX = x + dx * ratio;
+        double endY = y + dy * ratio;
+
+        for (int i = 0; i < raysCount; i++) {
+            this.rays.add(new Ray(x, y, endX, endY));
         }
     }
 }

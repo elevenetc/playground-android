@@ -11,10 +11,13 @@ public class Light {
     protected double x;
     protected double y;
 
-    public Light(double x, double y) {
+    public Light(double x, double y, int raysCount) {
         this.x = x;
         this.y = y;
+        this.raysCount = raysCount;
     }
+
+    protected int raysCount;
 
     public void updatePosition(double x, double y) {
 
@@ -31,21 +34,5 @@ public class Light {
         return rays;
     }
 
-
-
-    protected void initRays(int raysCount, double dirX, double dirY) {
-
-        //define end locations towards direction
-        //should be long to test intersections later
-        double ratio = 100;
-        double dx = dirX - x;
-        double dy = dirY - y;
-        double endX = x + dx * ratio;
-        double endY = y + dy * ratio;
-
-        for (int i = 0; i < raysCount; i++) {
-            this.rays.add(new Ray(x, y, endX, endY));
-        }
-    }
 
 }

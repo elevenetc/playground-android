@@ -102,7 +102,8 @@ public class RayMath {
                                       double bx1, double by1, double bx2, double by2) {
         double angleA = Math.atan2(ay1 - ay2, ax1 - ax2);
         double angleB = Math.atan2(by1 - by2, bx1 - bx2);
-        return (angleB - angleA) * 180 / Math.PI;
+        double a = (angleB - angleA) * 180 / Math.PI;
+        return a < 0 ? a * -1 : a;
     }
 
     public static boolean isReflectedByNormalAndIntersection(Segment ray, Edge edge) {

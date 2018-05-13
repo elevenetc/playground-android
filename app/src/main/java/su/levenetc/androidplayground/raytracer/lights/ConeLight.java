@@ -4,9 +4,9 @@ import su.levenetc.androidplayground.raytracer.RayMath;
 
 public class ConeLight extends DirectedLight {
 
-    public ConeLight(int rays, double x, double y, double dirX, double dirY) {
-        super(x, y, dirX, dirY);
-        initRays(rays, dirX, dirY);
+    public ConeLight(double x, double y, double dirX, double dirY, int raysCount) {
+        super(x, y, dirX, dirY, raysCount);
+        initRays();
         rotateInitVectors(true);
     }
 
