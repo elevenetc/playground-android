@@ -3,6 +3,7 @@ package su.levenetc.androidplayground;
 import org.assertj.core.data.Offset;
 import org.junit.Test;
 
+import su.levenetc.androidplayground.raytracer.Edge;
 import su.levenetc.androidplayground.raytracer.RayMath;
 import su.levenetc.androidplayground.raytracer.RaySegment;
 import su.levenetc.androidplayground.raytracer.geometry.Point;
@@ -34,12 +35,25 @@ public class RayMathTests {
         return new RaySegment(0, 0, 0, -100);
     }
 
-    static RaySegment vertDown() {
-        return new RaySegment(0, 0, 0, 100);
+    @Test
+    public void normals() {
+        Edge horiz = we();
+
+        horiz.setRightNormal();
+
+        assertThat(RayMath.angleBetween(horiz.normal(), sw45())).isEqualTo(45);
+        assertThat(RayMath.angleBetween(horiz.normal(), se45())).isEqualTo(-45);
     }
 
-    static RaySegment we() {
-        return new RaySegment(0, 0, 100, 0);
+    @Test
+    public void testReflectedByNormal() {
+        Edge ground = we();
+        ground.setRightNormal();
+
+        assertThat(RayMath.isReflectedByNormal(sw45(), ground)).isTrue();
+        assertThat(RayMath.isReflectedByNormal(se45(), ground)).isTrue();
+        assertThat(RayMath.isReflectedByNormal(vertDown(), ground)).isTrue();
+        assertThat(RayMath.isReflectedByNormal(vertUp(), ground)).isFalse();
     }
 
     static RaySegment horizOpposite() {
@@ -55,30 +69,9 @@ public class RayMathTests {
     }
 
     @Test
-    public void normals() {
-        RaySegment horiz = we();
-
-        horiz.initRightNormal();
-
-        assertThat(RayMath.angleBetween(horiz.normal(), sw45())).isEqualTo(45);
-        assertThat(RayMath.angleBetween(horiz.normal(), se45())).isEqualTo(-45);
-    }
-
-    @Test
-    public void testReflectedByNormal() {
-        RaySegment ground = we();
-        ground.initRightNormal();
-
-        assertThat(RayMath.isReflectedByNormal(sw45(), ground)).isTrue();
-        assertThat(RayMath.isReflectedByNormal(se45(), ground)).isTrue();
-        assertThat(RayMath.isReflectedByNormal(vertDown(), ground)).isTrue();
-        assertThat(RayMath.isReflectedByNormal(vertUp(), ground)).isFalse();
-    }
-
-    @Test
     public void testReflectedByIntersectionAndNormal() {
-        RaySegment ground = we();
-        ground.initRightNormal();
+        Edge ground = we();
+        ground.setRightNormal();
 
         assertThat(RayMath.isReflectedByNormalAndIntersection(sw45(), ground)).isTrue();
         assertThat(RayMath.isReflectedByNormalAndIntersection(se45(), ground)).isTrue();
@@ -87,16 +80,10 @@ public class RayMathTests {
     }
 
     @Test
-    public void testDirections() {
-        assertThat(sw45().direction()).isEqualTo(RaySegment.Direction.SW);
-        assertThat(se45().direction()).isEqualTo(RaySegment.Direction.SE);
-    }
-
-    @Test
     public void testDotProducts() {
 
-        RaySegment vert = vertDown();
-        vert.initLeftNormal();
+        Edge vert = vertDown();
+        vert.setLeftNormal();
 
         assertThat(RayMath.dotProduct(se45(), vert)).isGreaterThan(0);
         assertThat(RayMath.dotProduct(sw45(), vert)).isLessThan(0);
@@ -104,13 +91,13 @@ public class RayMathTests {
 
     @Test
     public void testReflection() {
-        RaySegment raySegment = we();
+        Edge raySegment = we();
         //RaySegment ray = sw45();
         //ray.translate(0, -50);
         RaySegment ray = new RaySegment(100, -25, 0, 50);
 
 
-        raySegment.initLeftNormal();
+        raySegment.setLeftNormal();
         Out.pln(RayMath.isReflectedByNormalAndIntersection(ray, raySegment));
         double angle = RayMath.angleBetween(ray, raySegment);
         Out.pln("angle", angle);
@@ -130,6 +117,20 @@ public class RayMathTests {
 
         Out.pln("rotated", nextRay);
         Out.pln();
+    }
+
+    @Test
+    public void testDirections() {
+        assertThat(sw45().direction()).isEqualTo(RaySegment.Direction.SW);
+        assertThat(se45().direction()).isEqualTo(RaySegment.Direction.SE);
+    }
+
+    static Edge vertDown() {
+        return new Edge(0, 0, 0, 100);
+    }
+
+    static Edge we() {
+        return new Edge(0, 0, 100, 0);
     }
 
 }
