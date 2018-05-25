@@ -13,7 +13,7 @@ public class PointLight extends Light {
 
         double radius = 500;
         double angle = 0;
-        double angleStep = 360d / raysCount;
+        double angleStep = (Math.PI * 2) / raysCount;
 
         for (int i = 0; i < raysCount; i++) {
 
