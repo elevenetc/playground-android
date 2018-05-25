@@ -70,7 +70,7 @@ public class RayTracerView extends View {
 //        light = new SingleRayLight(cx, cy, cx + 100, cy + 100);
         //light = new ConeLight(100, cx, cy, cx + 100, cy + 100);
         //light = new PlaneLight(cx, cy, cx + 100, cy, 80);
-        light = new PointLight(cx, cy, 360);
+        light = new PointLight(cx, cy, 1000, 128 * 10);
         lightController = new UndirectedLightController(light);
         RayTracer.trace(light, this.scene);
     }

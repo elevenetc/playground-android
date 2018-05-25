@@ -56,7 +56,6 @@ public class RayTracer {
             //and continue tracing
             traceInternal(ray, reflected, scene, currentLength);
         } else if (currentLength < ray.length) {//no intersection but light still has energy
-            double restDistance = ray.length - currentLength;
 
             RaySegment newVector = new RaySegment(initVector);
             newVector.start = currentLength == 0 ? 0 : (currentLength / ray.length);

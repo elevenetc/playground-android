@@ -4,14 +4,16 @@ import su.levenetc.androidplayground.raytracer.Ray;
 
 public class PointLight extends Light {
 
-    public PointLight(double x, double y, int raysCount) {
+    public PointLight(double x, double y, double radius, int raysCount) {
         super(x, y, raysCount);
+        this.radius = radius;
         initRays();
     }
 
+    double radius;
+
     private void initRays() {
 
-        double radius = 500;
         double angle = 0;
         double angleStep = (Math.PI * 2) / raysCount;
 
