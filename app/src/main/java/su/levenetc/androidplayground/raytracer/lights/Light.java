@@ -10,14 +10,13 @@ public class Light {
     public List<Ray> rays = new LinkedList<>();
     protected double x;
     protected double y;
+    protected int raysCount;
 
     public Light(double x, double y, int raysCount) {
         this.x = x;
         this.y = y;
         this.raysCount = raysCount;
     }
-
-    protected int raysCount;
 
     public void updatePosition(double x, double y) {
 
