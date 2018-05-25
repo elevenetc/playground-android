@@ -21,7 +21,7 @@ public class RayTracer {
     }
 
     public static void trace(Ray ray, Scene scene) {
-        ray.raySegments.clear();
+        ray.reflectedOrRefracted.clear();
         traceInternal(ray, ray.initVector, scene, 0);
     }
 
@@ -48,13 +48,23 @@ public class RayTracer {
             currentLength += length;
             newVector.end = currentLength / ray.length;
 
-            ray.raySegments.add(newVector);
+            ray.reflectedOrRefracted.add(newVector);
 
             //rotate init vector
             RaySegment reflected = rotateInitVector(initVector, intersection);
 
             //and continue tracing
             traceInternal(ray, reflected, scene, currentLength);
+        } else if (currentLength < ray.length) {//no intersection but light still has energy
+            double restDistance = ray.length - currentLength;
+
+            RaySegment newVector = new RaySegment(initVector);
+            newVector.start = currentLength == 0 ? 0 : (currentLength / ray.length);
+            double length = newVector.length();
+            currentLength += length;
+            newVector.end = currentLength / ray.length;
+
+            ray.reflectedOrRefracted.add(newVector);
         }
     }
 

@@ -31,8 +31,8 @@ public class RayTracerView extends View {
 
     private boolean initRender;
     private Light light;
-    private boolean debugScene = true;
-    private boolean debugLight = true;
+    private boolean debugScene = false;
+    private boolean debugLight = false;
 
     public RayTracerView(Context context) {
         super(context);
@@ -70,7 +70,7 @@ public class RayTracerView extends View {
 //        light = new SingleRayLight(cx, cy, cx + 100, cy + 100);
         //light = new ConeLight(100, cx, cy, cx + 100, cy + 100);
         //light = new PlaneLight(cx, cy, cx + 100, cy, 80);
-        light = new PointLight(cx, cy, 80);
+        light = new PointLight(cx, cy, 180);
         lightController = new UndirectedLightController(light);
         RayTracer.trace(light, this.scene);
     }

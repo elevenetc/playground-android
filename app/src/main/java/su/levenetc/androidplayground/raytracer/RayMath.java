@@ -20,6 +20,10 @@ public class RayMath {
     private final static Intersection intersection = new Intersection();
     private final static double doubleEqualityEps = 0.0001;
 
+    //public double distance(double xa, double ya,double xb, double yb){
+    //    return Math.sqrt(Math.pow(xa - xb, 2) + Math.pow(ya - yb, 2));
+    //}
+
     public static void rotate(Segment segment, double cx, double cy, double degrees) {
         double rads = Math.toRadians(degrees);
         double cos = Math.cos(rads);

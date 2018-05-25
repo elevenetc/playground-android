@@ -12,6 +12,10 @@ public class RaySegment extends Segment {
     public double start;
     public double end;
 
+    public RaySegment(Segment segment) {
+        this(segment.x1, segment.y1, segment.x2, segment.y2);
+    }
+
     public RaySegment(double x1, double y1, double x2, double y2) {
         super(x1, y1, x2, y2);
     }
