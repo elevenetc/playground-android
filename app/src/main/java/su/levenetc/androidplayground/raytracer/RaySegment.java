@@ -9,6 +9,10 @@ import su.levenetc.androidplayground.raytracer.geometry.Segment;
 
 public class RaySegment extends Segment {
 
+    public int startColor;
+    public int endColor;
+
+    //Decay values
     public double start;
     public double end;
 

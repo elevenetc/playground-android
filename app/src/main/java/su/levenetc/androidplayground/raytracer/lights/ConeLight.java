@@ -23,7 +23,7 @@ public class ConeLight extends DirectedLight {
         double angle = 0;
 
         for (int i = 0; i < rays.size(); i++) {
-            RayMath.rotate(this.rays.get(i).initVector, angle + (biased ? getDirectionBias() : 0) - coneAngle / 2);
+            RayMath.rotate(this.rays.get(i).initSegment, angle + (biased ? getDirectionBias() : 0) - coneAngle / 2);
             angle += stepAngle;
         }
     }

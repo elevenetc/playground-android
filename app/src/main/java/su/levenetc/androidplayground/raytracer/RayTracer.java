@@ -1,5 +1,6 @@
 package su.levenetc.androidplayground.raytracer;
 
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -21,50 +22,56 @@ public class RayTracer {
     }
 
     public static void trace(Ray ray, Scene scene) {
-        ray.reflectedOrRefracted.clear();
-        traceInternal(ray, ray.initVector, scene, 0);
+        ray.reset();
+        traceInternal(ray, ray.initSegment, scene, 0);
     }
 
-    private static void traceInternal(Ray ray, RaySegment initVector, Scene scene, double currentLength) {
+    private static void traceInternal(Ray ray, RaySegment initSegment, Scene scene, double currentLength) {
 
         if (currentLength >= ray.length) return;
 
-        RayMath.Intersection intersection = RayMath.getClosestIntersection(initVector, scene);
+        RayMath.Intersection intersection = RayMath.getClosestIntersection(initSegment, scene);
 
         if (intersection != null && intersection.point != null) {
             Point point = intersection.point;
 
+            RaySegment newSegment = new RaySegment(initSegment, point.x, point.y);
 
-            RaySegment newVector = new RaySegment(initVector, point.x, point.y);
-
-            if (((int) newVector.length()) == 0) {
-                Log.e("rayTracing", "collision" + new RaySegment(initVector, point.x, point.y).length());
+            if (((int) newSegment.length()) == 0) {
+                //stop tracing on collision case
                 return;
             }
 
-            //calc fading currentLength
-            newVector.start = currentLength == 0 ? 0 : (currentLength / ray.length);
-            double length = newVector.length();
-            currentLength += length;
-            newVector.end = currentLength / ray.length;
+            //calc fading and rest length
+            currentLength = setFading(ray, currentLength, newSegment);
 
-            ray.reflectedOrRefracted.add(newVector);
+            ray.reflectedOrRefracted().add(newSegment);
 
-            //rotate init vector
-            RaySegment reflected = rotateInitVector(initVector, intersection);
-
-            //and continue tracing
-            traceInternal(ray, reflected, scene, currentLength);
+            //continue tracing
+            traceInternal(ray, rotateInitVector(initSegment, intersection), scene, currentLength);
         } else if (currentLength < ray.length) {//no intersection but light still has energy
 
-            RaySegment newVector = new RaySegment(initVector);
-            newVector.start = currentLength == 0 ? 0 : (currentLength / ray.length);
-            double length = newVector.length();
-            currentLength += length;
-            newVector.end = currentLength / ray.length;
+            RaySegment newSegment = new RaySegment(initSegment);
 
-            ray.reflectedOrRefracted.add(newVector);
+            setFading(ray, currentLength, newSegment);
+
+            ray.reflectedOrRefracted().add(newSegment);
         }
+    }
+
+    private static void setColor(RaySegment newSegment) {
+
+    }
+
+    private static double setFading(Ray ray, double currentLength, RaySegment newSegment) {
+        float alphaStart = currentLength == 0 ? 0 : (float) (currentLength / ray.length);
+        newSegment.startColor = Color.argb(alphaStart, 255, 0, 0);
+
+        double length = newSegment.length();
+        currentLength += length;
+        float alphaEnd = (float) ((currentLength / ray.length));
+        newSegment.endColor = Color.argb(alphaEnd, 1, 0, 0);
+        return currentLength;
     }
 
     @NonNull

@@ -9,27 +9,36 @@ import java.util.List;
 
 public class Ray {
 
-    public RaySegment initVector = new RaySegment();
+    private List<RaySegment> reflectedOrRefracted = new LinkedList<>();
+    public RaySegment initSegment = new RaySegment();
     public double length;//px
 
+    public Ray(double x1, double y1, double x2, double y2, int color) {
+        init(x1, y1, x2, y2);
+        initSegment.startColor = color;
+        initSegment.endColor = color;
+    }
+
     public void init(double x1, double y1, double x2, double y2) {
-        initVector.set(x1, y1, x2, y2);
+        initSegment.set(x1, y1, x2, y2);
         //TODO: cache/pool
         reflectedOrRefracted.clear();
         length = RayMath.distance(x1, y1, x2, y2);
     }
 
-    public Ray(double x1, double y1, double x2, double y2) {
-        init(x1, y1, x2, y2);
-    }
-
-    public List<RaySegment> lines() {
+    public List<RaySegment> reflectedOrRefracted() {
         return reflectedOrRefracted;
     }
 
-    List<RaySegment> reflectedOrRefracted = new LinkedList<>();
 
     public RaySegment initVector() {
-        return initVector;
+        return initSegment;
+    }
+
+    /**
+     * Resets reflected and refracted segments
+     */
+    public void reset() {
+        reflectedOrRefracted.clear();
     }
 }

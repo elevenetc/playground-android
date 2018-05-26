@@ -60,8 +60,8 @@ public class RayTracerView extends View {
 
             //scene = Scenes.justVertical(width, height);
 //            scene = Scenes.justVerticalTransparent(width, height);
-//            scene = Scenes.basicPrism(width, height);
-            scene = Scenes.basicLens(width, height);
+            scene = Scenes.basicPrism(width, height);
+//            scene = Scenes.basicLens(width, height);
             initLight(cx, cy);
         }
     }
@@ -70,7 +70,7 @@ public class RayTracerView extends View {
 //        light = new SingleRayLight(cx, cy, cx + 100, cy + 100);
         //light = new ConeLight(100, cx, cy, cx + 100, cy + 100);
         //light = new PlaneLight(cx, cy, cx + 100, cy, 80);
-        light = new PointLight(cx, cy, 1000, 128 * 10);
+        light = new PointLight(cx, cy, 300, 50);
         lightController = new UndirectedLightController(light);
         RayTracer.trace(light, this.scene);
     }

@@ -16,7 +16,6 @@ public class V1Drawer implements Drawer {
     private Paint paint = new Paint();
 
     public V1Drawer() {
-        paint.setColor(Color.WHITE);
         paint.setStyle(Paint.Style.FILL);
     }
 
@@ -39,11 +38,14 @@ public class V1Drawer implements Drawer {
     private void drawRay(Ray ray, Canvas canvas) {
 
         paint.setAlpha(255);
+        paint.setColor(Color.RED);
 
         float spotRadius = 10f;//px
         double step = 5;//px
 
-        for (RaySegment raySegment : ray.lines()) {
+        for (RaySegment raySegment : ray.reflectedOrRefracted()) {
+
+
 
             double dx = raySegment.x2 - raySegment.x1;
             double dy = raySegment.y2 - raySegment.y1;
@@ -52,7 +54,10 @@ public class V1Drawer implements Drawer {
             double loc;//0.0 - 1.0
             double currentLen = 0;//px, from 0.0 to raySegmentLen
 
-            double fullRayLoc = raySegment.start;
+            float startAlpha = (raySegment.startColor >>> (8 * 3)) / 255f;
+            float endAlpha = (raySegment.endColor >>> (8 * 3)) / 255f;
+
+            double fullRayLoc = startAlpha;
 
             while (currentLen <= raySegmentLen) {
 
@@ -64,7 +69,8 @@ public class V1Drawer implements Drawer {
 
                 drawStepArea(ray, canvas, (float) x, (float) y, fullRayLoc, spotRadius);
 
-                fullRayLoc = raySegment.start + (raySegment.end - raySegment.start) * loc;
+
+                fullRayLoc = startAlpha + (endAlpha - startAlpha) * loc;
                 currentLen += step;
             }
         }

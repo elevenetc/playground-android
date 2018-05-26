@@ -26,7 +26,7 @@ public class Light {
         this.x = x;
         this.y = y;
 
-        for (Ray ray : rays) ray.initVector.translate(dx, dy);
+        for (Ray ray : rays) ray.initSegment.translate(dx, dy);
     }
 
     public List<Ray> rays() {

@@ -61,8 +61,8 @@ public class DebugDrawer implements Drawer {
     }
 
     public void draw(Ray ray, Canvas canvas) {
-        if (!ray.lines().isEmpty()) {
-            for (RaySegment raySegment : ray.lines())
+        if (!ray.reflectedOrRefracted().isEmpty()) {
+            for (RaySegment raySegment : ray.reflectedOrRefracted())
                 drawRaySegment(canvas, raySegment, Paints.Stroke.Yellow, true);
         } else {
             drawRaySegment(canvas, ray.initVector(), Paints.Stroke.Red, true);
