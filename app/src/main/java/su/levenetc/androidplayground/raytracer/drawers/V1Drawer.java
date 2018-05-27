@@ -13,7 +13,15 @@ import su.levenetc.androidplayground.raytracer.lights.Light;
 
 public class V1Drawer implements Drawer {
 
-    private Paint paint = new Paint();
+    private final Paint paint = new Paint();
+    /**
+     * Spots overlap each other, so brightness(alpha) should be decreased
+     */
+    private static final float brightness = .1f;
+    /**
+     * Spots overlap each other, so in the beginning size of spots should be smaller
+     */
+    private static final float sportSizeRation = 0.4f;
 
     public V1Drawer() {
         paint.setStyle(Paint.Style.FILL);
@@ -23,9 +31,7 @@ public class V1Drawer implements Drawer {
     public void draw(Light light, Canvas canvas) {
         List<Ray> rays = light.rays();
 
-        for (int i = 0; i < rays.size(); i++) {
-            drawRay(rays.get(i), canvas);
-        }
+        for (int i = 0; i < rays.size(); i++) drawRay(rays.get(i), canvas);
     }
 
     @Override
@@ -46,7 +52,6 @@ public class V1Drawer implements Drawer {
         for (RaySegment raySegment : ray.reflectedOrRefracted()) {
 
 
-
             double dx = raySegment.x2 - raySegment.x1;
             double dy = raySegment.y2 - raySegment.y1;
             double raySegmentLen = Math.sqrt(dx * dx + dy * dy);
@@ -54,10 +59,10 @@ public class V1Drawer implements Drawer {
             double loc;//0.0 - 1.0
             double currentLen = 0;//px, from 0.0 to raySegmentLen
 
-            float startAlpha = (raySegment.startColor >>> (8 * 3)) / 255f;
-            float endAlpha = (raySegment.endColor >>> (8 * 3)) / 255f;
+            float startAlpha = raySegment.startAlpha;
+            float endAlpha = raySegment.endAlpha;
 
-            double fullRayLoc = startAlpha;
+            double fadeLoc = startAlpha;
 
             while (currentLen <= raySegmentLen) {
 
@@ -67,27 +72,39 @@ public class V1Drawer implements Drawer {
                 double x = raySegment.x1 + dx * ratio;
                 double y = raySegment.y1 + dy * ratio;
 
-                drawStepArea(ray, canvas, (float) x, (float) y, fullRayLoc, spotRadius);
+                drawStepArea(canvas, (float) x, (float) y, fadeLoc, spotRadius);
 
 
-                fullRayLoc = startAlpha + (endAlpha - startAlpha) * loc;
+                fadeLoc = startAlpha + (endAlpha - startAlpha) * loc;
                 currentLen += step;
             }
         }
     }
 
-    private void drawStepArea(Ray ray,
-                              Canvas canvas,
+
+    /**
+     * @param canvas
+     * @param x
+     * @param y
+     * @param fadeLoc    from 0 to infinity
+     * @param spotRadius
+     */
+    private void drawStepArea(Canvas canvas,
                               float x, float y,
-                              double fullRayLoc,
+                              double fadeLoc,
                               float spotRadius) {
-        paint.setAlpha(getAlpha(ray, fullRayLoc));
+        //skip drawing transparent spots
+        if (fadeLoc > 1) return;
+
+        spotRadius *= (fadeLoc + sportSizeRation);
+
+        paint.setAlpha(calculateAlpha(fadeLoc));
         canvas.drawRect(x, y, x + spotRadius, y + spotRadius, paint);
     }
 
-    private int getAlpha(Ray ray, double fullRayLoc) {
-        double v = fullRayLoc;
-        if (v > 1) v = 1;
-        return (int) (50 * (1 - v));
+    private int calculateAlpha(double fadeLoc) {
+        double alpha = (1 - fadeLoc) * 255;
+        alpha *= brightness;
+        return (int) alpha;
     }
 }

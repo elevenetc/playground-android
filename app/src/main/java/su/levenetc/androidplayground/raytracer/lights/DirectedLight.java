@@ -47,7 +47,7 @@ abstract public class DirectedLight extends Light {
 
         //define end locations towards direction
         //should be long to test intersections later
-        double ratio = 100;
+        double ratio = 1;
         double dx = dirX - x;
         double dy = dirY - y;
         double endX = x + dx * ratio;

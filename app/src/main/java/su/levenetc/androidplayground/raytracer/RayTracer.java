@@ -1,6 +1,5 @@
 package su.levenetc.androidplayground.raytracer;
 
-import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -64,13 +63,11 @@ public class RayTracer {
     }
 
     private static double setFading(Ray ray, double currentLength, RaySegment newSegment) {
-        float alphaStart = currentLength == 0 ? 0 : (float) (currentLength / ray.length);
-        newSegment.startColor = Color.argb(alphaStart, 255, 0, 0);
+        newSegment.startAlpha = currentLength == 0 ? 0 : (float) (currentLength / ray.length);
 
         double length = newSegment.length();
         currentLength += length;
-        float alphaEnd = (float) ((currentLength / ray.length));
-        newSegment.endColor = Color.argb(alphaEnd, 1, 0, 0);
+        newSegment.endAlpha = (float) ((currentLength / ray.length));
         return currentLength;
     }
 
