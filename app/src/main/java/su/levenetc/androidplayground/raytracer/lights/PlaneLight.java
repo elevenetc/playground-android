@@ -7,8 +7,8 @@ public class PlaneLight extends DirectedLight {
 
     private static final double rayStep = 2;
 
-    public PlaneLight(double x, double y, double dirX, double dirY, int raysCount) {
-        super(x, y, dirX, dirY, raysCount);
+    public PlaneLight(double x, double y, double dirX, double dirY, int color, int raysCount) {
+        super(x, y, dirX, dirY, color, raysCount);
         initRays();
         arrangeRays();
     }

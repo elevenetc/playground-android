@@ -17,7 +17,7 @@ import static java.lang.Double.compare;
 
 public class RayMath {
 
-    private final static Intersection intersection = new Intersection();
+    private static Intersection intersection = new Intersection();
     private final static double doubleEqualityEps = 0.0001;
 
     //public double distance(double xa, double ya,double xb, double yb){
@@ -109,21 +109,34 @@ public class RayMath {
         return (angleB - angleA) * 180 / Math.PI;
     }
 
-    public static boolean isReflectedByNormalAndIntersection(Segment ray, Edge edge) {
-        return isReflectedByNormal(ray, edge) && hasIntersection(ray, edge);
+    public static Intersection isReflectedByNormalAndIntersection(Segment ray, Edge edge) {
+        Intersection intersection = isReflectedByNormal(ray, edge);
+        Point point = hasIntersection(ray, edge);
+        intersection.point = point;
+        return intersection;
     }
 
-    public static boolean isReflectedByNormal(Segment ray, Edge edge) {
+    public static Intersection isReflectedByNormal(Segment ray, Edge edge) {
 
-        boolean result = false;
+        Intersection result = new Intersection();
 
         if (edge.hasNormal()) {
 
             if (edge instanceof DoubleSidedEdge) {
                 DoubleSidedEdge dEdge = (DoubleSidedEdge) edge;
-                result = dotProduct(ray, dEdge.leftNormal) < 0 || dotProduct(ray, dEdge.rightNormal) < 0;
+
+                if (dotProduct(ray, dEdge.leftNormal) < 0) {
+                    result.leftNormal = true;
+                    result.bound = dEdge;
+                } else if (dotProduct(ray, dEdge.rightNormal) < 0) {
+                    result.leftNormal = false;
+                    result.bound = dEdge;
+                }
             } else {
-                result = dotProduct(ray, edge.normal) < 0;
+
+                if (dotProduct(ray, edge.normal) < 0) {
+                    result.bound = edge;
+                }
             }
 
         }
@@ -137,39 +150,39 @@ public class RayMath {
         return Math.sqrt(x1 * x1 + y1 * y1);
     }
 
+    @NonNull
     public static Intersection getClosestIntersection(RaySegment ray, Scene scene) {
 
         //TODO: use cached list
-        List<Edge> boundaries = new LinkedList<>();
+        List<Intersection> intersections = new LinkedList<>();
 
         intersection.bound = null;
         intersection.point = null;
 
         //get all intersection edges with array
         for (Shape object : scene.objects)
-            for (Edge bound : object.edges)
-                if (isReflectedByNormalAndIntersection(ray, bound))
-                    boundaries.add(bound);
+            for (Edge bound : object.edges) {
+                Intersection i = isReflectedByNormalAndIntersection(ray, bound);
+                if (i.exists()) intersections.add(i);
+            }
 
-        if (boundaries.isEmpty()) {
-            return null;
-        } else if (boundaries.size() == 1) {
-            intersection.bound = boundaries.get(0);
-            intersection.point = getIntersection(ray, boundaries.get(0));
+
+        if (intersections.isEmpty()) {
             return intersection;
+        } else if (intersections.size() == 1) {
+            return intersections.get(0);
         }
 
         double minDist = Double.MAX_VALUE;
 
         //get all intersection points and take closest
-        for (Edge bound : boundaries) {
-            Point inter = getIntersection(ray, bound);
+        for (Intersection i : intersections) {
+            Point inter = getIntersection(ray, i.bound);
             double dist = distance(inter.x, inter.y, ray.x1, ray.y1);
 
             if (compare(dist, 0) > 0 && compare(dist, minDist) < 0) {
                 minDist = dist;
-                intersection.point = inter;
-                intersection.bound = bound;
+                intersection = i;
             }
         }
 
@@ -196,7 +209,7 @@ public class RayMath {
         return getIntersection(x1, y1, x2, y2, b.x1, b.y1, b.x2, b.y2);
     }
 
-    public static boolean hasIntersection(Segment a, Segment b) {
+    public static Point hasIntersection(Segment a, Segment b) {
 
         double x1 = a.x1;
         double y1 = a.y1;
@@ -209,15 +222,18 @@ public class RayMath {
         double y4 = b.y2;
 
         boolean has = hasIntersection(x1, y1, x2, y2, x3, y3, x4, y4);
+        Point result = null;
 
         if (has) {
             Point intersection = getIntersection(x1, y1, x2, y2, x3, y3, x4, y4);
             if (pointAtEnds(intersection.x, intersection.y, x1, y1, x2, y2) || pointAtEnds(intersection.x, intersection.y, x3, y3, x4, y4)) {
                 has = false;
+            } else {
+                result = intersection;
             }
         }
 
-        return has;
+        return result;
     }
 
     @NonNull
@@ -233,8 +249,15 @@ public class RayMath {
     }
 
     static class Intersection {
+
         public Point point;
         public Edge bound;
+
+        public boolean exists() {
+            return point != null;
+        }
+
+        boolean leftNormal;
     }
 
     public static boolean hasIntersection(

@@ -12,11 +12,14 @@ public class Light {
     protected double y;
     protected int raysCount;
 
-    public Light(double x, double y, int raysCount) {
+    public Light(double x, double y, int color, int raysCount) {
         this.x = x;
         this.y = y;
+        this.color = color;
         this.raysCount = raysCount;
     }
+
+    protected int color;
 
     public void updatePosition(double x, double y) {
 

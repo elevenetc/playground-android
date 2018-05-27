@@ -6,8 +6,8 @@ import su.levenetc.androidplayground.raytracer.Ray;
 
 public class PointLight extends Light {
 
-    public PointLight(double x, double y, double radius, int raysCount) {
-        super(x, y, raysCount);
+    public PointLight(double x, double y, double radius, int color, int raysCount) {
+        super(x, y, color, raysCount);
         this.radius = radius;
         initRays();
     }

@@ -31,7 +31,7 @@ public class RayTracer {
 
         RayMath.Intersection intersection = RayMath.getClosestIntersection(initSegment, scene);
 
-        if (intersection != null && intersection.point != null) {
+        if (intersection.exists()) {
             Point point = intersection.point;
 
             RaySegment newSegment = new RaySegment(initSegment, point.x, point.y);
@@ -41,8 +41,11 @@ public class RayTracer {
                 return;
             }
 
+            setColor(newSegment, intersection);
+
             //calc fading and rest length
             currentLength = setFading(ray, currentLength, newSegment);
+
 
             ray.reflectedOrRefracted().add(newSegment);
 
@@ -52,14 +55,23 @@ public class RayTracer {
 
             RaySegment newSegment = new RaySegment(initSegment);
 
+            setColor(newSegment, intersection);
             setFading(ray, currentLength, newSegment);
 
             ray.reflectedOrRefracted().add(newSegment);
         }
     }
 
-    private static void setColor(RaySegment newSegment) {
-
+    private static void setColor(RaySegment newSegment, RayMath.Intersection intersection) {
+        if (intersection.exists() && intersection.bound instanceof TransparentEdge) {
+            if (intersection.leftNormal) {
+                newSegment.startColor = ((TransparentEdge) intersection.bound).leftColor;
+                newSegment.endColor = ((TransparentEdge) intersection.bound).leftColor;
+            } else {
+                newSegment.startColor = ((TransparentEdge) intersection.bound).rightColor;
+                newSegment.endColor = ((TransparentEdge) intersection.bound).rightColor;
+            }
+        }
     }
 
     private static double setFading(Ray ray, double currentLength, RaySegment newSegment) {

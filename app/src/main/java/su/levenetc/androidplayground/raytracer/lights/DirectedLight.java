@@ -1,7 +1,5 @@
 package su.levenetc.androidplayground.raytracer.lights;
 
-import android.graphics.Color;
-
 import su.levenetc.androidplayground.raytracer.Ray;
 
 abstract public class DirectedLight extends Light {
@@ -10,8 +8,8 @@ abstract public class DirectedLight extends Light {
     double dirY;
     boolean biased = true;
 
-    public DirectedLight(double x, double y, double dirX, double dirY, int raysCount) {
-        super(x, y, raysCount);
+    public DirectedLight(double x, double y, double dirX, double dirY, int color, int raysCount) {
+        super(x, y, color, raysCount);
         this.dirX = dirX;
         this.dirY = dirY;
     }
@@ -54,7 +52,7 @@ abstract public class DirectedLight extends Light {
         double endY = y + dy * ratio;
 
         for (int i = 0; i < raysCount; i++) {
-            this.rays.add(new Ray(x, y, endX, endY, Color.WHITE));
+            this.rays.add(new Ray(x, y, endX, endY, color));
         }
     }
 }
