@@ -18,4 +18,6 @@ public class BootActivity extends AppCompatActivity {
         startActivity(new Intent(this, c));
         finish();
     }
+
+
 }

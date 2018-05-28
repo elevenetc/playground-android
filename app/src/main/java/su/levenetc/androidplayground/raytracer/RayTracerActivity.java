@@ -7,6 +7,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.CheckBox;
 
+import su.levenetc.androidplayground.debug.DebugMenu;
+
 /**
  * Created by eugene.levenetc on 08/03/2018.
  */
@@ -22,6 +24,8 @@ public class RayTracerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         view = new RayTracerView(this);
         setContentView(view);
+
+        DebugMenu.add(this);
 
 //        view.setDebugLight(true);
 //        view.setDebugScene(true);
