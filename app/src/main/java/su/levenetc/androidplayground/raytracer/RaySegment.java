@@ -50,7 +50,14 @@ public class RaySegment extends Segment {
     }
 
     public RaySegment copy() {
-        return new RaySegment(x1, y1, x2, y2);
+        RaySegment copy = new RaySegment(x1, y1, x2, y2);
+        copy.startColor = startColor;
+        copy.endColor = endColor;
+        copy.start = start;
+        copy.end = end;
+        copy.startAlpha = startAlpha;
+        copy.endAlpha = endAlpha;
+        return copy;
     }
 
 }

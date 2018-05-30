@@ -18,7 +18,7 @@ public class V1Drawer implements Drawer {
     /**
      * Spots overlap each other, so brightness(alpha) should be decreased
      */
-    private static final float brightness = .1f;
+    private static final float brightness = 1f;//.1f;
     /**
      * Spots overlap each other, so in the beginning size of spots should be smaller
      */
@@ -40,13 +40,10 @@ public class V1Drawer implements Drawer {
 
     }
 
-    /**
-     */
     private void drawRay(Ray ray, Canvas canvas) {
 
         paint.setAlpha(255);
         paint.setColor(Color.RED);
-
 
         double step = 5;//px
 

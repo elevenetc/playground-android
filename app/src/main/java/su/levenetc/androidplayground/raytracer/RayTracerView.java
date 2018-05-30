@@ -32,8 +32,8 @@ public class RayTracerView extends View {
 
     private boolean initRender;
     private Light light;
-    private boolean debugScene = false;
-    private boolean debugLight = false;
+    private boolean debugScene = true;
+    private boolean debugLight = true;
 
     public RayTracerView(Context context) {
         super(context);

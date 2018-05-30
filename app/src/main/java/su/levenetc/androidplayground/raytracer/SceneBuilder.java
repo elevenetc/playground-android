@@ -73,7 +73,7 @@ public class SceneBuilder {
                                            double x2, double y2,
                                            String name
     ) {
-        DoubleSidedEdge edge = new DoubleSidedEdge();
+        DoubleSidedEdge edge = new TransparentEdge();
         edge.set(x1, y1, x2, y2);
         edge.name = name;
 

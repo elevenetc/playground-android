@@ -2,7 +2,7 @@ package su.levenetc.androidplayground.raytracer;
 
 import su.levenetc.androidplayground.raytracer.geometry.Segment;
 
-public class DoubleSidedEdge extends Edge {
+abstract public class DoubleSidedEdge extends Edge {
 
     public Segment leftNormal;
     public Segment rightNormal;

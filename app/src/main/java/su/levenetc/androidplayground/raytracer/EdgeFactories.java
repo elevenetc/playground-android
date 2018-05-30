@@ -10,10 +10,6 @@ public class EdgeFactories {
         return Edge::new;
     }
 
-    public static EdgeFactory doubleSided() {
-        return DoubleSidedEdge::new;
-    }
-
     public interface EdgeFactory {
         Edge create();
     }

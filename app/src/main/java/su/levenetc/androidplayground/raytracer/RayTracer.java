@@ -35,6 +35,7 @@ public class RayTracer {
             Point point = intersection.point;
 
             RaySegment newSegment = new RaySegment(initSegment, point.x, point.y);
+            newSegment.startColor = initSegment.startColor;
 
             if (((int) newSegment.length()) == 0) {
                 //stop tracing on collision case
@@ -54,6 +55,7 @@ public class RayTracer {
         } else if (currentLength < ray.length) {//no intersection but light still has energy
 
             RaySegment newSegment = new RaySegment(initSegment);
+            newSegment.startColor = initSegment.startColor;
 
             setColor(newSegment, intersection);
             setFading(ray, currentLength, newSegment);
@@ -63,15 +65,19 @@ public class RayTracer {
     }
 
     private static void setColor(RaySegment newSegment, RayMath.Intersection intersection) {
-        if (intersection.exists() && intersection.bound instanceof TransparentEdge) {
-            if (intersection.leftNormal) {
-                newSegment.startColor = ((TransparentEdge) intersection.bound).leftColor;
-                newSegment.endColor = ((TransparentEdge) intersection.bound).leftColor;
-            } else {
-                newSegment.startColor = ((TransparentEdge) intersection.bound).rightColor;
-                newSegment.endColor = ((TransparentEdge) intersection.bound).rightColor;
+
+        if (intersection.exists()) {//if exists then check edge color conversion
+            if (intersection.bound instanceof TransparentEdge) {
+                if (intersection.leftNormal) {
+                    newSegment.startColor = ((TransparentEdge) intersection.bound).leftColor;
+                    newSegment.endColor = ((TransparentEdge) intersection.bound).leftColor;
+                } else {
+                    newSegment.startColor = ((TransparentEdge) intersection.bound).rightColor;
+                    newSegment.endColor = ((TransparentEdge) intersection.bound).rightColor;
+                }
             }
         }
+
     }
 
     private static double setFading(Ray ray, double currentLength, RaySegment newSegment) {
