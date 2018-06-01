@@ -3,8 +3,8 @@ package su.levenetc.androidplayground.raytracer.shapes;
 import java.util.LinkedList;
 import java.util.List;
 
-import su.levenetc.androidplayground.raytracer.Edge;
-import su.levenetc.androidplayground.raytracer.EdgeFactories;
+import su.levenetc.androidplayground.raytracer.edges.Edge;
+import su.levenetc.androidplayground.raytracer.edges.EdgeFactories;
 
 public class Path extends Shape {
 
@@ -14,10 +14,10 @@ public class Path extends Shape {
 
     public static class Builder {
 
-        List<double[]> coords = new LinkedList<>();
-
-        private boolean initLeftNormals;
-        private boolean initRightNormals;
+        public Builder add(double x, double y) {
+            coordinates.add(new double[]{x, y});
+            return this;
+        }
         private EdgeFactories.EdgeFactory factory;
 
         public Builder setFactory(EdgeFactories.EdgeFactory factory) {
@@ -25,46 +25,25 @@ public class Path extends Shape {
             return this;
         }
 
-        public Builder add(double x, double y) {
-            coords.add(new double[]{x, y});
-            return this;
-        }
-
         public Builder append(double dx, double dy) {
-            double[] last = coords.get(coords.size() - 1);
+            double[] last = coordinates.get(coordinates.size() - 1);
             return add(last[0] + dx, last[1] + dy);
         }
 
-        public Builder initRightNormals() {
-            initRightNormals = true;
-            initLeftNormals = false;
-            return this;
-        }
-
-        public Builder initLeftNormals() {
-            initLeftNormals = true;
-            initRightNormals = false;
-            return this;
-        }
-
         public Path build() {
-            int segments = coords.size() - 1;
+            int segments = coordinates.size() - 1;
             Path path = new Path(segments, factory);
 
             for (int i = 0; i <= segments - 1; i++) {
                 Edge edge = path.edges.get(i);
-                double[] start = coords.get(i);
-                double[] end = coords.get(i + 1);
+                double[] start = coordinates.get(i);
+                double[] end = coordinates.get(i + 1);
                 edge.set(start[0], start[1], end[0], end[1]);
-            }
-
-            if (initRightNormals) {
-                path.initRightNormals();
-            } else if (initLeftNormals) {
-                path.initLeftNormals();
             }
 
             return path;
         }
+
+        List<double[]> coordinates = new LinkedList<>();
     }
 }

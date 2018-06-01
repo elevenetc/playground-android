@@ -3,11 +3,10 @@ package su.levenetc.androidplayground.raytracer.drawers;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
-import su.levenetc.androidplayground.raytracer.DoubleSidedEdge;
-import su.levenetc.androidplayground.raytracer.Edge;
 import su.levenetc.androidplayground.raytracer.Ray;
 import su.levenetc.androidplayground.raytracer.RaySegment;
 import su.levenetc.androidplayground.raytracer.Scene;
+import su.levenetc.androidplayground.raytracer.edges.Edge;
 import su.levenetc.androidplayground.raytracer.geometry.Segment;
 import su.levenetc.androidplayground.raytracer.lights.Light;
 import su.levenetc.androidplayground.raytracer.shapes.Shape;
@@ -27,18 +26,10 @@ public class DebugDrawer implements Drawer {
         if (endings) drawEndings(canvas, raySegment);
     }
 
-    private static void drawEdge(Canvas canvas, Edge edge, Paint paint, boolean endings) {
-        drawLine(canvas, edge, paint);
+    public void draw(Shape shape, Canvas canvas) {
+        for (Edge edge : shape.edges())
+            drawEdge(canvas, edge, Paints.Stroke.GreenBold, true);
 
-        if (edge instanceof DoubleSidedEdge) {
-            drawNormal(canvas, ((DoubleSidedEdge) edge).leftNormal);
-            drawNormal(canvas, ((DoubleSidedEdge) edge).rightNormal);
-        } else {
-            drawNormal(canvas, edge.normal());
-        }
-
-
-        if (endings) drawEndings(canvas, edge);
     }
 
     private static void drawNormal(Canvas canvas, Segment normal) {
@@ -69,9 +60,18 @@ public class DebugDrawer implements Drawer {
         }
     }
 
-    public void draw(Shape shape, Canvas canvas) {
-        for (Edge raySegment : shape.lines())
-            drawEdge(canvas, raySegment, Paints.Stroke.GreenBold, true);
+    private static void drawEdge(Canvas canvas, Edge edge, Paint paint, boolean endings) {
+        drawLine(canvas, edge, paint);
 
+        if (edge.leftSide().hasNormal()) {
+            drawNormal(canvas, edge.leftSide().normal());
+        }
+
+        if (edge.rightSide().hasNormal()) {
+            drawNormal(canvas, edge.rightSide().normal());
+        }
+
+
+        if (endings) drawEndings(canvas, edge);
     }
 }

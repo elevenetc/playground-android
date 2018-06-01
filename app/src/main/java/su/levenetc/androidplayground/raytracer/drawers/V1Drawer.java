@@ -62,7 +62,7 @@ public class V1Drawer implements Drawer {
 
             float fadeLoc = startAlpha;
 
-            paint.setColor(raySegment.startColor);
+            paint.setColor(raySegment.color);
 
             while (currentLen <= raySegmentLen) {
 

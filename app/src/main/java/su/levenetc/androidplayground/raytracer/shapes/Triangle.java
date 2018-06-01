@@ -1,10 +1,10 @@
 package su.levenetc.androidplayground.raytracer.shapes;
 
-import su.levenetc.androidplayground.raytracer.EdgeFactories;
+import su.levenetc.androidplayground.raytracer.edges.EdgeFactories;
 
 public class Triangle extends Shape {
     public Triangle() {
-        super(3, EdgeFactories.basic());
+        super(3, EdgeFactories.opaqueObjects());
     }
 
     public void init(
@@ -15,6 +15,5 @@ public class Triangle extends Shape {
         edges.get(0).set(x1, y1, x2, y2);
         edges.get(1).set(x2, y2, x3, y3);
         edges.get(2).set(x3, y3, x1, y1);
-        initRightNormals();
     }
 }

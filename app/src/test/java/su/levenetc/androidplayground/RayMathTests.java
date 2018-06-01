@@ -3,7 +3,6 @@ package su.levenetc.androidplayground;
 import org.assertj.core.data.Offset;
 import org.junit.Test;
 
-import su.levenetc.androidplayground.raytracer.Edge;
 import su.levenetc.androidplayground.raytracer.RayMath;
 import su.levenetc.androidplayground.raytracer.RaySegment;
 import su.levenetc.androidplayground.raytracer.geometry.Point;
@@ -37,7 +36,7 @@ public class RayMathTests {
 
     @Test
     public void normals() {
-        Edge horiz = we();
+        SingleSidedEdge horiz = we();
 
         horiz.setRightNormal();
 
@@ -47,13 +46,13 @@ public class RayMathTests {
 
     @Test
     public void testReflectedByNormal() {
-        Edge ground = we();
+        SingleSidedEdge ground = we();
         ground.setRightNormal();
 
-        assertThat(RayMath.isReflectedByNormal(sw45(), ground)).isTrue();
-        assertThat(RayMath.isReflectedByNormal(se45(), ground)).isTrue();
-        assertThat(RayMath.isReflectedByNormal(vertDown(), ground)).isTrue();
-        assertThat(RayMath.isReflectedByNormal(vertUp(), ground)).isFalse();
+        assertThat(RayMath.getIntersectionByNormal(sw45(), ground)).isTrue();
+        assertThat(RayMath.getIntersectionByNormal(se45(), ground)).isTrue();
+        assertThat(RayMath.getIntersectionByNormal(vertDown(), ground)).isTrue();
+        assertThat(RayMath.getIntersectionByNormal(vertUp(), ground)).isFalse();
     }
 
     static RaySegment horizOpposite() {
@@ -70,7 +69,7 @@ public class RayMathTests {
 
     @Test
     public void testReflectedByIntersectionAndNormal() {
-        Edge ground = we();
+        SingleSidedEdge ground = we();
         ground.setRightNormal();
 
         assertThat(RayMath.isReflectedByNormalAndIntersection(sw45(), ground)).isTrue();
@@ -82,7 +81,7 @@ public class RayMathTests {
     @Test
     public void testDotProducts() {
 
-        Edge vert = vertDown();
+        SingleSidedEdge vert = vertDown();
         vert.setLeftNormal();
 
         assertThat(RayMath.dotProduct(se45(), vert)).isGreaterThan(0);
@@ -91,7 +90,7 @@ public class RayMathTests {
 
     @Test
     public void testReflection() {
-        Edge raySegment = we();
+        SingleSidedEdge raySegment = we();
         //RaySegment ray = sw45();
         //ray.translate(0, -50);
         RaySegment ray = new RaySegment(100, -25, 0, 50);
@@ -125,12 +124,12 @@ public class RayMathTests {
         assertThat(se45().direction()).isEqualTo(RaySegment.Direction.SE);
     }
 
-    static Edge vertDown() {
-        return new Edge(0, 0, 0, 100);
+    static SingleSidedEdge vertDown() {
+        return new SingleSidedEdge(0, 0, 0, 100);
     }
 
-    static Edge we() {
-        return new Edge(0, 0, 100, 0);
+    static SingleSidedEdge we() {
+        return new SingleSidedEdge(0, 0, 100, 0);
     }
 
 }

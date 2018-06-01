@@ -22,10 +22,10 @@ public class RayTracer {
 
     public static void trace(Ray ray, Scene scene) {
         ray.reset();
-        traceInternal(ray, ray.initSegment, scene, 0);
+        traceInternal(ray, ray.initSegment, scene, 0, ray.initSegment.color);
     }
 
-    private static void traceInternal(Ray ray, RaySegment initSegment, Scene scene, double currentLength) {
+    private static void traceInternal(Ray ray, RaySegment initSegment, Scene scene, double currentLength, int prevColor) {
 
         if (currentLength >= ray.length) return;
 
@@ -35,14 +35,12 @@ public class RayTracer {
             Point point = intersection.point;
 
             RaySegment newSegment = new RaySegment(initSegment, point.x, point.y);
-            newSegment.startColor = initSegment.startColor;
+            newSegment.color = prevColor;
 
             if (((int) newSegment.length()) == 0) {
                 //stop tracing on collision case
                 return;
             }
-
-            setColor(newSegment, intersection);
 
             //calc fading and rest length
             currentLength = setFading(ray, currentLength, newSegment);
@@ -51,33 +49,16 @@ public class RayTracer {
             ray.reflectedOrRefracted().add(newSegment);
 
             //continue tracing
-            traceInternal(ray, rotateInitVector(initSegment, intersection), scene, currentLength);
+            traceInternal(ray, rotateInitVector(initSegment, intersection), scene, currentLength, intersection.hasOutColor ? intersection.outColor : prevColor);
         } else if (currentLength < ray.length) {//no intersection but light still has energy
 
             RaySegment newSegment = new RaySegment(initSegment);
-            newSegment.startColor = initSegment.startColor;
+            newSegment.color = prevColor;
 
-            setColor(newSegment, intersection);
             setFading(ray, currentLength, newSegment);
 
             ray.reflectedOrRefracted().add(newSegment);
         }
-    }
-
-    private static void setColor(RaySegment newSegment, RayMath.Intersection intersection) {
-
-        if (intersection.exists()) {//if exists then check edge color conversion
-            if (intersection.bound instanceof TransparentEdge) {
-                if (intersection.leftNormal) {
-                    newSegment.startColor = ((TransparentEdge) intersection.bound).leftColor;
-                    newSegment.endColor = ((TransparentEdge) intersection.bound).leftColor;
-                } else {
-                    newSegment.startColor = ((TransparentEdge) intersection.bound).rightColor;
-                    newSegment.endColor = ((TransparentEdge) intersection.bound).rightColor;
-                }
-            }
-        }
-
     }
 
     private static double setFading(Ray ray, double currentLength, RaySegment newSegment) {
@@ -92,7 +73,7 @@ public class RayTracer {
     @NonNull
     private static RaySegment rotateInitVector(RaySegment initVector, RayMath.Intersection intersection) {
 
-        double inputAngle = RayMath.angleBetween(initVector, intersection.bound);
+        double inputAngle = RayMath.angleBetween(initVector, intersection.edge);
         Point point = intersection.point;
         RaySegment reflected = initVector.copy();
 
@@ -100,8 +81,8 @@ public class RayTracer {
 
         double outputAngle;
 
-        if (intersection.bound instanceof TransparentEdge) {
-            double dot = RayMath.dotProduct(initVector.normalized(), intersection.bound.normalized());
+        if (intersection.side.isTransparent()) {
+            double dot = RayMath.dotProduct(initVector.normalized(), intersection.edge.normalized());
             outputAngle = 20 * dot;
         } else {
             outputAngle = (inputAngle - 180) * 2;

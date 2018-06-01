@@ -1,5 +1,7 @@
 package su.levenetc.androidplayground.raytracer;
 
+import su.levenetc.androidplayground.raytracer.edges.Edge;
+import su.levenetc.androidplayground.raytracer.edges.EdgeFactories;
 import su.levenetc.androidplayground.raytracer.shapes.BasicPrism;
 import su.levenetc.androidplayground.raytracer.shapes.Line;
 import su.levenetc.androidplayground.raytracer.shapes.Path;
@@ -31,30 +33,23 @@ public class SceneBuilder {
 
     public SceneBuilder addRect(double x, double y, double width, double height) {
         Rect rect = new Rect(x, y, width, height);
-        rect.initLeftNormals();
         scene.add(rect);
         return this;
     }
 
     public SceneBuilder addEdge(double x1, double y1,
-                                double x2, double y2,
-                                boolean leftNormal
+                                double x2, double y2
     ) {
         Line line = new Line(x1, y1, x2, y2);
-
-        if (leftNormal) line.initLeftNormals();
-        else line.initRightNormals();
-
         scene.add(line);
         return this;
     }
-
 
     public SceneBuilder addTransparentEdge(double x1, double y1,
                                            double x2, double y2,
                                            String name
     ) {
-        Edge edge = new TransparentEdge();
+        Edge edge = EdgeFactories.transparent().create();
         edge.set(x1, y1, x2, y2);
         edge.name = name;
 
@@ -73,7 +68,7 @@ public class SceneBuilder {
                                            double x2, double y2,
                                            String name
     ) {
-        DoubleSidedEdge edge = new TransparentEdge();
+        Edge edge = EdgeFactories.transparent().create();
         edge.set(x1, y1, x2, y2);
         edge.name = name;
 
@@ -119,11 +114,13 @@ public class SceneBuilder {
     }
 
     public Scene build() {
-        Rect boundRect = new Rect(padding, padding, screenWidth - padding, screenHeight - padding);
-
-        boundRect.initRightNormals();
+        Rect boundRect = new Rect(
+                padding,
+                padding,
+                screenWidth - padding,
+                screenHeight - padding,
+                EdgeFactories.boundingBox());
         scene.add(boundRect);
-
         return scene;
     }
 }

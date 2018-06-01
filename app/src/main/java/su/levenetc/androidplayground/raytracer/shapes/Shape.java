@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import su.levenetc.androidplayground.raytracer.Edge;
-import su.levenetc.androidplayground.raytracer.EdgeFactories;
+import su.levenetc.androidplayground.raytracer.edges.Edge;
+import su.levenetc.androidplayground.raytracer.edges.EdgeFactories;
 
 public class Shape {
 
@@ -22,19 +22,13 @@ public class Shape {
         }
     }
 
-    public void initRightNormals() {
-        for (Edge raySegment : edges) raySegment.setRightNormal();
-    }
-
-    public void initLeftNormals() {
-        for (Edge raySegment : edges) raySegment.setLeftNormal();
-    }
-
     public void translate(double x, double y) {
-        for (Edge raySegment : edges) raySegment.translate(x, y);
+        for (Edge edge : edges) {
+            edge.translate(x, y);
+        }
     }
 
-    public List<Edge> lines() {
+    public List<Edge> edges() {
         return edges;
     }
 }

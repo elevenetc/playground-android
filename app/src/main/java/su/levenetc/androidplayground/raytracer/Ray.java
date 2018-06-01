@@ -15,8 +15,7 @@ public class Ray {
 
     public Ray(double x1, double y1, double x2, double y2, int color) {
         init(x1, y1, x2, y2);
-        initSegment.startColor = color;
-        initSegment.endColor = color;
+        initSegment.color = color;
     }
 
     public void init(double x1, double y1, double x2, double y2) {

@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import java.util.LinkedList;
 import java.util.List;
 
+import su.levenetc.androidplayground.raytracer.edges.Edge;
 import su.levenetc.androidplayground.raytracer.geometry.Point;
 import su.levenetc.androidplayground.raytracer.geometry.Segment;
 import su.levenetc.androidplayground.raytracer.shapes.Shape;
@@ -110,35 +111,39 @@ public class RayMath {
     }
 
     public static Intersection isReflectedByNormalAndIntersection(Segment ray, Edge edge) {
-        Intersection intersection = isReflectedByNormal(ray, edge);
-        Point point = hasIntersection(ray, edge);
-        intersection.point = point;
+        Intersection intersection = getIntersectionByNormal(ray, edge);
+        if (intersection.edge == null) return intersection;
+        intersection.point = getIntersectionPointWithEndsCheck(ray, edge);
         return intersection;
     }
 
-    public static Intersection isReflectedByNormal(Segment ray, Edge edge) {
+    public static Intersection getIntersectionByNormal(Segment ray, Edge edge) {
 
+        //TODO: cache
         Intersection result = new Intersection();
 
-        if (edge.hasNormal()) {
 
-            if (edge instanceof DoubleSidedEdge) {
-                DoubleSidedEdge dEdge = (DoubleSidedEdge) edge;
+        if (edge.leftSide().hasNormal()) {
+            if (dotProduct(ray, edge.leftSide().normal()) < 0) {
+                result.edge = edge;
+                result.side = edge.leftSide();
 
-                if (dotProduct(ray, dEdge.leftNormal) < 0) {
-                    result.leftNormal = true;
-                    result.bound = dEdge;
-                } else if (dotProduct(ray, dEdge.rightNormal) < 0) {
-                    result.leftNormal = false;
-                    result.bound = dEdge;
-                }
-            } else {
-
-                if (dotProduct(ray, edge.normal) < 0) {
-                    result.bound = edge;
+                if (edge.leftSide().isTransparent()) {
+                    result.hasOutColor = true;
+                    result.outColor = edge.leftSide().color();
                 }
             }
+        } else if (edge.rightSide().hasNormal()) {
+            if (dotProduct(ray, edge.rightSide().normal()) < 0) {
 
+                result.edge = edge;
+                result.side = edge.rightSide();
+
+                if (edge.rightSide().isTransparent()) {
+                    result.hasOutColor = true;
+                    result.outColor = edge.leftSide().color();
+                }
+            }
         }
 
         return result;
@@ -156,13 +161,13 @@ public class RayMath {
         //TODO: use cached list
         List<Intersection> intersections = new LinkedList<>();
 
-        intersection.bound = null;
+        intersection.edge = null;
         intersection.point = null;
 
         //get all intersection edges with array
         for (Shape object : scene.objects)
-            for (Edge bound : object.edges) {
-                Intersection i = isReflectedByNormalAndIntersection(ray, bound);
+            for (Edge edge : object.edges) {
+                Intersection i = isReflectedByNormalAndIntersection(ray, edge);
                 if (i.exists()) intersections.add(i);
             }
 
@@ -177,7 +182,8 @@ public class RayMath {
 
         //get all intersection points and take closest
         for (Intersection i : intersections) {
-            Point inter = getIntersection(ray, i.bound);
+
+            Point inter = getIntersection(ray, i.edge);
             double dist = distance(inter.x, inter.y, ray.x1, ray.y1);
 
             if (compare(dist, 0) > 0 && compare(dist, minDist) < 0) {
@@ -209,7 +215,7 @@ public class RayMath {
         return getIntersection(x1, y1, x2, y2, b.x1, b.y1, b.x2, b.y2);
     }
 
-    public static Point hasIntersection(Segment a, Segment b) {
+    public static Point getIntersectionPointWithEndsCheck(Segment a, Segment b) {
 
         double x1 = a.x1;
         double y1 = a.y1;
@@ -251,13 +257,14 @@ public class RayMath {
     static class Intersection {
 
         public Point point;
-        public Edge bound;
+        public Edge edge;
+        public Edge.Side side;
+        public int outColor;
+        public boolean hasOutColor;
 
         public boolean exists() {
             return point != null;
         }
-
-        boolean leftNormal;
     }
 
     public static boolean hasIntersection(

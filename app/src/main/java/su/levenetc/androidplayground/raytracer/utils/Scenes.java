@@ -43,7 +43,6 @@ public class Scenes {
                         .append(-100, 0)
                         .append(-100, 50)
                         .add(initX, initY)
-                        .initRightNormals()
                         .build())
                 .build();
     }
@@ -51,8 +50,8 @@ public class Scenes {
     public static Scene justVertical(int width, int height) {
         return new SceneBuilder(width, height)
                 .addEdge(width / 2, 200,
-                        width / 2, height - 200,
-                        false)
+                        width / 2, height - 200
+                )
                 .build();
     }
 

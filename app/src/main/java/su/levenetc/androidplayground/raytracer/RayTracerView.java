@@ -68,8 +68,8 @@ public class RayTracerView extends View {
     }
 
     private void initLight(double cx, double cy) {
-        light = new SingleRayLight(cx, cy, cx + 450, cy, Color.WHITE);
-//        light = new ConeLight(cx, cy, cx + 300, cy + 300, 100);
+        light = new SingleRayLight(cx, cy, cx, cy + 450, Color.BLUE);
+//        light = new ConeLight(cx, cy, cx + 300, cy + 300, Color.BLUE, 100);
         //light = new PlaneLight(cx, cy, cx + 100, cy, 80);
 //        light = new PointLight(cx, cy, 300, 50);
 //        lightController = new UndirectedLightController(light);

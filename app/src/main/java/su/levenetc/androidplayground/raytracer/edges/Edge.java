@@ -1,5 +1,6 @@
-package su.levenetc.androidplayground.raytracer;
+package su.levenetc.androidplayground.raytracer.edges;
 
+import su.levenetc.androidplayground.raytracer.Normal;
 import su.levenetc.androidplayground.raytracer.geometry.Segment;
 
 import static su.levenetc.androidplayground.raytracer.geometry.Segment.Direction.E;
@@ -10,38 +11,57 @@ import static su.levenetc.androidplayground.raytracer.geometry.Segment.Direction
 import static su.levenetc.androidplayground.raytracer.geometry.Segment.Direction.SW;
 import static su.levenetc.androidplayground.raytracer.geometry.Segment.Direction.W;
 
-
 public class Edge extends Segment {
 
-    Segment normal;
+    private Side left = new Side();
+    private Side right = new Side();
 
-    public Edge() {
-
+    @Override
+    public void set(double x1, double y1, double x2, double y2) {
+        super.set(x1, y1, x2, y2);
+        //Recalculate normals
+        if (left.hasNormal()) left.normal = getLeftNormal();
+        if (right.hasNormal()) right.normal = getRightNormal();
     }
 
-    public Edge(double x1, double y1, double x2, double y2) {
-        super(x1, y1, x2, y2);
+    public Side leftSide() {
+        return left;
+    }
+
+    public Side rightSide() {
+        return right;
     }
 
     public void setLeftNormal() {
-        normal = getLeftNormal();
+        left.normal = getLeftNormal();
+    }
+
+    public void setType(Side.Type type) {
+        left.type = type;
+        right.type = type;
+    }
+
+    public void setBehaviour(Side.Behaviour behaviour) {
+        left.behaviour = behaviour;
+        right.behaviour = behaviour;
     }
 
     public void setRightNormal() {
-        normal = getRightNormal();
+        right.normal = getRightNormal();
     }
 
-    public Segment getRightNormal() {
+    public Normal getRightNormal() {
         return getNormal(-50);
     }
 
-    public Segment getLeftNormal() {
+    public Normal getLeftNormal() {
         return getNormal(50);
     }
 
-    private Segment getNormal(double lengthAndDirection) {
-        Segment normal = new Segment();
-        RaySegment.Direction direction = direction();
+    private Normal getNormal(double lengthAndDirection) {
+
+        Normal normal = new Normal();
+        Direction direction = direction();
 
         normal.x1 = (x1 + x2) / 2d;
         normal.y1 = (y1 + y2) / 2d;
@@ -61,9 +81,7 @@ public class Edge extends Segment {
         } else {
             double s = -1 / slope();
             double length = lengthAndDirection;
-
             double b = -s * normal.x1 + normal.y1;
-
             double normalSide;
 
             if (direction == NE) {
@@ -83,16 +101,43 @@ public class Edge extends Segment {
         return normal;
     }
 
+    public static class Side {
 
-    public boolean hasNormal() {
-        return normal != null;
-    }
+        public boolean isTransparent() {
+            return behaviour == Behaviour.TRANSPARENT;
+        }
 
-    public Segment normal() {
-        return normal;
-    }
+        public Normal normal() {
+            return normal;
+        }
 
-    public void setNormal(double x1, double y1, double x2, double y2) {
-        normal = new RaySegment(x1, y1, x2, y2);
+        public void setType(Type type) {
+            this.type = type;
+        }
+
+        public boolean hasNormal() {
+            return normal != null;
+        }
+
+        public void setColor(int color) {
+            this.color = color;
+        }
+
+        public int color() {
+            return color;
+        }
+
+        Normal normal;
+        int color;
+        Type type;
+        Behaviour behaviour;
+
+        enum Type {
+            IN, OUT
+        }
+
+        enum Behaviour {
+            TRANSPARENT, OPAQUE
+        }
     }
 }

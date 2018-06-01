@@ -12,8 +12,7 @@ public class RaySegment extends Segment {
     public float startAlpha;
     public float endAlpha;
 
-    public int startColor;
-    public int endColor;
+    public int color;
 
     //Decay values
     public double start;
@@ -51,8 +50,7 @@ public class RaySegment extends Segment {
 
     public RaySegment copy() {
         RaySegment copy = new RaySegment(x1, y1, x2, y2);
-        copy.startColor = startColor;
-        copy.endColor = endColor;
+        copy.color = color;
         copy.start = start;
         copy.end = end;
         copy.startAlpha = startAlpha;
