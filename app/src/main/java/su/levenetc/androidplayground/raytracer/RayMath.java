@@ -122,7 +122,6 @@ public class RayMath {
         //TODO: cache
         Intersection result = new Intersection();
 
-
         if (edge.leftSide().hasNormal()) {
             if (dotProduct(ray, edge.leftSide().normal()) < 0) {
                 result.edge = edge;
@@ -132,8 +131,12 @@ public class RayMath {
                     result.hasOutColor = true;
                     result.outColor = edge.leftSide().color();
                 }
+
+                return result;
             }
-        } else if (edge.rightSide().hasNormal()) {
+        }
+
+        if (edge.rightSide().hasNormal()) {
             if (dotProduct(ray, edge.rightSide().normal()) < 0) {
 
                 result.edge = edge;
@@ -143,6 +146,8 @@ public class RayMath {
                     result.hasOutColor = true;
                     result.outColor = edge.leftSide().color();
                 }
+
+                return result;
             }
         }
 
