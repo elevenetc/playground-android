@@ -35,7 +35,8 @@ public class RayTracer {
             Point point = intersection.point;
 
             RaySegment newSegment = new RaySegment(initSegment, point.x, point.y);
-            newSegment.color = prevColor;
+
+            setColor(prevColor, intersection, newSegment);
 
             if (((int) newSegment.length()) == 0) {
                 //stop tracing on collision case
@@ -53,11 +54,25 @@ public class RayTracer {
         } else if (currentLength < ray.length) {//no intersection but light still has energy
 
             RaySegment newSegment = new RaySegment(initSegment);
-            newSegment.color = prevColor;
+
+            setColor(prevColor, intersection, newSegment);
 
             setFading(ray, currentLength, newSegment);
 
             ray.reflectedOrRefracted().add(newSegment);
+        }
+    }
+
+    private static void setColor(int prevColor, RayMath.Intersection intersection, RaySegment newSegment) {
+        if (!intersection.exists()) {
+            newSegment.color = prevColor;
+            return;
+        } else {
+            if (intersection.side.isInside()) {
+                newSegment.color = intersection.outColor;
+            } else {
+                newSegment.color = prevColor;
+            }
         }
     }
 

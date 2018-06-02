@@ -14,8 +14,8 @@ public class EdgeFactories {
             edge.setRightNormal();
             edge.leftSide().setColor(color);
             edge.rightSide().setColor(color);
-            edge.leftSide().setType(Edge.Side.Type.IN);
-            edge.rightSide().setType(Edge.Side.Type.OUT);
+            edge.leftSide().setType(Edge.Side.Type.OUT);
+            edge.rightSide().setType(Edge.Side.Type.IN);
             return edge;
         };
     }

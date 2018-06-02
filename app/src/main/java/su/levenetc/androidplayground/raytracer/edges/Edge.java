@@ -103,6 +103,14 @@ public class Edge extends Segment {
 
     public static class Side {
 
+        public boolean isInside() {
+            return type == Type.IN;
+        }
+
+        public boolean isOutise() {
+            return type == Type.OUT;
+        }
+
         public boolean isTransparent() {
             return behaviour == Behaviour.TRANSPARENT;
         }
