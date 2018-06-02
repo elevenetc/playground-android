@@ -1,5 +1,7 @@
 package su.levenetc.androidplayground.raytracer;
 
+import android.graphics.Color;
+
 import su.levenetc.androidplayground.raytracer.edges.Edge;
 import su.levenetc.androidplayground.raytracer.edges.EdgeFactories;
 import su.levenetc.androidplayground.raytracer.shapes.BasicPrism;
@@ -101,7 +103,7 @@ public class SceneBuilder {
             double yc = y - radius * Math.cos(rad);
 
             if (builder == null) {
-                builder = new Path.Builder().setFactory(EdgeFactories.transparent()).add(xc, yc);
+                builder = new Path.Builder().setFactory(EdgeFactories.transparent(Color.GREEN)).add(xc, yc);
             }
 
             builder.add(xc, yc);

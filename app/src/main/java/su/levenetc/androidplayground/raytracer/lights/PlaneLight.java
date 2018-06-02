@@ -22,7 +22,7 @@ public class PlaneLight extends DirectedLight {
         dirX = dx;
         dirY = dy;
         for (int i = 0; i < rays.size(); i++) {
-            RayMath.rotate(rays.get(i).initSegment, x, y, diffAngle);
+            RayMath.rotate(rays.get(i).initSegment, x, y, diffAngle * -1);
         }
     }
 

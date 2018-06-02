@@ -5,9 +5,12 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.CheckBox;
 
 import su.levenetc.androidplayground.debug.DebugMenu;
+import su.levenetc.androidplayground.raytracer.views.BackgroundRayTracerView;
+import su.levenetc.androidplayground.raytracer.views.RayTraceView;
 
 /**
  * Created by eugene.levenetc on 08/03/2018.
@@ -17,13 +20,14 @@ public class RayTracerActivity extends AppCompatActivity {
 
     private String debugScene = "Debug Scene";
     private String debugLight = "Debug Light";
-    private RayTracerView view;
+    private RayTraceView view;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        view = new RayTracerView(this);
-        setContentView(view);
+        //view = new RealTimeRayTracerView(this);
+        view = new BackgroundRayTracerView(this);
+        setContentView((View) view);
 
         DebugMenu.add(this);
 

@@ -1,9 +1,11 @@
 package su.levenetc.androidplayground.raytracer.edges;
 
+import android.graphics.Color;
+
 public class EdgeFactories {
 
     public static EdgeFactory transparent() {
-        return transparent(0);
+        return transparent(Color.WHITE);
     }
 
     public static EdgeFactory transparent(int color) {
