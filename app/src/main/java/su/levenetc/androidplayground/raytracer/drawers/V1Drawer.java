@@ -16,10 +16,6 @@ public class V1Drawer implements Drawer {
     private final Paint paint = new Paint();
     private final float spotRadius = 10f;//px
     /**
-     * Spots overlap each other, so brightness(alpha) should be decreased
-     */
-    private static final float brightness = 1f;//.1f;
-    /**
      * Spots overlap each other, so in the beginning size of spots should be smaller
      */
     private static final float minSpotSize = 0.7f;
@@ -32,7 +28,7 @@ public class V1Drawer implements Drawer {
     public void draw(Light light, Canvas canvas) {
         List<Ray> rays = light.rays();
 
-        for (int i = 0; i < rays.size(); i++) drawRay(rays.get(i), canvas);
+        for (int i = 0; i < rays.size(); i++) drawRay(rays.get(i), light, canvas);
     }
 
     @Override
@@ -40,7 +36,7 @@ public class V1Drawer implements Drawer {
 
     }
 
-    private void drawRay(Ray ray, Canvas canvas) {
+    private void drawRay(Ray ray, Light light, Canvas canvas) {
 
         paint.setAlpha(255);
         paint.setColor(Color.RED);
@@ -72,7 +68,7 @@ public class V1Drawer implements Drawer {
                 double x = raySegment.x1 + dx * ratio;
                 double y = raySegment.y1 + dy * ratio;
 
-                drawStepArea(canvas, (float) x, (float) y, fadeLoc);
+                drawStepArea(canvas, (float) x, (float) y, fadeLoc, light.brightness());
 
 
                 fadeLoc = startAlpha + (endAlpha - startAlpha) * loc;
@@ -89,17 +85,18 @@ public class V1Drawer implements Drawer {
      */
     private void drawStepArea(Canvas canvas,
                               float x, float y,
-                              float fadeLoc) {
+                              float fadeLoc,
+                              float brightness) {
         //skip drawing transparent spots
         if (fadeLoc > 1) return;
 
         float sr = spotRadius * (fadeLoc + minSpotSize);
 
-        paint.setAlpha(calculateAlpha(fadeLoc));
+        paint.setAlpha(calculateAlpha(fadeLoc, brightness));
         canvas.drawRect(x, y, x + sr, y + sr, paint);
     }
 
-    private int calculateAlpha(double fadeLoc) {
+    private int calculateAlpha(double fadeLoc, float brightness) {
         double alpha = (1 - fadeLoc) * 255;
         alpha *= brightness;
         return (int) alpha;

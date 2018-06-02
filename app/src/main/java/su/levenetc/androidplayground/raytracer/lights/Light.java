@@ -12,14 +12,20 @@ public class Light {
     protected double y;
     protected int raysCount;
 
+    public float brightness() {
+        return brightness;
+    }
+
+    public void setBrightness(float brightness) {
+        this.brightness = brightness;
+    }
+
     public Light(double x, double y, int color, int raysCount) {
         this.x = x;
         this.y = y;
         this.color = color;
         this.raysCount = raysCount;
     }
-
-    protected int color;
 
     public void updatePosition(double x, double y) {
 
@@ -36,5 +42,6 @@ public class Light {
         return rays;
     }
 
-
+    protected int color;
+    protected float brightness = 1f;
 }

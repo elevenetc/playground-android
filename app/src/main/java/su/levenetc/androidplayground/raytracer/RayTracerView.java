@@ -11,11 +11,11 @@ import android.view.View;
 import su.levenetc.androidplayground.raytracer.drawers.DebugDrawer;
 import su.levenetc.androidplayground.raytracer.drawers.Drawer;
 import su.levenetc.androidplayground.raytracer.drawers.V1Drawer;
+import su.levenetc.androidplayground.raytracer.lights.ConeLight;
 import su.levenetc.androidplayground.raytracer.lights.DirectedLight;
 import su.levenetc.androidplayground.raytracer.lights.DirectedLightController;
 import su.levenetc.androidplayground.raytracer.lights.Light;
 import su.levenetc.androidplayground.raytracer.lights.LightController;
-import su.levenetc.androidplayground.raytracer.lights.SingleRayLight;
 import su.levenetc.androidplayground.raytracer.utils.Scenes;
 
 /**
@@ -32,8 +32,8 @@ public class RayTracerView extends View {
 
     private boolean initRender;
     private Light light;
-    private boolean debugScene = true;
-    private boolean debugLight = true;
+    private boolean debugScene = false;
+    private boolean debugLight = false;
 
     public RayTracerView(Context context) {
         super(context);
@@ -68,8 +68,9 @@ public class RayTracerView extends View {
     }
 
     private void initLight(double cx, double cy) {
-        light = new SingleRayLight(cx, cy, cx, cy + 450, Color.WHITE);
-//        light = new ConeLight(cx, cy, cx + 300, cy + 300, Color.BLUE, 100);
+//        light = new SingleRayLight(cx, cy, cx, cy + 450, Color.WHITE);
+        light = new ConeLight(cx, cy, cx + 400, cy + 400, Color.WHITE, 100);
+        light.setBrightness(0.1f);
         //light = new PlaneLight(cx, cy, cx + 100, cy, 80);
 //        light = new PointLight(cx, cy, 300, 50);
 //        lightController = new UndirectedLightController(light);
