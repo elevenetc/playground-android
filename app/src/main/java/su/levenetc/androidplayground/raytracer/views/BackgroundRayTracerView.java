@@ -11,7 +11,7 @@ import android.view.View;
 import su.levenetc.androidplayground.raytracer.RayTracer;
 import su.levenetc.androidplayground.raytracer.Scene;
 import su.levenetc.androidplayground.raytracer.drawers.Drawer;
-import su.levenetc.androidplayground.raytracer.drawers.V1Drawer;
+import su.levenetc.androidplayground.raytracer.drawers.V2Drawer;
 import su.levenetc.androidplayground.raytracer.lights.DirectedLight;
 import su.levenetc.androidplayground.raytracer.lights.DirectedLightController;
 import su.levenetc.androidplayground.raytracer.lights.Light;
@@ -21,7 +21,9 @@ import su.levenetc.androidplayground.raytracer.utils.Scenes;
 
 public class BackgroundRayTracerView extends View implements RayTraceView {
 
-    private Drawer drawer = new V1Drawer(0.05f, 0.05f);
+    private final float spotSize = 0.1f;
+    //private Drawer drawer = new V1Drawer(spotSize, spotSize);
+    private Drawer drawer = new V2Drawer(spotSize);
     private Canvas canvas;
     private Scene scene;
     private Light light;
@@ -96,7 +98,7 @@ public class BackgroundRayTracerView extends View implements RayTraceView {
 
     private void initLight(double cx, double cy) {
 //        light = new SingleRayLight(cx, cy, cx + 500, cy, Color.WHITE);
-        light = new PlaneLight(cx, cy, cx + 500, cy, 0.05f, Color.WHITE, 1000);
+        light = new PlaneLight(cx, cy, cx + 800, cy, spotSize, Color.WHITE, 1000);
         light.setBrightness(.7f);
         lightController = new DirectedLightController((DirectedLight) light);
         RayTracer.trace(light, this.scene);

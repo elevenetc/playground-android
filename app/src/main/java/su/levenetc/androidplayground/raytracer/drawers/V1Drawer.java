@@ -99,7 +99,8 @@ public class V1Drawer implements Drawer {
         //float sr = spotRadius * (fadeLoc + minSpotSize);
 
         paint.setAlpha(calculateAlpha(fadeLoc, brightness));
-        canvas.drawRect(x, y, x + spotRadius, y + spotRadius, paint);
+        //canvas.drawRect(x, y, x + spotRadius, y + spotRadius, paint);
+        //canvas.drawCircle(x, y, spotRadius / 2f, paint);
     }
 
     private int calculateAlpha(double fadeLoc, float brightness) {
