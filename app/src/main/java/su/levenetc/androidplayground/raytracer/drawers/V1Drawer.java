@@ -14,14 +14,22 @@ import su.levenetc.androidplayground.raytracer.lights.Light;
 public class V1Drawer implements Drawer {
 
     private final Paint paint = new Paint();
-    private final float spotRadius = 10f;//px
+    private float spotRadius;
+    private float spotStep;
     /**
      * Spots overlap each other, so in the beginning size of spots should be smaller
      */
     private static final float minSpotSize = 0.7f;
 
     public V1Drawer() {
+        this(10, 5);
         paint.setStyle(Paint.Style.FILL);
+    }
+
+    public V1Drawer(float spotRadius, float spotStep) {
+        paint.setStyle(Paint.Style.FILL);
+        this.spotRadius = spotRadius;
+        this.spotStep = spotStep;
     }
 
     @Override
@@ -40,8 +48,6 @@ public class V1Drawer implements Drawer {
 
         paint.setAlpha(255);
         paint.setColor(Color.RED);
-
-        double step = 5;//px
 
         for (RaySegment raySegment : ray.reflectedOrRefracted()) {
 
@@ -72,7 +78,7 @@ public class V1Drawer implements Drawer {
 
 
                 fadeLoc = startAlpha + (endAlpha - startAlpha) * loc;
-                currentLen += step;
+                currentLen += spotStep;
             }
         }
     }
@@ -90,10 +96,10 @@ public class V1Drawer implements Drawer {
         //skip drawing transparent spots
         if (fadeLoc > 1) return;
 
-        float sr = spotRadius * (fadeLoc + minSpotSize);
+        //float sr = spotRadius * (fadeLoc + minSpotSize);
 
         paint.setAlpha(calculateAlpha(fadeLoc, brightness));
-        canvas.drawRect(x, y, x + sr, y + sr, paint);
+        canvas.drawRect(x, y, x + spotRadius, y + spotRadius, paint);
     }
 
     private int calculateAlpha(double fadeLoc, float brightness) {

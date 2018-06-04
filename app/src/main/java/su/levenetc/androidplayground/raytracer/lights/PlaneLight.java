@@ -5,10 +5,11 @@ import su.levenetc.androidplayground.raytracer.RayMath;
 
 public class PlaneLight extends DirectedLight {
 
-    private static final double rayStep = 2;
+    private final double rayStep;
 
-    public PlaneLight(double x, double y, double dirX, double dirY, int color, int raysCount) {
+    public PlaneLight(double x, double y, double dirX, double dirY, double rayStep, int color, int raysCount) {
         super(x, y, dirX, dirY, color, raysCount);
+        this.rayStep = rayStep;
         initRays();
         arrangeRays();
     }

@@ -85,7 +85,7 @@ public class RealTimeRayTracerView extends View {
     private void initLight(double cx, double cy) {
 //        light = new SingleRayLight(cx, cy, cx, cy + 450, Color.WHITE);
 //        light = new ConeLight(cx, cy, cx + 400, cy + 400, Color.WHITE, 100);
-        light = new PlaneLight(cx, cy, cx + 500, cy, Color.WHITE, 80);
+        light = new PlaneLight(cx, cy, cx + 500, cy, 2, Color.WHITE, 80);
 //        light = new PointLight(cx, cy, 300, 50);
 //        lightController = new UndirectedLightController(light);
         light.setBrightness(0.05f);

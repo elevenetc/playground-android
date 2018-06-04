@@ -21,7 +21,7 @@ import su.levenetc.androidplayground.raytracer.utils.Scenes;
 
 public class BackgroundRayTracerView extends View implements RayTraceView {
 
-    private Drawer drawer = new V1Drawer();
+    private Drawer drawer = new V1Drawer(0.05f, 0.05f);
     private Canvas canvas;
     private Scene scene;
     private Light light;
@@ -49,28 +49,30 @@ public class BackgroundRayTracerView extends View implements RayTraceView {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 
-        if (lightController.onTouch(event)) {
+        int action = event.getAction();
+
+        boolean result = lightController.onTouch(event);
+
+        if (action == MotionEvent.ACTION_CANCEL || action == MotionEvent.ACTION_UP) {
             renderThread.draw();
-            return true;
         } else {
-            return false;
+            if (result) invalidate();
         }
+
+        return result;
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-        canvas.drawColor(Color.BLACK);
+        preRenderInit(canvas.getWidth(), canvas.getHeight());
 
-        int width = canvas.getWidth();
-        int height = canvas.getHeight();
+        if (renderThread.isDrawing) {
+            canvas.drawColor(Color.BLACK);
+        } else {
+            canvas.drawBitmap(bitmap, 0, 0, paint);
+        }
 
-        preRenderInit(width, height);
-
-        this.canvas.drawColor(Color.BLACK);
-
-        //drawer.draw(light, this.canvas);
-        lightController.draw(this.canvas);
-        canvas.drawBitmap(bitmap, 0, 0, paint);
+        lightController.draw(canvas);
     }
 
     private void init() {
@@ -88,12 +90,14 @@ public class BackgroundRayTracerView extends View implements RayTraceView {
             initLight(cx, cy);
 
             renderThread = new RenderThread(scene, drawer, light, canvas, () -> post(this::invalidate));
+            renderThread.start();
         }
     }
 
     private void initLight(double cx, double cy) {
-        light = new PlaneLight(cx, cy, cx + 500, cy, Color.WHITE, 80);
-        light.setBrightness(0.05f);
+//        light = new SingleRayLight(cx, cy, cx + 500, cy, Color.WHITE);
+        light = new PlaneLight(cx, cy, cx + 500, cy, 0.05f, Color.WHITE, 1000);
+        light.setBrightness(.7f);
         lightController = new DirectedLightController((DirectedLight) light);
         RayTracer.trace(light, this.scene);
     }
@@ -107,6 +111,8 @@ public class BackgroundRayTracerView extends View implements RayTraceView {
         private ReadyListener listener;
         private volatile boolean isDrawing;
 
+        private final Object lock = new Object();
+
         public RenderThread(Scene scene, Drawer drawer, Light light, Canvas canvas, ReadyListener listener) {
             this.scene = scene;
             this.drawer = drawer;
@@ -118,7 +124,9 @@ public class BackgroundRayTracerView extends View implements RayTraceView {
         public void draw() {
             if (!isDrawing) {
                 isDrawing = true;
-                notify();
+                synchronized (lock) {
+                    lock.notify();
+                }
             }
         }
 
@@ -126,11 +134,14 @@ public class BackgroundRayTracerView extends View implements RayTraceView {
         public void run() {
             while (true) {
                 RayTracer.trace(light, scene);
+                canvas.drawColor(Color.BLACK);
                 drawer.draw(light, canvas);
                 listener.onRendered();
                 try {
                     isDrawing = false;
-                    this.wait();
+                    synchronized (lock) {
+                        lock.wait();
+                    }
                 } catch (InterruptedException e) {
                     //ignore
                 }
