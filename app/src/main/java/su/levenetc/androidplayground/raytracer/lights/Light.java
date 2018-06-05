@@ -12,6 +12,9 @@ public class Light {
     protected double y;
     protected int raysCount;
 
+    /**
+     * @return 0.0 to 1.0
+     */
     public float brightness() {
         return brightness;
     }

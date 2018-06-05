@@ -8,7 +8,6 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-import su.levenetc.androidplayground.raytracer.RayTracer;
 import su.levenetc.androidplayground.raytracer.Scene;
 import su.levenetc.androidplayground.raytracer.drawers.DebugDrawer;
 import su.levenetc.androidplayground.raytracer.drawers.Drawer;
@@ -18,6 +17,8 @@ import su.levenetc.androidplayground.raytracer.lights.DirectedLightController;
 import su.levenetc.androidplayground.raytracer.lights.Light;
 import su.levenetc.androidplayground.raytracer.lights.LightController;
 import su.levenetc.androidplayground.raytracer.lights.PlaneLight;
+import su.levenetc.androidplayground.raytracer.tracers.RayTracer;
+import su.levenetc.androidplayground.raytracer.tracers.RayTracerV1;
 import su.levenetc.androidplayground.raytracer.utils.Scenes;
 
 /**
@@ -29,11 +30,13 @@ public class RealTimeRayTracerView extends View {
 
     Scene scene;
     Drawer debugDrawer = new DebugDrawer();
+    private RayTracer tracer = new RayTracerV1();
 
     public RealTimeRayTracerView(Context context) {
         super(context);
         init();
     }
+
     LightController lightController;
 
     private boolean initRender;
@@ -82,6 +85,18 @@ public class RealTimeRayTracerView extends View {
         }
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+
+        if (lightController.onTouch(event)) {
+            tracer.trace(light, scene);
+            invalidate();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     private void initLight(double cx, double cy) {
 //        light = new SingleRayLight(cx, cy, cx, cy + 450, Color.WHITE);
 //        light = new ConeLight(cx, cy, cx + 400, cy + 400, Color.WHITE, 100);
@@ -90,19 +105,7 @@ public class RealTimeRayTracerView extends View {
 //        lightController = new UndirectedLightController(light);
         light.setBrightness(0.05f);
         lightController = new DirectedLightController((DirectedLight) light);
-        RayTracer.trace(light, this.scene);
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-
-        if (lightController.onTouch(event)) {
-            RayTracer.trace(light, scene);
-            invalidate();
-            return true;
-        } else {
-            return false;
-        }
+        tracer.trace(light, this.scene);
     }
 
     Drawer drawer = new V1Drawer();

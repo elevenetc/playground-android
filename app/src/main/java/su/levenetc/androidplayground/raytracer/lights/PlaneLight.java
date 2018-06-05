@@ -1,7 +1,7 @@
 package su.levenetc.androidplayground.raytracer.lights;
 
 import su.levenetc.androidplayground.raytracer.Ray;
-import su.levenetc.androidplayground.raytracer.RayMath;
+import su.levenetc.androidplayground.raytracer.math.RayMathV1;
 
 public class PlaneLight extends DirectedLight {
 
@@ -17,13 +17,13 @@ public class PlaneLight extends DirectedLight {
     @Override
     public void updateDirection(double dx, double dy) {
 
-        double newAngle = RayMath.angleBetween(x, y, x + 10, y, x, y, dx, dy);
-        double currAngle = RayMath.angleBetween(x, y, x + 10, y, x, y, dirX, dirY);
+        double newAngle = RayMathV1.angleBetween(x, y, x + 10, y, x, y, dx, dy);
+        double currAngle = RayMathV1.angleBetween(x, y, x + 10, y, x, y, dirX, dirY);
         double diffAngle = currAngle - newAngle;
         dirX = dx;
         dirY = dy;
         for (int i = 0; i < rays.size(); i++) {
-            RayMath.rotate(rays.get(i).initSegment, x, y, diffAngle * -1);
+            RayMathV1.rotate(rays.get(i).initSegment, x, y, diffAngle * -1);
         }
     }
 

@@ -1,10 +1,12 @@
-package su.levenetc.androidplayground.raytracer;
+package su.levenetc.androidplayground.raytracer.math;
 
 import android.support.annotation.NonNull;
 
 import java.util.LinkedList;
 import java.util.List;
 
+import su.levenetc.androidplayground.raytracer.RaySegment;
+import su.levenetc.androidplayground.raytracer.Scene;
 import su.levenetc.androidplayground.raytracer.edges.Edge;
 import su.levenetc.androidplayground.raytracer.geometry.Point;
 import su.levenetc.androidplayground.raytracer.geometry.Segment;
@@ -16,12 +18,13 @@ import static java.lang.Double.compare;
  * Created by eugene.levenetc on 08/03/2018.
  */
 
-public class RayMath {
+public class RayMathV1 implements RayMath {
 
-    private static Intersection intersection = new Intersection();
-    private final static double doubleEqualityEps = 0.0001;
+    private Intersection intersection = new Intersection();
+    private final double doubleEqualityEps = 0.0001;
 
-    public static void rotate(Segment segment, double cx, double cy, double degrees) {
+    @Override
+    public void rotate(Segment segment, double cx, double cy, double degrees) {
         double rads = Math.toRadians(degrees);
         double cos = Math.cos(rads);
         double sin = Math.sin(rads);
@@ -45,7 +48,8 @@ public class RayMath {
         segment.y2 = y2 + cy;
     }
 
-    public static void rotate(Segment segment, double degrees) {
+    @Override
+    public void rotate(Segment segment, double degrees) {
         double rads = Math.toRadians(degrees);
         double cos = Math.cos(rads);
         double sin = Math.sin(rads);
@@ -63,14 +67,16 @@ public class RayMath {
         segment.y2 = y + segment.y1;
     }
 
-    public static double dotProduct(Segment a, Segment b) {
+    @Override
+    public double dotProduct(Segment a, Segment b) {
         RaySegment aOrigin = toOrigin(a);
         RaySegment bOrigin = toOrigin(b);
         return aOrigin.x2 * bOrigin.x2 + aOrigin.y2 * bOrigin.y2;
     }
 
-    public static double dotProduct(double x1, double y1, double x2, double y2,
-                                    double x3, double y3, double x4, double y4) {
+    @Override
+    public double dotProduct(double x1, double y1, double x2, double y2,
+                             double x3, double y3, double x4, double y4) {
         //move to origin
         x2 = x2 - x1;
         y2 = y2 - y1;
@@ -85,35 +91,31 @@ public class RayMath {
         return x2 * x4 + y2 * y4;
     }
 
-    static RaySegment toOrigin(Segment segment) {
-        double diffX = segment.x1;
-        double diffY = segment.y1;
-
-        //TODO: cache instance
-        return new RaySegment(0, 0, segment.x2 - diffX, segment.y2 - diffY);
-    }
-
-    public static double angleBetween(Segment a, Segment b) {
+    @Override
+    public double angleBetween(Segment a, Segment b) {
         return angleBetween(
                 a.x1, a.y1, a.x2, a.y2,
                 b.x1, b.y1, b.x2, b.y2);
     }
 
-    public static double angleBetween(double ax1, double ay1, double ax2, double ay2,
-                                      double bx1, double by1, double bx2, double by2) {
+    @Override
+    public double angleBetween(double ax1, double ay1, double ax2, double ay2,
+                               double bx1, double by1, double bx2, double by2) {
         double angleA = Math.atan2(ay1 - ay2, ax1 - ax2);
         double angleB = Math.atan2(by1 - by2, bx1 - bx2);
         return (angleB - angleA) * 180 / Math.PI;
     }
 
-    public static Intersection isReflectedByNormalAndIntersection(Segment ray, Edge edge) {
+    @Override
+    public Intersection isReflectedByNormalAndIntersection(Segment ray, Edge edge) {
         Intersection intersection = getIntersectionByNormal(ray, edge);
         if (intersection.edge == null) return intersection;
         intersection.point = getIntersectionPointWithEndsCheck(ray, edge);
         return intersection;
     }
 
-    public static Intersection getIntersectionByNormal(Segment ray, Edge edge) {
+    @Override
+    public Intersection getIntersectionByNormal(Segment ray, Edge edge) {
 
         //TODO: cache
         Intersection result = new Intersection();
@@ -150,14 +152,16 @@ public class RayMath {
         return result;
     }
 
-    public static double distance(double x1, double y1, double x2, double y2) {
+    @Override
+    public double distance(double x1, double y1, double x2, double y2) {
         x1 -= x2;
         y1 -= y2;
         return Math.sqrt(x1 * x1 + y1 * y1);
     }
 
+    @Override
     @NonNull
-    public static Intersection getClosestIntersection(RaySegment ray, Scene scene) {
+    public Intersection getClosestIntersection(RaySegment ray, Scene scene) {
 
         //TODO: use cached list
         List<Intersection> intersections = new LinkedList<>();
@@ -196,8 +200,8 @@ public class RayMath {
         return intersection;
     }
 
-
-    public static Point getIntersection(RaySegment a, Edge b) {
+    @Override
+    public Point getIntersection(RaySegment a, Edge b) {
         double x1 = a.x1;
         double y1 = a.y1;
         double x2 = a.x2;
@@ -211,12 +215,14 @@ public class RayMath {
         return getIntersection(x1, y1, x2, y2, x3, y3, x4, y4);
     }
 
-    public static Point getIntersection(double x1, double y1, double x2, double y2,
-                                        RaySegment b) {
+    @Override
+    public Point getIntersection(double x1, double y1, double x2, double y2,
+                                 RaySegment b) {
         return getIntersection(x1, y1, x2, y2, b.x1, b.y1, b.x2, b.y2);
     }
 
-    public static Point getIntersectionPointWithEndsCheck(Segment a, Segment b) {
+    @Override
+    public Point getIntersectionPointWithEndsCheck(Segment a, Segment b) {
 
         double x1 = a.x1;
         double y1 = a.y1;
@@ -243,8 +249,9 @@ public class RayMath {
         return result;
     }
 
+    @Override
     @NonNull
-    public static Point getIntersection(
+    public Point getIntersection(
             double x1, double y1, double x2, double y2,
             double x3, double y3, double x4, double y4) {
         double d = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
@@ -255,20 +262,8 @@ public class RayMath {
         return new Point(x, y);
     }
 
-    static class Intersection {
-
-        public Point point;
-        public Edge edge;
-        public Edge.Side side;
-        public int outColor;
-        public boolean hasOutColor;
-
-        public boolean exists() {
-            return point != null;
-        }
-    }
-
-    public static boolean hasIntersection(
+    @Override
+    public boolean hasIntersection(
             double x1, double y1, double x2, double y2,
             double x3, double y3, double x4, double y4
     ) {
@@ -278,12 +273,20 @@ public class RayMath {
                 relativeCCW(x3, y3, x4, y4, x2, y2) <= 0));
     }
 
+    private RaySegment toOrigin(Segment segment) {
+        double diffX = segment.x1;
+        double diffY = segment.y1;
+
+        //TODO: cache instance
+        return new RaySegment(0, 0, segment.x2 - diffX, segment.y2 - diffY);
+    }
+
     /**
      * From java.awt.geom.Java2D
      */
-    private static int relativeCCW(double x1, double y1,
-                                   double x2, double y2,
-                                   double px, double py) {
+    private int relativeCCW(double x1, double y1,
+                            double x2, double y2,
+                            double px, double py) {
         x2 -= x1;
         y2 -= y1;
         px -= x1;
@@ -303,11 +306,11 @@ public class RayMath {
         return compare(ccw, 0.0);
     }
 
-    private static boolean pointAtEnds(double px, double py, double x1, double y1, double x2, double y2) {
+    private boolean pointAtEnds(double px, double py, double x1, double y1, double x2, double y2) {
         return (doubleEquals(px, x1) && doubleEquals(py, y1)) || (doubleEquals(px, x2) && doubleEquals(py, y2));
     }
 
-    private static boolean doubleEquals(double a, double b) {
+    private boolean doubleEquals(double a, double b) {
         double diff = Math.abs(a - b);
         return diff <= doubleEqualityEps;
     }

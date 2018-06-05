@@ -3,9 +3,9 @@ package su.levenetc.androidplayground;
 import org.assertj.core.data.Offset;
 import org.junit.Test;
 
-import su.levenetc.androidplayground.raytracer.RayMath;
 import su.levenetc.androidplayground.raytracer.RaySegment;
 import su.levenetc.androidplayground.raytracer.geometry.Point;
+import su.levenetc.androidplayground.raytracer.math.RayMathV1;
 import su.levenetc.androidplayground.utils.Out;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -18,9 +18,9 @@ public class RayMathTests {
 
     @Test
     public void testAngles() {
-        assertThat(RayMath.angleBetween(we(), se45())).isEqualTo(-315);
-        assertThat(RayMath.angleBetween(we(), vertDown())).isEqualTo(-270);
-        assertThat(RayMath.angleBetween(we(), horizOpposite())).isEqualTo(-180);
+        assertThat(RayMathV1.angleBetween(we(), se45())).isEqualTo(-315);
+        assertThat(RayMathV1.angleBetween(we(), vertDown())).isEqualTo(-270);
+        assertThat(RayMathV1.angleBetween(we(), horizOpposite())).isEqualTo(-180);
     }
 
     @Test
@@ -40,8 +40,8 @@ public class RayMathTests {
 
         horiz.setRightNormal();
 
-        assertThat(RayMath.angleBetween(horiz.normal(), sw45())).isEqualTo(45);
-        assertThat(RayMath.angleBetween(horiz.normal(), se45())).isEqualTo(-45);
+        assertThat(RayMathV1.angleBetween(horiz.normal(), sw45())).isEqualTo(45);
+        assertThat(RayMathV1.angleBetween(horiz.normal(), se45())).isEqualTo(-45);
     }
 
     @Test
@@ -49,10 +49,10 @@ public class RayMathTests {
         SingleSidedEdge ground = we();
         ground.setRightNormal();
 
-        assertThat(RayMath.getIntersectionByNormal(sw45(), ground)).isTrue();
-        assertThat(RayMath.getIntersectionByNormal(se45(), ground)).isTrue();
-        assertThat(RayMath.getIntersectionByNormal(vertDown(), ground)).isTrue();
-        assertThat(RayMath.getIntersectionByNormal(vertUp(), ground)).isFalse();
+        assertThat(RayMathV1.getIntersectionByNormal(sw45(), ground)).isTrue();
+        assertThat(RayMathV1.getIntersectionByNormal(se45(), ground)).isTrue();
+        assertThat(RayMathV1.getIntersectionByNormal(vertDown(), ground)).isTrue();
+        assertThat(RayMathV1.getIntersectionByNormal(vertUp(), ground)).isFalse();
     }
 
     static RaySegment horizOpposite() {
@@ -72,10 +72,10 @@ public class RayMathTests {
         SingleSidedEdge ground = we();
         ground.setRightNormal();
 
-        assertThat(RayMath.isReflectedByNormalAndIntersection(sw45(), ground)).isTrue();
-        assertThat(RayMath.isReflectedByNormalAndIntersection(se45(), ground)).isTrue();
-        assertThat(RayMath.isReflectedByNormalAndIntersection(vertDown(), ground)).isTrue();
-        assertThat(RayMath.isReflectedByNormalAndIntersection(vertUp(), ground)).isFalse();
+        assertThat(RayMathV1.isReflectedByNormalAndIntersection(sw45(), ground)).isTrue();
+        assertThat(RayMathV1.isReflectedByNormalAndIntersection(se45(), ground)).isTrue();
+        assertThat(RayMathV1.isReflectedByNormalAndIntersection(vertDown(), ground)).isTrue();
+        assertThat(RayMathV1.isReflectedByNormalAndIntersection(vertUp(), ground)).isFalse();
     }
 
     @Test
@@ -84,8 +84,8 @@ public class RayMathTests {
         SingleSidedEdge vert = vertDown();
         vert.setLeftNormal();
 
-        assertThat(RayMath.dotProduct(se45(), vert)).isGreaterThan(0);
-        assertThat(RayMath.dotProduct(sw45(), vert)).isLessThan(0);
+        assertThat(RayMathV1.dotProduct(se45(), vert)).isGreaterThan(0);
+        assertThat(RayMathV1.dotProduct(sw45(), vert)).isLessThan(0);
     }
 
     @Test
@@ -97,10 +97,10 @@ public class RayMathTests {
 
 
         raySegment.setLeftNormal();
-        Out.pln(RayMath.isReflectedByNormalAndIntersection(ray, raySegment));
-        double angle = RayMath.angleBetween(ray, raySegment);
+        Out.pln(RayMathV1.isReflectedByNormalAndIntersection(ray, raySegment));
+        double angle = RayMathV1.angleBetween(ray, raySegment);
         Out.pln("angle", angle);
-        Point intersection = RayMath.getIntersection(ray, raySegment);
+        Point intersection = RayMathV1.getIntersection(ray, raySegment);
         Out.pln(intersection);
 
         RaySegment nextRay = ray.copy();
@@ -112,7 +112,7 @@ public class RayMathTests {
 
         double newAngle = (angle - 180) * 2;
 
-        RayMath.rotate(nextRay, newAngle);
+        RayMathV1.rotate(nextRay, newAngle);
 
         Out.pln("rotated", nextRay);
         Out.pln();

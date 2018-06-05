@@ -3,6 +3,8 @@ package su.levenetc.androidplayground.raytracer;
 import java.util.LinkedList;
 import java.util.List;
 
+import su.levenetc.androidplayground.raytracer.math.RayMathV1;
+
 /**
  * Created by eugene.levenetc on 08/03/2018.
  */
@@ -22,7 +24,7 @@ public class Ray {
         initSegment.set(x1, y1, x2, y2);
         //TODO: cache/pool
         reflectedOrRefracted.clear();
-        length = RayMath.distance(x1, y1, x2, y2);
+        length = RayMathV1.distance(x1, y1, x2, y2);
     }
 
     public List<RaySegment> reflectedOrRefracted() {

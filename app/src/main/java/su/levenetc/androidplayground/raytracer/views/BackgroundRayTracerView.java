@@ -8,22 +8,25 @@ import android.graphics.Paint;
 import android.view.MotionEvent;
 import android.view.View;
 
-import su.levenetc.androidplayground.raytracer.RayTracer;
 import su.levenetc.androidplayground.raytracer.Scene;
 import su.levenetc.androidplayground.raytracer.drawers.Drawer;
 import su.levenetc.androidplayground.raytracer.drawers.V2Drawer;
+import su.levenetc.androidplayground.raytracer.lights.ConeLight;
 import su.levenetc.androidplayground.raytracer.lights.DirectedLight;
 import su.levenetc.androidplayground.raytracer.lights.DirectedLightController;
 import su.levenetc.androidplayground.raytracer.lights.Light;
 import su.levenetc.androidplayground.raytracer.lights.LightController;
-import su.levenetc.androidplayground.raytracer.lights.PlaneLight;
+import su.levenetc.androidplayground.raytracer.renderers.RenderThread;
+import su.levenetc.androidplayground.raytracer.tracers.RayTracer;
+import su.levenetc.androidplayground.raytracer.tracers.RayTracerV1;
 import su.levenetc.androidplayground.raytracer.utils.Scenes;
 
 public class BackgroundRayTracerView extends View implements RayTraceView {
 
-    private final float spotSize = 0.1f;
+    private final float spotSize = 1.0f;
     //private Drawer drawer = new V1Drawer(spotSize, spotSize);
     private Drawer drawer = new V2Drawer(spotSize);
+    private RayTracer tracer = new RayTracerV1();
     private Canvas canvas;
     private Scene scene;
     private Light light;
@@ -68,7 +71,7 @@ public class BackgroundRayTracerView extends View implements RayTraceView {
     protected void onDraw(Canvas canvas) {
         preRenderInit(canvas.getWidth(), canvas.getHeight());
 
-        if (renderThread.isDrawing) {
+        if (renderThread.isDrawing()) {
             canvas.drawColor(Color.BLACK);
         } else {
             canvas.drawBitmap(bitmap, 0, 0, paint);
@@ -91,68 +94,17 @@ public class BackgroundRayTracerView extends View implements RayTraceView {
             canvas = new Canvas(bitmap);
             initLight(cx, cy);
 
-            renderThread = new RenderThread(scene, drawer, light, canvas, () -> post(this::invalidate));
+            renderThread = new RenderThread(tracer, scene, drawer, light, canvas, () -> post(this::invalidate));
             renderThread.start();
         }
     }
 
     private void initLight(double cx, double cy) {
 //        light = new SingleRayLight(cx, cy, cx + 500, cy, Color.WHITE);
-        light = new PlaneLight(cx, cy, cx + 800, cy, spotSize, Color.WHITE, 1000);
-        light.setBrightness(.7f);
+//        light = new PlaneLight(cx, cy, cx + 800, cy, spotSize, Color.WHITE, 6000);
+        light = new ConeLight(cx, cy, cx + 800, cy, Color.WHITE, 1000);
+        light.setBrightness(.07f);
         lightController = new DirectedLightController((DirectedLight) light);
-        RayTracer.trace(light, this.scene);
     }
 
-    static class RenderThread extends Thread {
-
-        private Scene scene;
-        private Drawer drawer;
-        private final Light light;
-        private final Canvas canvas;
-        private ReadyListener listener;
-        private volatile boolean isDrawing;
-
-        private final Object lock = new Object();
-
-        public RenderThread(Scene scene, Drawer drawer, Light light, Canvas canvas, ReadyListener listener) {
-            this.scene = scene;
-            this.drawer = drawer;
-            this.light = light;
-            this.canvas = canvas;
-            this.listener = listener;
-        }
-
-        public void draw() {
-            if (!isDrawing) {
-                isDrawing = true;
-                synchronized (lock) {
-                    lock.notify();
-                }
-            }
-        }
-
-        @Override
-        public void run() {
-            while (true) {
-                RayTracer.trace(light, scene);
-                canvas.drawColor(Color.BLACK);
-                drawer.draw(light, canvas);
-                listener.onRendered();
-                try {
-                    isDrawing = false;
-                    synchronized (lock) {
-                        lock.wait();
-                    }
-                } catch (InterruptedException e) {
-                    //ignore
-                }
-            }
-
-        }
-
-        interface ReadyListener {
-            void onRendered();
-        }
-    }
 }

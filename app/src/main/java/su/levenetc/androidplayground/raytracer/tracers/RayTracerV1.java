@@ -1,35 +1,44 @@
-package su.levenetc.androidplayground.raytracer;
+package su.levenetc.androidplayground.raytracer.tracers;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
+import su.levenetc.androidplayground.raytracer.Ray;
+import su.levenetc.androidplayground.raytracer.RaySegment;
+import su.levenetc.androidplayground.raytracer.Scene;
 import su.levenetc.androidplayground.raytracer.geometry.Point;
 import su.levenetc.androidplayground.raytracer.lights.Light;
+import su.levenetc.androidplayground.raytracer.math.Intersection;
+import su.levenetc.androidplayground.raytracer.math.RayMath;
 
 /**
  * Created by eugene.levenetc on 08/03/2018.
  */
 
-public class RayTracer {
+public class RayTracerV1 implements RayTracer {
 
-    public static void trace(Light light, Scene scene) {
-        long start = System.currentTimeMillis();
-        for (Ray ray : light.rays) {
-            trace(ray, scene);
-        }
-        Log.d("time-to-trace", String.valueOf(System.currentTimeMillis() - start));
+    private RayMath math;
+
+    public RayTracerV1(RayMath math) {
+
+        this.math = math;
     }
 
-    public static void trace(Ray ray, Scene scene) {
+    @Override
+    public void trace(Light light, Scene scene) {
+        for (Ray ray : light.rays)
+            trace(ray, scene);
+    }
+
+    private void trace(Ray ray, Scene scene) {
         ray.reset();
         traceInternal(ray, ray.initSegment, scene, 0, ray.initSegment.color);
     }
 
-    private static void traceInternal(Ray ray, RaySegment initSegment, Scene scene, double currentLength, int prevColor) {
+    private void traceInternal(Ray ray, RaySegment initSegment, Scene scene, double currentLength, int prevColor) {
 
         if (currentLength >= ray.length) return;
 
-        RayMath.Intersection intersection = RayMath.getClosestIntersection(initSegment, scene);
+        Intersection intersection = math.getClosestIntersection(initSegment, scene);
 
         if (intersection.exists()) {
             Point point = intersection.point;
@@ -63,7 +72,7 @@ public class RayTracer {
         }
     }
 
-    private static void setColor(int prevColor, RayMath.Intersection intersection, RaySegment newSegment) {
+    private void setColor(int prevColor, Intersection intersection, RaySegment newSegment) {
         if (!intersection.exists()) {
             newSegment.color = prevColor;
             return;
@@ -76,7 +85,7 @@ public class RayTracer {
         }
     }
 
-    private static double setFading(Ray ray, double currentLength, RaySegment newSegment) {
+    private double setFading(Ray ray, double currentLength, RaySegment newSegment) {
         newSegment.startAlpha = currentLength == 0 ? 0 : (float) (currentLength / ray.length);
 
         double length = newSegment.length();
@@ -86,9 +95,9 @@ public class RayTracer {
     }
 
     @NonNull
-    private static RaySegment rotateInitVector(RaySegment initVector, RayMath.Intersection intersection) {
+    private RaySegment rotateInitVector(RaySegment initVector, Intersection intersection) {
 
-        double inputAngle = RayMath.angleBetween(initVector, intersection.edge);
+        double inputAngle = math.angleBetween(initVector, intersection.edge);
         Point point = intersection.point;
         RaySegment reflected = initVector.copy();
 
@@ -97,13 +106,13 @@ public class RayTracer {
         double outputAngle;
 
         if (intersection.side.isTransparent()) {
-            double dot = RayMath.dotProduct(initVector.normalized(), intersection.edge.normalized());
+            double dot = math.dotProduct(initVector.normalized(), intersection.edge.normalized());
             outputAngle = 20 * dot;
         } else {
             outputAngle = (inputAngle - 180) * 2;
         }
 
-        RayMath.rotate(reflected, outputAngle);
+        math.rotate(reflected, outputAngle);
 
         return reflected;
     }

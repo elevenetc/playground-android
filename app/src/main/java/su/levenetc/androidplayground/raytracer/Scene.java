@@ -7,7 +7,7 @@ import su.levenetc.androidplayground.raytracer.shapes.Shape;
 
 public class Scene {
 
-    List<Shape> objects = new LinkedList<>();
+    public List<Shape> objects = new LinkedList<>();
 
     public void add(Shape shape) {
         objects.add(shape);

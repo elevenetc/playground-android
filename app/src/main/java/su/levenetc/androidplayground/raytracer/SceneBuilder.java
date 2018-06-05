@@ -90,11 +90,10 @@ public class SceneBuilder {
         return this;
     }
 
-    public SceneBuilder addBasicLens(double x, double y, double width, double height) {
+    public SceneBuilder addBasicLens(double x, double y, double width, double height, double stepRad) {
         Path.Builder builder = null;
         double radius = height;
         double ratio = height / width;
-        double stepRad = 1;
         double s = 0;
 
         while (s <= 360) {
