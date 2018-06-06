@@ -17,6 +17,8 @@ import su.levenetc.androidplayground.raytracer.lights.DirectedLightController;
 import su.levenetc.androidplayground.raytracer.lights.Light;
 import su.levenetc.androidplayground.raytracer.lights.LightController;
 import su.levenetc.androidplayground.raytracer.lights.PlaneLight;
+import su.levenetc.androidplayground.raytracer.math.RayMath;
+import su.levenetc.androidplayground.raytracer.math.RayMathV1;
 import su.levenetc.androidplayground.raytracer.tracers.RayTracer;
 import su.levenetc.androidplayground.raytracer.tracers.RayTracerV1;
 import su.levenetc.androidplayground.raytracer.utils.Scenes;
@@ -29,8 +31,10 @@ public class RealTimeRayTracerView extends View {
 
 
     Scene scene;
+
     Drawer debugDrawer = new DebugDrawer();
-    private RayTracer tracer = new RayTracerV1();
+    private RayMath math = new RayMathV1();
+    private RayTracer tracer = new RayTracerV1(math);
 
     public RealTimeRayTracerView(Context context) {
         super(context);
@@ -100,7 +104,7 @@ public class RealTimeRayTracerView extends View {
     private void initLight(double cx, double cy) {
 //        light = new SingleRayLight(cx, cy, cx, cy + 450, Color.WHITE);
 //        light = new ConeLight(cx, cy, cx + 400, cy + 400, Color.WHITE, 100);
-        light = new PlaneLight(cx, cy, cx + 500, cy, 2, Color.WHITE, 80);
+        light = new PlaneLight(cx, cy, cx + 500, cy, 2, Color.WHITE, 80, math);
 //        light = new PointLight(cx, cy, 300, 50);
 //        lightController = new UndirectedLightController(light);
         light.setBrightness(0.05f);

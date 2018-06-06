@@ -1,11 +1,14 @@
 package su.levenetc.androidplayground.raytracer.lights;
 
-import su.levenetc.androidplayground.raytracer.math.RayMathV1;
+import su.levenetc.androidplayground.raytracer.math.RayMath;
 
 public class ConeLight extends DirectedLight {
 
-    public ConeLight(double x, double y, double dirX, double dirY, int color, int raysCount) {
+    private RayMath math;
+
+    public ConeLight(double x, double y, double dirX, double dirY, int color, int raysCount, RayMath math) {
         super(x, y, dirX, dirY, color, raysCount);
+        this.math = math;
         initRays();
         rotateInitVectors(true);
     }
@@ -23,7 +26,7 @@ public class ConeLight extends DirectedLight {
         double angle = 0;
 
         for (int i = 0; i < rays.size(); i++) {
-            RayMathV1.rotate(this.rays.get(i).initSegment, angle + (biased ? getDirectionBias() : 0) - coneAngle / 2);
+            math.rotate(this.rays.get(i).initSegment, angle + (biased ? getDirectionBias() : 0) - coneAngle / 2);
             angle += stepAngle;
         }
     }

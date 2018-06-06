@@ -1,7 +1,5 @@
 package su.levenetc.androidplayground.raytracer.lights;
 
-import android.graphics.Color;
-
 import su.levenetc.androidplayground.raytracer.Ray;
 
 public class PointLight extends Light {
@@ -24,7 +22,7 @@ public class PointLight extends Light {
             double dx = radius * Math.cos(angle) + x;
             double dy = radius * Math.sin(angle) + y;
 
-            rays.add(new Ray(x, y, dx, dy, Color.RED));
+            rays.add(new Ray(x, y, dx, dy, color));
 
             angle += angleStep;
         }
