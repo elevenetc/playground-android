@@ -55,6 +55,20 @@ public class ViewUtils {
     private static Point screenSize;
     private static float defaultToolbarHeight;
 
+    public static void getMeasuredSize(View view, Size listener) {
+        view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                view.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                listener.size(view.getWidth(), view.getHeight());
+            }
+        });
+    }
+
+    public interface Size {
+        void size(int width, int height);
+    }
+
     /**
      * @param spec        measure spec
      * @param desiredSize desired size in pixels

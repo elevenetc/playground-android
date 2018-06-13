@@ -27,7 +27,7 @@ import su.levenetc.androidplayground.raytracer.utils.Scenes;
  * Created by eugene.levenetc on 08/03/2018.
  */
 
-public class RealTimeRayTracerView extends View {
+public class RealTimeRayTracerView extends View implements RayTraceView {
 
 
     Scene scene;
@@ -114,11 +114,13 @@ public class RealTimeRayTracerView extends View {
 
     Drawer drawer = new V1Drawer();
 
+    @Override
     public void setDebugScene(boolean debug) {
         this.debugScene = debug;
         invalidate();
     }
 
+    @Override
     public void setDebugLight(boolean debug) {
         this.debugLight = debug;
         invalidate();
