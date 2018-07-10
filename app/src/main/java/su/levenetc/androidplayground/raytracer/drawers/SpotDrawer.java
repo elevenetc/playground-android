@@ -1,7 +1,6 @@
 package su.levenetc.androidplayground.raytracer.drawers;
 
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 
 import java.util.List;
@@ -11,22 +10,18 @@ import su.levenetc.androidplayground.raytracer.RaySegment;
 import su.levenetc.androidplayground.raytracer.Scene;
 import su.levenetc.androidplayground.raytracer.lights.Light;
 
-public class V1Drawer implements Drawer {
+public class SpotDrawer implements Drawer {
 
     private final Paint paint = new Paint();
     private float spotRadius;
     private float spotStep;
-    /**
-     * Spots overlap each other, so in the beginning size of spots should be smaller
-     */
-    private static final float minSpotSize = 0.7f;
 
-    public V1Drawer() {
+    public SpotDrawer() {
         this(10, 5);
         paint.setStyle(Paint.Style.FILL);
     }
 
-    public V1Drawer(float spotRadius, float spotStep) {
+    public SpotDrawer(float spotRadius, float spotStep) {
         paint.setStyle(Paint.Style.FILL);
         this.spotRadius = spotRadius;
         this.spotStep = spotStep;
@@ -44,10 +39,15 @@ public class V1Drawer implements Drawer {
 
     }
 
+    protected int calculateSpotAlpha(double fadeLoc, float brightness) {
+        double alpha = (1 - fadeLoc) * 255;
+        alpha *= brightness;
+        return (int) alpha;
+    }
+
     private void drawRay(Ray ray, Light light, Canvas canvas) {
 
         paint.setAlpha(255);
-        paint.setColor(Color.RED);
 
         for (RaySegment raySegment : ray.reflectedOrRefracted()) {
 
@@ -74,7 +74,7 @@ public class V1Drawer implements Drawer {
                 double x = raySegment.x1 + dx * ratio;
                 double y = raySegment.y1 + dy * ratio;
 
-                drawStepArea(canvas, (float) x, (float) y, fadeLoc, light.brightness());
+                drawSpot(canvas, (float) x, (float) y, fadeLoc, light.brightness());
 
 
                 fadeLoc = startAlpha + (endAlpha - startAlpha) * loc;
@@ -83,29 +83,21 @@ public class V1Drawer implements Drawer {
         }
     }
 
-
     /**
      * @param x       location of spot
      * @param y       location of spot
-     * @param fadeLoc from 0 to infinity
+     * @param fadeLoc from 0 to infinity.  values >1 will be treated as transparent
      */
-    private void drawStepArea(Canvas canvas,
-                              float x, float y,
-                              float fadeLoc,
-                              float brightness) {
+    private void drawSpot(Canvas canvas,
+                          float x, float y,
+                          float fadeLoc,
+                          float brightness) {
         //skip drawing transparent spots
         if (fadeLoc > 1) return;
 
         //float sr = spotRadius * (fadeLoc + minSpotSize);
 
-        paint.setAlpha(calculateAlpha(fadeLoc, brightness));
-        //canvas.drawRect(x, y, x + spotRadius, y + spotRadius, paint);
-        //canvas.drawCircle(x, y, spotRadius / 2f, paint);
-    }
-
-    private int calculateAlpha(double fadeLoc, float brightness) {
-        double alpha = (1 - fadeLoc) * 255;
-        alpha *= brightness;
-        return (int) alpha;
+        paint.setAlpha(calculateSpotAlpha(fadeLoc, brightness));
+        canvas.drawRect(x, y, x + spotRadius, y + spotRadius, paint);
     }
 }

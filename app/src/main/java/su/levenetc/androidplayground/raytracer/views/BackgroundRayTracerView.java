@@ -10,7 +10,7 @@ import android.view.View;
 
 import su.levenetc.androidplayground.raytracer.Scene;
 import su.levenetc.androidplayground.raytracer.drawers.Drawer;
-import su.levenetc.androidplayground.raytracer.drawers.V2Drawer;
+import su.levenetc.androidplayground.raytracer.drawers.LinearDrawer;
 import su.levenetc.androidplayground.raytracer.lights.ConeLight;
 import su.levenetc.androidplayground.raytracer.lights.DirectedLight;
 import su.levenetc.androidplayground.raytracer.lights.DirectedLightController;
@@ -26,8 +26,8 @@ import su.levenetc.androidplayground.raytracer.utils.Scenes;
 public class BackgroundRayTracerView extends View implements RayTraceView {
 
     private final float spotSize = 1.0f;
-    //private Drawer drawer = new V1Drawer(spotSize, spotSize);
-    private Drawer drawer = new V2Drawer(spotSize);
+    //private Drawer drawer = new SpotDrawer(spotSize, spotSize);
+    private Drawer drawer = new LinearDrawer(spotSize);
     private RayMath math = new RayMathV1();
     private RayTracer tracer = new RayTracerV1(math);
     private Canvas canvas;

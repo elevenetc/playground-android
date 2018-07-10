@@ -11,12 +11,12 @@ import su.levenetc.androidplayground.raytracer.RaySegment;
 import su.levenetc.androidplayground.raytracer.Scene;
 import su.levenetc.androidplayground.raytracer.lights.Light;
 
-public class V2Drawer implements Drawer {
+public class LinearDrawer implements Drawer {
 
     private Paint paint = new Paint();
     private float rayWidth;
 
-    public V2Drawer(float rayWidth) {
+    public LinearDrawer(float rayWidth) {
 
         this.rayWidth = rayWidth;
     }

@@ -11,12 +11,12 @@ import android.view.View;
 import su.levenetc.androidplayground.raytracer.Scene;
 import su.levenetc.androidplayground.raytracer.drawers.DebugDrawer;
 import su.levenetc.androidplayground.raytracer.drawers.Drawer;
-import su.levenetc.androidplayground.raytracer.drawers.V1Drawer;
+import su.levenetc.androidplayground.raytracer.drawers.InterferenceDrawer;
+import su.levenetc.androidplayground.raytracer.lights.ConeLight;
 import su.levenetc.androidplayground.raytracer.lights.DirectedLight;
 import su.levenetc.androidplayground.raytracer.lights.DirectedLightController;
 import su.levenetc.androidplayground.raytracer.lights.Light;
 import su.levenetc.androidplayground.raytracer.lights.LightController;
-import su.levenetc.androidplayground.raytracer.lights.PlaneLight;
 import su.levenetc.androidplayground.raytracer.math.RayMath;
 import su.levenetc.androidplayground.raytracer.math.RayMathV1;
 import su.levenetc.androidplayground.raytracer.tracers.RayTracer;
@@ -29,10 +29,9 @@ import su.levenetc.androidplayground.raytracer.utils.Scenes;
 
 public class RealTimeRayTracerView extends View implements RayTraceView {
 
-
-    Scene scene;
-
-    Drawer debugDrawer = new DebugDrawer();
+    private Scene scene;
+    private Drawer debugDrawer = new DebugDrawer();
+    private Drawer drawer = new InterferenceDrawer();//new SpotDrawer();
     private RayMath math = new RayMathV1();
     private RayTracer tracer = new RayTracerV1(math);
 
@@ -103,8 +102,8 @@ public class RealTimeRayTracerView extends View implements RayTraceView {
 
     private void initLight(double cx, double cy) {
 //        light = new SingleRayLight(cx, cy, cx, cy + 450, Color.WHITE);
-//        light = new ConeLight(cx, cy, cx + 400, cy + 400, Color.WHITE, 100);
-        light = new PlaneLight(cx, cy, cx + 500, cy, 2, Color.WHITE, 80, math);
+        light = new ConeLight(cx, cy, cx + 400, cy + 400, Color.WHITE, 100, math);
+//        light = new PlaneLight(cx, cy, cx + 500, cy, 2, Color.WHITE, 80, math);
 //        light = new PointLight(cx, cy, 300, 50);
 //        lightController = new UndirectedLightController(light);
         light.setBrightness(0.05f);
@@ -112,7 +111,6 @@ public class RealTimeRayTracerView extends View implements RayTraceView {
         tracer.trace(light, this.scene);
     }
 
-    Drawer drawer = new V1Drawer();
 
     @Override
     public void setDebugScene(boolean debug) {
